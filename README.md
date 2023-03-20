@@ -37,9 +37,7 @@ etc.
 
 # System Design
 
-## Overview
-
-Overview of system
+The project consists of the following subsections:
 
 ## Gameplay
 
