@@ -1,3 +1,5 @@
+![logo](logo.png)
+
 # Algo Crypt
 
 A Massively-Multiplayer Online Trading Card Game on the Algorand Blockchain
