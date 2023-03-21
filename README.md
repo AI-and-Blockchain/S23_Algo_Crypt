@@ -92,7 +92,7 @@ The project consists of the following subsections:
 
 ## Gameplay
 
-New users will have 20 basic cards to start the game. After entering a battle with an enemy,
+New users will have 30 basic cards to start the game. After entering a battle with an enemy,
 you will have 5 cards in hand (5 is the upper limit for cards in hand). You and the enemy will take turns to play cards. On each turn, you can only play up to three cards, the rest will go to discard pile (after you run out of cards in hand and deck, your discard pile will be shuffled so that you can keep using these cards.) The player and the enemy will each have 30 health points (HP). The aim of the game is to make you enemy's HP become 0 before he defeats you. After one player played one to three cards, it will become the other player's turn, and he should react to previous cards, and play his cards. When a player is out of cards in hand, deck, and discard pile, he is going to lose HP on each turn incrementally (-1 hp, -2 hp, ...). Challengers will always play first. 
 
 Each card consists of an ability(attack, block, dodge). Attack and block cards have physical and magical properties. One's attack and block is scaled by their strength and intelligence properties respectively. An enemy with more strength will have greater physical attacks and blocks while an enemy with more intelligence will have greater magical attacks and blocks. The attack value will become direct damage toward a player; in this case, the player can play block cards to decrease the damage or use dodge cards to avoid the attack. 
