@@ -103,6 +103,8 @@ Card or enemy NFTs will be minted and/or distributed at the following stages.
 
 ### Account Creation
 
+![account_creation](documentation/diagrams/account_creation.png)
+
 Whenever a player creates a new account, the account receives a basic deck to their collection in the form of a set number of basic cards. Each of these cards must be generated as an asset with the unit name "CRPTCARD" and a descriptive asset name corresponding to the name of the card. The minting and distribution of these cards will be combined in an atomic transaction ensuring invalid NFTs do not leak into the supply.
 
 ### Enemy Creation
