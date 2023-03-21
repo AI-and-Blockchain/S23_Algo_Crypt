@@ -117,9 +117,13 @@ In addition to the cards, the enemy's image will be generated, uploaded to IPFS,
 
 A text based stat block and character background is generated from GPT3 based on a parmaterized prompt. The stat block is passed into DALE in order to generate a visual representation. The stat block and images are then combined to make the enemy card. Initially, these cards will be text-only. However, in the future
 
+![enemy_generation](documentation/diagrams/Enemy_Browser.png)
+
 ## NFT Marketplace
 
 NFT marketplace for cards and defeated enemies (including rarities, value, etc).
+
+![marketplace](documentation/diagrams/marketplace.png)
 
 ### Types of Cards
 - Basic
