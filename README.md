@@ -112,9 +112,11 @@ Whenever a player creates a new account, the account receives a basic deck to th
 
 ### Enemy Creation
 
+![enemy_creation](documentation/diagrams/enemy_creation.png)
+
 When enemies are created, they will gain a pre-determined deck of cards similar to player account creation. However, the deck of cards will be supplied to the enemy creation script and designed by a developer. Each of the generated cards will have corresponding NFTs of the same "CRPTCARD" unit name which are then placed in escrow in the smart contract that corresponds to that enemy. When the enemy is defeated, a subset of those cards are randomly selected to reward to the victorious player, and the rest are deleted.
 
-In addition to the cards, the enemy's image will be generated, uploaded to IPFS, and minted as an NFT before being placed in escrow in the smart contract. This NFT and a subset of that enemy's deck will then be awarded to the victorious player when the enemy is defeated.
+In addition to the cards, the enemy's image will be generated, uploaded to IPFS, and minted as an NFT before being placed in escrow in the smart contract. This NFT and a subset of that enemy's deck will then be awarded to the victorious player when the enemy is defeated. The enemy's contract will include a separate game state for every active challenge, and games will be played on-chain with transactions submitted to the enemy contracts.
 
 ## Enemy Generation
 
