@@ -83,6 +83,10 @@ The blockchain component runs on Algorand. All cards and enemies are represented
     - Card Management Interface 
 # System Design
 
+## Overview
+
+![overview](documentation/diagrams/overview.png)
+
 The project consists of the following subsections:
 
 
