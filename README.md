@@ -95,6 +95,7 @@ The project consists of the following subsections:
 ![GamePlaymatStructure](documentation/diagrams/GamePlaymatStructure.png)
 
 ![WinAndLoseScreen](documentation/diagrams/WinAndLoseScreen.png)
+
 New users will have 30 basic cards to start the game. After entering a battle with an enemy,
 you will have 5 cards in hand (5 is the upper limit for cards in hand). You and the enemy will take turns to play cards. On each turn, you can only play up to three cards, the rest will go to discard pile (after you run out of cards in hand and deck, your discard pile will be shuffled so that you can keep using these cards.) The player and the enemy will each have 30 health points (HP). The aim of the game is to make you enemy's HP become 0 before he defeats you. After one player played one to three cards, it will become the other player's turn, and he should react to previous cards, and play his cards. When a player is out of cards in hand, deck, and discard pile, he is going to lose HP on each turn incrementally (-1 hp, -2 hp, ...). Challengers will always play first. 
 
