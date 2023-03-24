@@ -129,7 +129,7 @@ A text based stat block and character background is generated from GPT3 based on
 
 NFT marketplace for cards and defeated enemies (including rarities, value, etc).
 
-![marketplace](documentation/diagrams/marketplace.png)
+![marketplace](documentation/diagrams/Marketplace.png)
 
 ### Types of Cards
 - Basic
