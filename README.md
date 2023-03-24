@@ -121,7 +121,7 @@ In addition to the cards, the enemy's image will be generated, uploaded to IPFS,
 
 ## Enemy Generation
 
-A text based stat block and character background is generated from GPT3 based on a parmaterized prompt. The stat block is passed into DALE in order to generate a visual representation. The stat block and images are then combined to make the enemy card. Initially, these cards will be text-only. However, in the future
+A text based stat block and character background is generated from GPT3 based on a parmaterized prompt. The stat block is passed into DALE in order to generate a visual representation. The stat block and images are then combined to make the enemy card. Initially, these cards will be text-only. However, in the future, cards will be fully-featured and include images similar to the enemy cards.
 
 ![enemy_generation](documentation/diagrams/Enemy_Browser.png)
 
@@ -130,6 +130,8 @@ A text based stat block and character background is generated from GPT3 based on
 NFT marketplace for cards and defeated enemies (including rarities, value, etc).
 
 ![marketplace](documentation/diagrams/Marketplace.png)
+
+The marketplace is a standard NFT marketplace where users exchange assets using atomic swap contracts. The assets to be traded are the playing cards and enemy cards received from defeating enemies on the chain.
 
 ### Types of Cards
 - Basic
