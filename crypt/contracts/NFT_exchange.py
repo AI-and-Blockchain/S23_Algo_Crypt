@@ -80,7 +80,7 @@ class Auction(Application):
     auction_start_time: GlobalStateValue(
         stack_type=abi.Uint64,
         descr="Start time of the auction",
-        default=Global.latest_timestamp()
+        default=0
     )
     auction_end_time: GlobalStateValue(
         stack_type=abi.Uint64,
@@ -185,12 +185,24 @@ def auction_blueprint(app: Application) -> None:
     def create() -> Expr:
         return app.initialize_global_state()
     
+    @Subroutine(TealType.none)
+    def pay(receiver: Expr, amount: Expr) -> Expr:
+        return InnerTxnBuilder.Execute(
+            {
+                TxnField.type_enum: TxnType.Payment,
+                TxnField.receiver: receiver,
+                TxnField.amount: amount,
+                TxnField.fee: Int(0)
+            }
+        )
+    
     @app.external(authorize=Authorize.only(app.owner))
     def start_auction(
         paymentTx: abi.PaymentTransaction,
         name: abi.String,
         image_uri: abi.String,
         description: abi.String,
+        buy_now_price: abi.Uint64,
         auction_end_time: abi.Uint64,
         auction_start_price: abi.Uint64,
     ) -> Expr:
@@ -201,6 +213,116 @@ def auction_blueprint(app: Application) -> None:
             app.image_uri.set(image_uri),
             app.description.set(description),
             app.auction_start_time.set(Global.latest_timestamp()),
+            app.buy_now_price.set(buy_now_price),
             app.auction_end_time.set(auction_end_time),
             app.auction_start_price.set(auction_start_price),
+        )
+    
+    @app.external
+    def bid(paymentTx: abi.PaymentTransaction) -> Expr:
+        payment = paymentTx.get()
+
+        end_time = app.auction_end_time.get()
+        start_time = app.auction_start_time.get()
+        highest_bidder = app.current_bidder.get()
+        highest_bid = app.current_bid.get()
+        return Seq(
+            Assert(paymentTx.receiver() == Global.current_application_address()),
+            Assert(payment.amount() > highest_bid),
+            Assert(Global.latest_timestamp() < end_time),
+            Assert(start_time != Int(0)),
+            If(
+                highest_bidder != Global.zero_address(),
+                pay(highest_bidder, highest_bid),
+            ),
+            app.current_bidder.set(payment.sender()),
+            app.current_bid.set(payment.amount()),
+        )
+    
+    @app.external
+    def buy_now(paymentTx: abi.PaymentTransaction) -> Expr:
+        start_time = app.auction_start_time.get()
+        highest_bidder = app.current_bidder.get()
+        highest_bid = app.current_bid.get()
+        buy_now_price = app.buy_now_price.get()
+        owner = app.owner.get()
+        return Seq(
+            Assert(start_time != Int(0)),
+            Assert(paymentTx.receiver() == Global.current_application_address()),
+            Assert(paymentTx.amount() == buy_now_price),
+            If(
+                highest_bidder != Global.zero_address(),
+                pay(highest_bidder, highest_bid),
+            ),
+            pay(owner, buy_now_price),
+            app.owner.set(paymentTx.sender()),
+            app.auction_end_time.set_default(),
+            app.auction_start_time.set_default(),
+            app.auction_start_price.set_default(),
+            app.current_bid.set_default(),
+            app.current_bidder.set_default(),
+        )
+    
+    @app.external(authorize=Authorize.only(app.owner))
+    def end_auction() -> Expr:
+        start_time = app.auction_start_time.get()
+        highest_bidder = app.current_bidder.get()
+        highest_bid = app.current_bid.get()
+        owner = app.owner.get()
+        return Seq(
+            Assert(start_time != Int(0)),
+            Assert(Global.latest_timestamp() > app.auction_end_time.get()),
+            pay(owner, highest_bid),
+            app.owner.set(highest_bidder),
+            app.auction_end_time.set_default(),
+            app.auction_start_time.set_default(),
+            app.auction_start_price.set_default(),
+            app.current_bid.set_default(),
+            app.current_bidder.set_default(),
+        )
+
+
+def flat_price_blueprint(app: Application) -> None:
+    @app.create
+    def create() -> Expr:
+        return app.initialize_global_state()
+    
+    @Subroutine(TealType.none)
+    def pay(receiver: Expr, amount: Expr) -> Expr:
+        return InnerTxnBuilder.Execute(
+            {
+                TxnField.type_enum: TxnType.Payment,
+                TxnField.receiver: receiver,
+                TxnField.amount: amount,
+                TxnField.fee: Int(0)
+            }
+        )
+    
+    @app.external(authorize=Authorize.only(app.owner))
+    def set_price(
+        paymentTx: abi.PaymentTransaction,
+        name: abi.String,
+        image_uri: abi.String,
+        description: abi.String,
+        price: abi.Uint64,
+    ) -> Expr:
+        return Seq(
+            Assert(paymentTx.receiver() == Global.current_application_address()),
+            Assert(paymentTx.amount() == Int(100_000)),
+            app.name.set(name),
+            app.image_uri.set(image_uri),
+            app.description.set(description),
+            app.price.set(price),
+        )
+    
+    @app.external
+    def buy(paymentTx: abi.PaymentTransaction) -> Expr:
+        price = app.price.get()
+        owner = app.owner.get()
+        return Seq(
+            Assert(paymentTx.receiver() == Global.current_application_address()),
+            Assert(paymentTx.amount() == price),
+            pay(owner, price),
+            app.owner.set(paymentTx.sender()),
+            app.price.set_default(),
         )
