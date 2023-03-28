@@ -45,6 +45,7 @@ Methods:
 from beaker import *
 from pyteal import *
 from typing import Final
+from argparse import ArgumentParser
 
 # Base States
 # ===========
@@ -326,3 +327,58 @@ def flat_price_blueprint(app: Application) -> None:
             app.owner.set(paymentTx.sender()),
             app.price.set_default(),
         )
+
+
+if __name__ == "__main__":
+
+    parser = ArgumentParser()
+    parser.add_argument(
+        "--auction",
+        action="store_true",
+        help="Build auction NFT app",
+    )
+    parser.add_argument(
+        "--flat",
+        action="store_true",
+        help="Build flat price NFT app",
+    )
+    parser.add_argument(
+        "--type",
+        type=str,
+        default="card",
+        help="Type of NFT to build (card or enemy)",
+    )
+    args = parser.parse_args()
+
+    if args.auction:
+        if args.type == "card":
+            app = Application("card_auction", CardAuction)
+        elif args.type == "enemy":
+            app = Application("enemy_auction", EnemyAuction)
+        else:
+            raise ValueError("Invalid NFT type")
+        auction_blueprint(app)
+    elif args.flat:
+        if args.type == "card":
+            app = Application("card_flat", CardFlatPrice)
+        elif args.type == "enemy":
+            app = Application("enemy_flat", EnemyFlatPrice)
+        else:
+            raise ValueError("Invalid NFT type")
+        flat_price_blueprint(app)
+    else:
+        raise ValueError("Must specify auction or flat")
+    
+    client = client.ApplicationClient(
+        client=sandbox.get_algod_client(),
+        app=app,
+        signer=sandbox.get_accounts().pop().signer
+    )
+
+    app_id, app_addr, txid = client.create()
+    print(
+        f"""Deployed app in txid {txid}
+        App ID: {app_id} 
+        Address: {app_addr} 
+    """
+    )
