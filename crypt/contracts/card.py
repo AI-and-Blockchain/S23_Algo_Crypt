@@ -272,3 +272,17 @@ def mint_card_to_enemy(asset_id: abi.Uint64, enemy: abi.Address, amount: abi.Uin
             }
         ),
     )
+
+client = client.ApplicationClient(
+    client=sandbox.get_algod_client(),
+    app=card_minter,
+    signer=sandbox.get_accounts().pop().signer
+)
+
+app_id, app_addr, txid = client.create()
+print(
+    f"""Deployed app in txid {txid}
+    App ID: {app_id} 
+    Address: {app_addr} 
+"""
+)

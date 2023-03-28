@@ -251,4 +251,19 @@ def attack_challenger(attack_type: abi.String) -> Expr:
             current_challenger_health=game_state.current_challenger_health - damage,
         )
     ) 
+
+
+client = client.ApplicationClient(
+    client=sandbox.get_algod_client(),
+    app=enemy,
+    signer=sandbox.get_accounts().pop().signer
+)
+
+app_id, app_addr, txid = client.create()
+print(
+    f"""Deployed app in txid {txid}
+    App ID: {app_id} 
+    Address: {app_addr} 
+"""
+)
     
