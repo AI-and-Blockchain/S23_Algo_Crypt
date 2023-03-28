@@ -2,19 +2,18 @@ from enum import Enum
 import pygame
 import random
 
-class Suits(Enum):
-  CLUB = 0
-  SPADE = 1
-  HEART = 2
-  DIAMOND = 3
+class Types(Enum):
+  ATTACK = 0
+  DEFENSE = 1
+  DODGE = 2
 
 class Card:
-  suit = None
+  type = None
   value = None
   image = None
   
-  def __init__(self, suit, value):
-    self.suit = suit
+  def __init__(self, type, value):
+    self.type = type
     self.value = value
     self.image = pygame.image.load('images/BACK.png')
 
@@ -38,34 +37,25 @@ class Deck:
     return len(self.cards)
 
 
-class Pile:
-  cards = None
-  
-  def __init__(self):
-    self.cards = []
-    
-  def add(self, card):
-    self.cards.append(card)
-    
-  def peek(self):
-    if (len(self.cards) > 0):
-      return self.cards[-1]
-    else:
-      return None
-      
-  def popAll(self):
-    return self.cards
-    
-  def clear(self):
-    self.cards = []
-    
-  def isSnap(self):
-    if (len(self.cards) > 1):
-      return (self.cards[-1].value == self.cards[-2].value)
-    return False
-
-
 class Player:
+  hand = None
+  flipKey = None
+  snapKey = None
+  name = None
+
+  def __init__(self, name, flipKey, snapKey):
+    self.hand = []
+    self.flipKey = flipKey
+    self.snapKey = snapKey
+    self.name = name
+    
+  def draw(self, deck):
+    self.hand.append(deck.deal())
+    
+  def play(self):
+    return self.hand.pop(0)
+
+class Enemy:
   hand = None
   flipKey = None
   snapKey = None
