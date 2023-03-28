@@ -49,7 +49,7 @@ from typing import Final
 # Base States
 # ===========
 
-class Auction(Application):
+class AuctionState:
     """State of the auction contract."""
 
     owner: GlobalStateValue(
@@ -104,7 +104,7 @@ class Auction(Application):
     )    
 
 
-class FlatPrice(Application):
+class FlatPriceState:
     """State of the flat price contract."""
 
     owner: GlobalStateValue(
@@ -137,7 +137,7 @@ class FlatPrice(Application):
 # Specific States
 # ===============
 
-class CardAuction(Auction):
+class CardAuction(AuctionState):
     """State of the card auction contract."""
 
     type: GlobalStateValue(
@@ -147,7 +147,7 @@ class CardAuction(Auction):
     )
 
 
-class EnemyAuction(Auction):
+class EnemyAuction(AuctionState):
     """State of the enemy auction contract."""
 
     type: GlobalStateValue(
@@ -157,7 +157,7 @@ class EnemyAuction(Auction):
     )
 
 
-class CardFlatPrice(FlatPrice):
+class CardFlatPrice(FlatPriceState):
     """State of the card flat price contract."""
 
     type: GlobalStateValue(
@@ -167,7 +167,7 @@ class CardFlatPrice(FlatPrice):
     )
 
 
-class EnemyFlatPrice(FlatPrice):
+class EnemyFlatPrice(FlatPriceState):
     """State of the enemy flat price contract."""
 
     type: GlobalStateValue(
