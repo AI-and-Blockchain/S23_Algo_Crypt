@@ -7,7 +7,7 @@ bounds = (1024, 768)
 window = pygame.display.set_mode(bounds)
 pygame.display.set_caption("AlgoCrypt")
 
-gameEngine = SnapEngine()
+# gameEngine = SnapEngine()
 
 enemyImage = pygame.image.load('images/wizard.png')
 enemyImage = pygame.transform.scale(enemyImage, (int(238*0.8), int(332*0.8)))
@@ -90,30 +90,30 @@ def renderGame(window):
   # text = font.render(str(len(gameEngine.player2.hand)) + " cards", True, (255,255,255))
   # window.blit(text, (700, 500))
 
-  topCard = gameEngine.pile.peek()
-  if (topCard != None):
-    window.blit(topCard.image, (400, 200))
+  # topCard = gameEngine.pile.peek()
+  # if (topCard != None):
+  #   window.blit(topCard.image, (400, 200))
 
 
-  if gameEngine.state == GameState.PLAYING:
-    # text = font.render(gameEngine.currentPlayer.name + " to flip", True, (255,255,255))
-    # window.blit(text, (20,50))
-    pass
+  # if gameEngine.state == GameState.PLAYING:
+  #   # text = font.render(gameEngine.currentPlayer.name + " to flip", True, (255,255,255))
+  #   # window.blit(text, (20,50))
+  #   pass
 
-  if gameEngine.state == GameState.SNAPPING:
-    result = gameEngine.result
-    if result["isSnap"] == True:
-      message = "Winning Snap! by " + result["winner"].name
-    else:
-      message = "False Snap! by " + result["snapCaller"].name + ". " + result["winner"].name + " wins!"
-    text = font.render(message, True, (255,255,255))
-    window.blit(text, (20,50))
+  # if gameEngine.state == GameState.SNAPPING:
+  #   result = gameEngine.result
+  #   if result["isSnap"] == True:
+  #     message = "Winning Snap! by " + result["winner"].name
+  #   else:
+  #     message = "False Snap! by " + result["snapCaller"].name + ". " + result["winner"].name + " wins!"
+  #   text = font.render(message, True, (255,255,255))
+  #   window.blit(text, (20,50))
 
-  if gameEngine.state == GameState.ENDED:
-    result = gameEngine.result
-    message = "Game Over! " + result["winner"].name + " wins!"
-    text = font.render(message, True, (255,255,255))
-    window.blit(text, (20,50))
+  # if gameEngine.state == GameState.ENDED:
+  #   result = gameEngine.result
+  #   message = "Game Over! " + result["winner"].name + " wins!"
+  #   text = font.render(message, True, (255,255,255))
+  #   window.blit(text, (20,50))
 
 
 run = True
@@ -126,10 +126,10 @@ while run:
       key = event.key
 
   
-  gameEngine.play(key)
+  # gameEngine.play(key)
   renderGame(window)
   pygame.display.update()
 
-  if gameEngine.state == GameState.SNAPPING:
-    pygame.time.delay(3000)
-    gameEngine.state = GameState.PLAYING
+  # if gameEngine.state == GameState.SNAPPING:
+  #   pygame.time.delay(3000)
+  #   gameEngine.state = GameState.PLAYING
