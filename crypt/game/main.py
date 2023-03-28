@@ -3,8 +3,13 @@ from models import *
 from engine import *
 
 pygame.init()
-bounds = (1024, 768)
-window = pygame.display.set_mode(bounds)
+# bounds = (1024, 768)
+info = pygame.display.Info() 
+screen_width,screen_height = info.current_w,info.current_h
+window_width,window_height = screen_width-10,screen_height-50
+window = pygame.display.set_mode((window_width,window_height))
+algocrypt_icon = pygame.image.load('images/logo.png')
+pygame.display.set_icon(algocrypt_icon)
 pygame.display.set_caption("AlgoCrypt")
 
 # gameEngine = SnapEngine()
