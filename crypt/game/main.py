@@ -50,7 +50,6 @@ def renderGame(window):
     for i in range(5):
       cardWon = gameEngine.enemy.deck.cards[random.randint(0,gameEngine.enemy.deck.length()-1)]
       gameEngine.player.wonCards.append(cardWon)
-      print(len(gameEngine.player.wonCards))
       window.blit(cardWon.image, (700 + ((i+2)*100), 600))
     gameEngine.state = GameState.ENDED
     return
