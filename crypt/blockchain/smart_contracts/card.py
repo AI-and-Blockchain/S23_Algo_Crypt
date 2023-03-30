@@ -20,14 +20,17 @@ Methods:
 from beaker import *
 from pyteal import *
 
+
 class Card(abi.NamedTuple):
     name: abi.Field[abi.String]
     image_uri: abi.Field[abi.String]
     asset_id: abi.Field[abi.Uint64]
-    
+
+
 class CardVolume(abi.NamedTuple):
     card: abi.Field[Card]
     volume: abi.Field[abi.Uint64]
+
 
 class CardMintingState:
     governor: GlobalStateValue(
@@ -56,12 +59,16 @@ card_minter = Application("Algocrypt Card Minting Contract", CardMintingState)
 
 # Methods
 
+
 @card_minter.create
 def create() -> Expr:
     return card_minter.initialize_global_state()
 
+
 @card_minter.external(authorize=Authorize.only(card_minter.state.governor))
-def bootstrap(txn: abi.PaymentTransaction, assets: abi.DynamicArray[abi.Tuple3[abi.String, abi.Uint64, abi.String]]) -> Expr:
+def bootstrap(
+    txn: abi.PaymentTransaction, assets: abi.DynamicArray[abi.Tuple3[abi.String, abi.Uint64, abi.String]]
+) -> Expr:
     i = ScratchVar(TealType.uint64)
     return Seq(
         For(
@@ -72,9 +79,7 @@ def bootstrap(txn: abi.PaymentTransaction, assets: abi.DynamicArray[abi.Tuple3[a
             InnerTxnBuilder.Execute(
                 {
                     TxnField.type_enum: TxnType.AssetConfig,
-                    TxnField.config_asset_name: Concat(
-                        Bytes("CRPT-"), assets[i.load()][0]
-                    ),
+                    TxnField.config_asset_name: Concat(Bytes("CRPT-"), assets[i.load()][0]),
                     TxnField.config_asset_unit_name: Bytes("CRPT"),
                     TxnField.config_asset_total: assets[i.load()][1],
                     TxnField.config_asset_decimals: Int(0),
@@ -104,32 +109,36 @@ def bootstrap(txn: abi.PaymentTransaction, assets: abi.DynamicArray[abi.Tuple3[a
         )
     )
 
+
 @card_minter.external(authorize=Authorize.only(card_minter.state.governor))
 def update_governor(new_governor: abi.Account) -> Expr:
     return card_minter.state.governor.set(new_governor.address())
+
 
 @card_minter.external(authorize=Authorize.only(card_minter.state.governor))
 def update_description(new_description: abi.String) -> Expr:
     return card_minter.state.description.set(new_description)
 
+
 @card_minter.external(authorize=Authorize.only(card_minter.state.governor))
 def update_starting_deck(new_starting_deck: abi.Array[abi.String]) -> Expr:
     return card_minter.state.starting_deck.set(new_starting_deck)
 
+
 @Subroutine(TealType.none)
 def transfer_asset(receiver: Expr, asset_id: Expr, amount: Expr) -> Expr:
     return Seq(
-            # reduce volume of card
-            card_minter.state.all_cards.set(
-                card_minter.state.all_cards.get().map(
-                    lambda cv: If(
-                        cv.card.asset_id == asset_id,
-                        cv.volume.set(cv.volume - amount),
-                        cv,
-                    )
+        # reduce volume of card
+        card_minter.state.all_cards.set(
+            card_minter.state.all_cards.get().map(
+                lambda cv: If(
+                    cv.card.asset_id == asset_id,
+                    cv.volume.set(cv.volume - amount),
+                    cv,
                 )
-            ),
-            InnerTxnBuilder.Execute(
+            )
+        ),
+        InnerTxnBuilder.Execute(
             {
                 TxnField.type_enum: TxnType.AssetTransfer,
                 TxnField.asset_receiver: receiver,
@@ -137,8 +146,9 @@ def transfer_asset(receiver: Expr, asset_id: Expr, amount: Expr) -> Expr:
                 TxnField.xfer_asset: asset_id,
                 TxnField.fee: Int(0),
             }
-        )
+        ),
     )
+
 
 @card_minter.external
 def signup() -> Expr:
@@ -157,15 +167,14 @@ def signup() -> Expr:
         )
     )
 
+
 @card_minter.external(authorize=Authorize.only(card_minter.state.governor))
 def add_card(name: abi.String, image_uri: abi.String, volume: abi.Uint64) -> Expr:
     return Seq(
         InnerTxnBuilder.Execute(
             {
                 TxnField.type_enum: TxnType.AssetConfig,
-                TxnField.config_asset_name: Concat(
-                    Bytes("CRPT-"), name
-                ),
+                TxnField.config_asset_name: Concat(Bytes("CRPT-"), name),
                 TxnField.config_asset_unit_name: Bytes("CRPT"),
                 TxnField.config_asset_total: volume,
                 TxnField.config_asset_decimals: Int(0),
@@ -194,6 +203,7 @@ def add_card(name: abi.String, image_uri: abi.String, volume: abi.Uint64) -> Exp
         ),
     )
 
+
 @card_minter.external(authorize=Authorize.only(card_minter.state.governor))
 def add_cards(cards: abi.DynamicArray[abi.Tuple3[abi.String, abi.Uint64, abi.String]]) -> Expr:
     i = ScratchVar(TealType.uint64)
@@ -206,9 +216,7 @@ def add_cards(cards: abi.DynamicArray[abi.Tuple3[abi.String, abi.Uint64, abi.Str
             InnerTxnBuilder.Execute(
                 {
                     TxnField.type_enum: TxnType.AssetConfig,
-                    TxnField.config_asset_name: Concat(
-                        Bytes("CRPT-"), cards[i.load()][0]
-                    ),
+                    TxnField.config_asset_name: Concat(Bytes("CRPT-"), cards[i.load()][0]),
                     TxnField.config_asset_unit_name: Bytes("CRPT"),
                     TxnField.config_asset_total: cards[i.load()][1],
                     TxnField.config_asset_decimals: Int(0),
@@ -238,16 +246,16 @@ def add_cards(cards: abi.DynamicArray[abi.Tuple3[abi.String, abi.Uint64, abi.Str
         )
     )
 
+
 @card_minter.external(authorize=Authorize.only(card_minter.state.governor))
 def remove_card(asset_id: abi.Uint64) -> Expr:
     return Seq(
         # remove card from all_cards
         card_minter.state.all_cards.set(
-            card_minter.state.all_cards.get().filter(
-                lambda cv: cv.card.asset_id != asset_id
-            )
+            card_minter.state.all_cards.get().filter(lambda cv: cv.card.asset_id != asset_id)
         ),
     )
+
 
 @card_minter.external(authorize=Authorize.only(card_minter.state.governor))
 def mint_card_to_enemy(asset_id: abi.Uint64, enemy: abi.Address, amount: abi.Uint64) -> Expr:
@@ -273,10 +281,9 @@ def mint_card_to_enemy(asset_id: abi.Uint64, enemy: abi.Address, amount: abi.Uin
         ),
     )
 
+
 client = client.ApplicationClient(
-    client=sandbox.get_algod_client(),
-    app=card_minter,
-    signer=sandbox.get_accounts().pop().signer
+    client=sandbox.get_algod_client(), app=card_minter, signer=sandbox.get_accounts().pop().signer
 )
 
 app_id, app_addr, txid = client.create()

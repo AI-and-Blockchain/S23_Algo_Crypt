@@ -50,142 +50,71 @@ from argparse import ArgumentParser
 # Base States
 # ===========
 
+
 class AuctionState:
     """State of the auction contract."""
 
-    owner: GlobalStateValue(
-        stack_type=abi.Address,
-        descr="Owner of the contract",
-        default=Global.creator_address()
-    )
-    name: GlobalStateValue(
-        stack_type=abi.String,
-        descr="Name of the item",
-        default=""
-    )
-    image_uri: GlobalStateValue(
-        stack_type=abi.String,
-        descr="URI of the image of the item",
-        default=""
-    )
-    description: GlobalStateValue(
-        stack_type=abi.String,
-        descr="Description of the item",
-        default=""
-    )
-    buy_now_price: GlobalStateValue(
-        stack_type=abi.Uint64,
-        descr="Buy now price of the item",
-        default=0
-    )
-    auction_start_time: GlobalStateValue(
-        stack_type=abi.Uint64,
-        descr="Start time of the auction",
-        default=0
-    )
-    auction_end_time: GlobalStateValue(
-        stack_type=abi.Uint64,
-        descr="End time of the auction",
-        default=0
-    )
-    auction_start_price: GlobalStateValue(
-        stack_type=abi.Uint64,
-        descr="Start price of the auction",
-        default=0
-    )
-    current_bid: GlobalStateValue(
-        stack_type=abi.Uint64,
-        descr="Current bid of the auction",
-        default=0
-    )
+    owner: GlobalStateValue(stack_type=abi.Address, descr="Owner of the contract", default=Global.creator_address())
+    name: GlobalStateValue(stack_type=abi.String, descr="Name of the item", default="")
+    image_uri: GlobalStateValue(stack_type=abi.String, descr="URI of the image of the item", default="")
+    description: GlobalStateValue(stack_type=abi.String, descr="Description of the item", default="")
+    buy_now_price: GlobalStateValue(stack_type=abi.Uint64, descr="Buy now price of the item", default=0)
+    auction_start_time: GlobalStateValue(stack_type=abi.Uint64, descr="Start time of the auction", default=0)
+    auction_end_time: GlobalStateValue(stack_type=abi.Uint64, descr="End time of the auction", default=0)
+    auction_start_price: GlobalStateValue(stack_type=abi.Uint64, descr="Start price of the auction", default=0)
+    current_bid: GlobalStateValue(stack_type=abi.Uint64, descr="Current bid of the auction", default=0)
     current_bidder: GlobalStateValue(
-        stack_type=abi.Address,
-        descr="Current bidder of the auction",
-        default=Global.zero_address()
-    )    
+        stack_type=abi.Address, descr="Current bidder of the auction", default=Global.zero_address()
+    )
 
 
 class FlatPriceState:
     """State of the flat price contract."""
 
-    owner: GlobalStateValue(
-        stack_type=abi.Address,
-        descr="Owner of the contract",
-        default=Global.creator_address()
-    )
-    name: GlobalStateValue(
-        stack_type=abi.String,
-        descr="Name of the item",
-        default=""
-    )
-    image_uri: GlobalStateValue(
-        stack_type=abi.String,
-        descr="URI of the image of the item",
-        default=""
-    )
-    description: GlobalStateValue(
-        stack_type=abi.String,
-        descr="Description of the item",
-        default=""
-    )
-    price: GlobalStateValue(
-        stack_type=abi.Uint64,
-        descr="Price of the item",
-        default=0
-    )
+    owner: GlobalStateValue(stack_type=abi.Address, descr="Owner of the contract", default=Global.creator_address())
+    name: GlobalStateValue(stack_type=abi.String, descr="Name of the item", default="")
+    image_uri: GlobalStateValue(stack_type=abi.String, descr="URI of the image of the item", default="")
+    description: GlobalStateValue(stack_type=abi.String, descr="Description of the item", default="")
+    price: GlobalStateValue(stack_type=abi.Uint64, descr="Price of the item", default=0)
 
 
 # Specific States
 # ===============
 
+
 class CardAuction(AuctionState):
     """State of the card auction contract."""
 
-    type: GlobalStateValue(
-        stack_type=abi.String,
-        descr="Type of the item",
-        default="card"
-    )
+    type: GlobalStateValue(stack_type=abi.String, descr="Type of the item", default="card")
 
 
 class EnemyAuction(AuctionState):
     """State of the enemy auction contract."""
 
-    type: GlobalStateValue(
-        stack_type=abi.String,
-        descr="Type of the item",
-        default="enemy"
-    )
+    type: GlobalStateValue(stack_type=abi.String, descr="Type of the item", default="enemy")
 
 
 class CardFlatPrice(FlatPriceState):
     """State of the card flat price contract."""
 
-    type: GlobalStateValue(
-        stack_type=abi.String,
-        descr="Type of the item",
-        default="card"
-    )
+    type: GlobalStateValue(stack_type=abi.String, descr="Type of the item", default="card")
 
 
 class EnemyFlatPrice(FlatPriceState):
     """State of the enemy flat price contract."""
 
-    type: GlobalStateValue(
-        stack_type=abi.String,
-        descr="Type of the item",
-        default="enemy"
-    )
+    type: GlobalStateValue(stack_type=abi.String, descr="Type of the item", default="enemy")
 
 
 # Blueprints
 # ==========
 
+
 def auction_blueprint(app: Application) -> None:
     @app.create
     def create() -> Expr:
         return app.initialize_global_state()
-    
+
     @Subroutine(TealType.none)
     def pay(receiver: Expr, amount: Expr) -> Expr:
         return InnerTxnBuilder.Execute(
@@ -193,10 +122,10 @@ def auction_blueprint(app: Application) -> None:
                 TxnField.type_enum: TxnType.Payment,
                 TxnField.receiver: receiver,
                 TxnField.amount: amount,
-                TxnField.fee: Int(0)
+                TxnField.fee: Int(0),
             }
         )
-    
+
     @app.external(authorize=Authorize.only(app.owner))
     def start_auction(
         paymentTx: abi.PaymentTransaction,
@@ -218,7 +147,7 @@ def auction_blueprint(app: Application) -> None:
             app.auction_end_time.set(auction_end_time),
             app.auction_start_price.set(auction_start_price),
         )
-    
+
     @app.external
     def bid(paymentTx: abi.PaymentTransaction) -> Expr:
         payment = paymentTx.get()
@@ -239,7 +168,7 @@ def auction_blueprint(app: Application) -> None:
             app.current_bidder.set(payment.sender()),
             app.current_bid.set(payment.amount()),
         )
-    
+
     @app.external
     def buy_now(paymentTx: abi.PaymentTransaction) -> Expr:
         start_time = app.auction_start_time.get()
@@ -263,7 +192,7 @@ def auction_blueprint(app: Application) -> None:
             app.current_bid.set_default(),
             app.current_bidder.set_default(),
         )
-    
+
     @app.external(authorize=Authorize.only(app.owner))
     def end_auction() -> Expr:
         start_time = app.auction_start_time.get()
@@ -287,7 +216,7 @@ def flat_price_blueprint(app: Application) -> None:
     @app.create
     def create() -> Expr:
         return app.initialize_global_state()
-    
+
     @Subroutine(TealType.none)
     def pay(receiver: Expr, amount: Expr) -> Expr:
         return InnerTxnBuilder.Execute(
@@ -295,10 +224,10 @@ def flat_price_blueprint(app: Application) -> None:
                 TxnField.type_enum: TxnType.Payment,
                 TxnField.receiver: receiver,
                 TxnField.amount: amount,
-                TxnField.fee: Int(0)
+                TxnField.fee: Int(0),
             }
         )
-    
+
     @app.external(authorize=Authorize.only(app.owner))
     def set_price(
         paymentTx: abi.PaymentTransaction,
@@ -315,7 +244,7 @@ def flat_price_blueprint(app: Application) -> None:
             app.description.set(description),
             app.price.set(price),
         )
-    
+
     @app.external
     def buy(paymentTx: abi.PaymentTransaction) -> Expr:
         price = app.price.get()
@@ -330,7 +259,6 @@ def flat_price_blueprint(app: Application) -> None:
 
 
 if __name__ == "__main__":
-
     parser = ArgumentParser()
     parser.add_argument(
         "--auction",
@@ -368,11 +296,9 @@ if __name__ == "__main__":
         flat_price_blueprint(app)
     else:
         raise ValueError("Must specify auction or flat")
-    
+
     client = client.ApplicationClient(
-        client=sandbox.get_algod_client(),
-        app=app,
-        signer=sandbox.get_accounts().pop().signer
+        client=sandbox.get_algod_client(), app=app, signer=sandbox.get_accounts().pop().signer
     )
 
     app_id, app_addr, txid = client.create()

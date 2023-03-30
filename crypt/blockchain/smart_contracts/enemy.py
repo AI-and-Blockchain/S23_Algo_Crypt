@@ -51,6 +51,7 @@ Methods:
 from beaker import *
 from pyteal import *
 
+
 class Enemy(abi.NamedTuple):
     name: abi.Field[abi.String]
     health: abi.Field[abi.Uint64]
@@ -60,6 +61,7 @@ class Enemy(abi.NamedTuple):
     image_uri: abi.Field[abi.String]
     description: abi.Field[abi.String]
 
+
 class Challenger(abi.NamedTuple):
     name: abi.Field[abi.String]
     user: abi.Field[abi.Address]
@@ -67,6 +69,7 @@ class Challenger(abi.NamedTuple):
     strength: abi.Field[abi.Uint64]
     intelligence: abi.Field[abi.Uint64]
     dexterity: abi.Field[abi.Uint64]
+
 
 class GameState(abi.NamedTuple):
     challenger: abi.Field[Challenger]
@@ -76,6 +79,7 @@ class GameState(abi.NamedTuple):
     current_challenger_health: abi.Field[abi.Uint64]
     challenger_won: abi.Field[abi.Bool]
     enemy_won: abi.Field[abi.Bool]
+
 
 class EnemyState:
     owner: GlobalStateValue(
@@ -126,13 +130,16 @@ class EnemyState:
         ),
     )
 
+
 enemy = Application("Algocrypt Enemy Contract", EnemyState)
 
 # Methods
 
+
 @enemy.create
 def create() -> Expr:
     return enemy.initialize_global_state()
+
 
 @enemy.external(authorize=Authorize.only(enemy.owner))
 def set_enemy_details(
@@ -150,6 +157,7 @@ def set_enemy_details(
         )
     )
 
+
 @enemy.external
 def challenge(challenger: Challenger) -> Expr:
     return enemy.state.game_state.set(
@@ -164,11 +172,13 @@ def challenge(challenger: Challenger) -> Expr:
         )
     )
 
+
 @enemy.external
 def play_turn(
-    cards: abi.Tuple3[abi.Tuple2[abi.String, abi.String], 
-                      abi.Tuple2[abi.String, abi.String], 
-                      abi.Tuple2[abi.String, abi.String]]) -> Expr:
+    cards: abi.Tuple3[
+        abi.Tuple2[abi.String, abi.String], abi.Tuple2[abi.String, abi.String], abi.Tuple2[abi.String, abi.String]
+    ]
+) -> Expr:
     game_state = enemy.state.game_state.get()
     enemy_details = game_state.enemy
     challenger_details = game_state.challenger
@@ -189,8 +199,8 @@ def play_turn(
             elif card[1] == "intelligence":
                 mag_defense += challenger_details.intelligence
         else:
-            phys_defense += challenger_details.dexterity//2
-            mag_defense += challenger_details.dexterity//2
+            phys_defense += challenger_details.dexterity // 2
+            mag_defense += challenger_details.dexterity // 2
 
     dex_diff = challenger_details.dexterity - enemy_details.dexterity
     str_diff = challenger_details.strength - enemy_details.strength
@@ -215,8 +225,8 @@ def play_turn(
     elif preferred_def == "strength":
         enemy_phys_defense += enemy_details.strength
     else:
-        enemy_phys_defense += enemy_details.dexterity//2
-        enemy_mag_defense += enemy_details.dexterity//2
+        enemy_phys_defense += enemy_details.dexterity // 2
+        enemy_mag_defense += enemy_details.dexterity // 2
 
     damage_to_enemy = max(0, phys_damage - enemy_phys_defense) + max(0, mag_damage - enemy_mag_defense)
     damage_to_challenger = max(0, enemy_phys_damage - phys_defense) + max(0, enemy_mag_damage - mag_defense)
@@ -229,9 +239,11 @@ def play_turn(
         )
     )
 
+
 @Subroutine(TealType.none)
 def end_game() -> Expr:
     raise NotImplementedError
+
 
 @Subroutine(TealType.none)
 def attack_challenger(attack_type: abi.String) -> Expr:
@@ -250,13 +262,11 @@ def attack_challenger(attack_type: abi.String) -> Expr:
         game_state.set(
             current_challenger_health=game_state.current_challenger_health - damage,
         )
-    ) 
+    )
 
 
 client = client.ApplicationClient(
-    client=sandbox.get_algod_client(),
-    app=enemy,
-    signer=sandbox.get_accounts().pop().signer
+    client=sandbox.get_algod_client(), app=enemy, signer=sandbox.get_accounts().pop().signer
 )
 
 app_id, app_addr, txid = client.create()
@@ -266,4 +276,3 @@ print(
     Address: {app_addr} 
 """
 )
-    
