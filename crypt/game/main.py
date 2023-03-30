@@ -23,7 +23,7 @@ enemyDeck = Deck([Card(Types.ATTACK,Values.INTELLIGENCE,"images/LIGHTNINGATTACKI
                   + [Card(Types.DEFENSE,Values.INTELLIGENCE,"images/ELIXIRDEFENSEINTELL.png")]*5)
 gameEngine = GameEngine(playerDeck,enemyDeck,
                         "PalaMAN","Gandalf The Grey",
-                        playerHealth=100,enemyHealth=10,
+                        playerHealth=100,enemyHealth=75,
                         playerStrength=5,enemyStrength=2,
                         playerIntelligence=2,enemyIntelligence=10,
                         playerDexterity=4,enemyDexterity=2,
@@ -37,12 +37,12 @@ cardBack = pygame.image.load('images/BACK.png')
 cardBack = pygame.transform.scale(cardBack, (int(238*0.6), int(332*0.6)))
 
 def renderGame(window):
-  window.fill((1,50,32))
+  window.fill((12,9,13))
   font = pygame.font.SysFont('arial',20, True)
 
   if (gameEngine.state == GameState.WIN):
     font = pygame.font.SysFont('arial',50, True)
-    winText = font.render("You Win!", True, (144, 238, 144))
+    winText = font.render("You Win!", True, (8,126,139))
     window.blit(winText, (window.get_width()/2 - winText.get_width()/2, window.get_height()/2 - winText.get_height()/2))
     window.blit(gameEngine.enemy.image, (700, 600))
     gameEngine.player.winNFTImagePath = ENEMY_IMAGE_PATH
@@ -55,7 +55,7 @@ def renderGame(window):
     return
   elif (gameEngine.state == GameState.LOSE):
     font = pygame.font.SysFont('arial',50, True)
-    loseText = font.render("You Lose " + str(GAMESTAKE) + " CRPT!", True, (255,0,0))
+    loseText = font.render("You Lose " + str(GAMESTAKE) + " CRPT!", True, (200,29,37))
     window.blit(loseText, (window.get_width()/2 - loseText.get_width()/2, window.get_height()/2 - loseText.get_height()/2))
     gameEngine.state = GameState.ENDED
     return
@@ -63,43 +63,43 @@ def renderGame(window):
 
 
   if (gameEngine.state == GameState.STARTUP):
-    startPlayText = font.render("Press The Space Bar To Draw", True, (144, 238, 144))
+    startPlayText = font.render("Press The Space Bar To Draw", True, (191,215,234))
     window.blit(startPlayText, (950,450))
 
   #player image
   window.blit(gameEngine.player.image, (100, 600))
   #player health
-  healthText = font.render("Health: " + str(gameEngine.player.health) + "/" + str(PLAYERHEALTH), True, (255,0,0), (64,47,29))
+  healthText = font.render("Health: " + str(gameEngine.player.health) + "/" + str(PLAYERHEALTH), True, (200,29,37))
   window.blit(healthText, (300, 825))
   #player damage
   if (gameEngine.state == GameState.DONEPLAY):
-    damageText = font.render("-" + str(gameEngine.player.damage), True, (255,0,0), (64,47,29))
+    damageText = font.render("-" + str(gameEngine.player.damage), True, (200,29,37))
     window.blit(damageText, (300, 750))
 
-  text = font.render(gameEngine.player.name, True, (0,0,0))
+  text = font.render(gameEngine.player.name, True, (191,215,234))
   window.blit(text, (100, 900))
 
   #enemy image
   window.blit(gameEngine.enemy.image, (100, 100))
   #enemy health
-  healthText = font.render("Health: " + str(gameEngine.enemy.health) + "/" + str(ENEMYHEALTH), True, (255,0,0), (64,47,29))
+  healthText = font.render("Health: " + str(gameEngine.enemy.health) + "/" + str(ENEMYHEALTH), True, (200,29,37))
   window.blit(healthText, (300, 325))
   #enemy damage
   if (gameEngine.state == GameState.DONEPLAY):
-    damageText = font.render("-" + str(gameEngine.enemy.damage), True, (255,0,0), (64,47,29))
+    damageText = font.render("-" + str(gameEngine.enemy.damage), True, (200,29,37))
     window.blit(damageText, (300, 250))
-  text = font.render(gameEngine.enemy.name, True, (0,0,0))
+  text = font.render(gameEngine.enemy.name, True, (191,215,234))
   window.blit(text, (100, 50))
 
   # Draw piles
-  drawText = font.render("Draw Pile: " + str(gameEngine.player.deck.length()), True, (0,0,255))
+  drawText = font.render("Draw Pile: " + str(gameEngine.player.deck.length()), True, (8,126,139))
   window.blit(drawText, (500, 800))
   window.blit(cardBack, (500, 600)) # Player
   # Player stats
-  userText1 = font.render("User Stats: ", True, (0,0,0))
-  userText2 = font.render("Strength: " + str(gameEngine.player.strength), True, (0,0,0))
-  userText3 = font.render("Intelligence: " + str(gameEngine.player.intelligence), True, (0,0,0))
-  userText4 = font.render("Dexterity: " + str(gameEngine.player.dexterity), True, (0,0,0))
+  userText1 = font.render("User Stats: ", True, (255,90,95))
+  userText2 = font.render("Strength: " + str(gameEngine.player.strength), True, (255,90,95))
+  userText3 = font.render("Intelligence: " + str(gameEngine.player.intelligence), True, (255,90,95))
+  userText4 = font.render("Dexterity: " + str(gameEngine.player.dexterity), True, (255,90,95))
   window.blit(userText1, (300, 600))
   window.blit(userText2, (300, 650))
   window.blit(userText3, (300, 675))
@@ -107,10 +107,10 @@ def renderGame(window):
 
   window.blit(cardBack, (500, 100)) # Enemy
   # Enemy stats
-  enemyText1 = font.render("Enemy Stats: ", True, (0,0,0))
-  enemyText2 = font.render("Strength: " + str(gameEngine.enemy.strength), True, (0,0,0))
-  enemyText3 = font.render("Intelligence: " + str(gameEngine.enemy.intelligence), True, (0,0,0))
-  enemyText4 = font.render("Dexterity: " + str(gameEngine.enemy.dexterity), True, (0,0,0))  
+  enemyText1 = font.render("Enemy Stats: ", True, (255,90,95))
+  enemyText2 = font.render("Strength: " + str(gameEngine.enemy.strength), True, (255,90,95))
+  enemyText3 = font.render("Intelligence: " + str(gameEngine.enemy.intelligence), True, (255,90,95))
+  enemyText4 = font.render("Dexterity: " + str(gameEngine.enemy.dexterity), True, (255,90,95))  
   window.blit(enemyText1, (300, 100))
   window.blit(enemyText2, (300, 150))
   window.blit(enemyText3, (300, 175))
@@ -118,7 +118,7 @@ def renderGame(window):
 
   # Discard piles
   window.blit(cardBack, (1700, 600))
-  discardText = font.render("Discard Pile: " + str(gameEngine.player.discard.length()), True, (0,0,255))
+  discardText = font.render("Discard Pile: " + str(gameEngine.player.discard.length()), True, (8,126,139))
   window.blit(discardText, (1700, 800))
 
   window.blit(cardBack, (1700, 100))
@@ -138,15 +138,15 @@ def renderGame(window):
 
   # Enemy hand
   if (gameEngine.state == GameState.DRAWING or gameEngine.state == GameState.INPLAY):
-    if (gameEngine.enemy.hand[0] != None):
+    if (gameEngine.enemy.hand[0] != None and type(gameEngine.enemy.hand[0]) == Card):
       window.blit(cardBack, (800, 0))
-    if (gameEngine.enemy.hand[1] != None):
+    if (gameEngine.enemy.hand[1] != None and type(gameEngine.enemy.hand[1]) == Card):
       window.blit(cardBack, (950, 0))
-    if (gameEngine.enemy.hand[2] != None):
+    if (gameEngine.enemy.hand[2] != None and type(gameEngine.enemy.hand[2]) == Card):
       window.blit(cardBack, (1100, 0))
-    if (gameEngine.enemy.hand[3] != None):
+    if (gameEngine.enemy.hand[3] != None and type(gameEngine.enemy.hand[3]) == Card):
       window.blit(cardBack, (1250, 0))
-    if (gameEngine.enemy.hand[4] != None):
+    if (gameEngine.enemy.hand[4] != None and type(gameEngine.enemy.hand[4]) == Card):
       window.blit(cardBack, (1400, 0))
 
   # Player played cards

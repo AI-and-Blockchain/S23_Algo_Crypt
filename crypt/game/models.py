@@ -192,14 +192,15 @@ class Enemy:
     self.hand.append(self.deck.deal())
   
   def playCard(self):
-    self.play[0] = self.hand[0]
-    self.hand[0] = 0
+    drawnCards = random.sample(range(0,5),3)
+    self.play[0] = self.hand[drawnCards[0]]
+    self.hand[drawnCards[0]] = 0
 
-    self.play[1] = self.hand[1]
-    self.hand[1] = 1
+    self.play[1] = self.hand[drawnCards[1]]
+    self.hand[drawnCards[1]] = 1
 
-    self.play[2] = self.hand[2]
-    self.hand[2] = 2
+    self.play[2] = self.hand[drawnCards[2]]
+    self.hand[drawnCards[2]] = 2
 
   def action(self):
     for card in self.play:
