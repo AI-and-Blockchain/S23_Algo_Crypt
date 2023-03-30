@@ -7,7 +7,10 @@ class GameState(Enum):
   STARTUP = 0
   DRAWING = 1
   INPLAY = 2
-  ENDED = 3
+  DONEPLAY = 3
+  WIN = 4
+  LOSE = 5
+  ENDED = 6
 
 
 class GameEngine:
@@ -32,9 +35,6 @@ class GameEngine:
     if key == None: 
       return
      
-    if self.state == GameState.ENDED:
-      return
-
     if key == pygame.K_SPACE and self.state == GameState.STARTUP:
       self.state = GameState.DRAWING
       self.player.draw()
