@@ -73,8 +73,8 @@ def generate_enemy():
     dalle_prompt = response3.choices[0].text.strip()
 
 
-    print(dalle_prompt)
-    print()
+    #print(dalle_prompt)
+    #print()
 
 
     response = openai.Image.create(
