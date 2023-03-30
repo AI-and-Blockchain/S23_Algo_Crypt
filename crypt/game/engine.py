@@ -4,93 +4,57 @@ from models import *
 
 
 class GameState(Enum):
-  PLAYING = 0
-  SNAPPING = 1
-  ENDED = 2
+  STARTUP = 0
+  DRAWING = 1
+  INPLAY = 2
+  DONEPLAY = 3
+  WIN = 4
+  LOSE = 5
+  ENDED = 6
 
 
-class SnapEngine:
-  deck = None
-  player1 = None
-  player2 = None
-  pile = None
+class GameEngine:
+  player = None
+  enemy = None
   state = None
-  currentPlayer = None
+  
   result = None
   
-  def __init__(self):
-    self.deck = Deck()
-    self.deck.shuffle()
-    self.player1 = Player("Player 1", pygame.K_q, pygame.K_w)
-    self.player2 = Player("Player 2", pygame.K_o,pygame.K_p)
-    self.pile = Pile()
-    self.deal()
-    self.currentPlayer = self.player1
-    self.state = GameState.PLAYING
-
-
-  def deal(self):
-    half = self.deck.length() // 2
-    for i in range(0, half):
-      self.player1.draw(self.deck)
-      self.player2.draw(self.deck)
-
-  def switchPlayer(self):
-    if self.currentPlayer == self.player1:
-      self.currentPlayer = self.player2
-    else:
-      self.currentPlayer = self.player1
-
-  def winRound(self, player):
-    self.state = GameState.SNAPPING
-    player.hand.extend(self.pile.popAll())
-    self.pile.clear()
+  def __init__(self, playerDeck, enemyDeck, 
+               playerName, enemyName, 
+               playerHealth=100, enemyHealth=100, 
+               playerStrength=0, enemyStrength=0, 
+               playerIntelligence=0, enemyIntelligence=0, 
+               playerDexterity=0, enemyDexterity=0, playerImagePath=None, enemyImagePath=None):
+    
+    self.player = Player(playerName, playerDeck, playerHealth, playerStrength, playerIntelligence, playerDexterity, playerImagePath)
+    self.enemy = Enemy(enemyName, enemyDeck, enemyHealth, enemyStrength, enemyIntelligence, enemyDexterity, enemyImagePath)
+    self.state = GameState.STARTUP
 
   def play(self, key):
     if key == None: 
       return
      
-    if self.state == GameState.ENDED:
+    if key == pygame.K_SPACE and self.state == GameState.STARTUP:
+      self.state = GameState.DRAWING
+      self.player.draw()
+      self.enemy.draw()
       return
 
-    if key == self.currentPlayer.flipKey:
-      self.pile.add(self.currentPlayer.play())
-      self.switchPlayer()
+    if self.state == GameState.DRAWING:
+      if key == pygame.K_1:
+        self.player.playCard(0)
+      elif key == pygame.K_2:
+        self.player.playCard(1)
+      elif key == pygame.K_3:
+        self.player.playCard(2)
+      elif key == pygame.K_4:
+        self.player.playCard(3) 
+      elif key == pygame.K_5:
+        self.player.playCard(4)
+      elif key == pygame.K_RETURN:
+        if (self.player.play[2] != None and self.player.play[1] != None and self.player.play[0] != None):
+          self.state = GameState.INPLAY
+          self.enemy.playCard()
+          return
 
-    snapCaller = None
-    nonSnapCaller = None
-    isSnap = self.pile.isSnap()
-
-    if (key == self.player1.snapKey):
-      snapCaller = self.player1
-      nonSnapCaller = self.player2
-    elif (key == self.player2.snapKey):
-      snapCaller = self.player2
-      nonSnapCaller = self.player1
-
-    if isSnap and snapCaller:
-      self.winRound(snapCaller)
-      self.result = {
-        "winner": snapCaller,
-        "isSnap": True,
-        "snapCaller": snapCaller 
-      }
-      self.winRound(snapCaller)
-    elif not isSnap and snapCaller:
-      self.result = {
-        "winner": nonSnapCaller,
-        "isSnap": False,
-        "snapCaller": snapCaller 
-      }
-      self.winRound(nonSnapCaller)
-
-    if len(self.player1.hand) == 0:
-      self.result = {
-        "winner": self.player2,
-      }
-      self.state = GameState.ENDED
-    elif len(self.player2.hand) == 0:
-      self.result = {
-        "winner": self.player1,
-      }
-      self.state = GameState.ENDED
