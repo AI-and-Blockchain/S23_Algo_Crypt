@@ -1,0 +1,71 @@
+{
+    "hints": {
+        "bootstrap(pay,(string,string,string)[])void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMiAxIDY1NTM2IDEwMDAwCmJ5dGVjYmxvY2sgMHggMHg2ZTVmNjM2MTcyNjQ3Mwp0eG4gTnVtQXBwQXJncwppbnRjXzAgLy8gMAo9PQpibnogbWFpbl9sNAp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweGEzMjFlN2RhIC8vICJib290c3RyYXAocGF5LChzdHJpbmcsc3RyaW5nLHN0cmluZylbXSl2b2lkIgo9PQpibnogbWFpbl9sMwplcnIKbWFpbl9sMzoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQpzdG9yZSAxCnR4biBHcm91cEluZGV4CmludGNfMiAvLyAxCi0Kc3RvcmUgMApsb2FkIDAKZ3R4bnMgVHlwZUVudW0KaW50Y18yIC8vIHBheQo9PQphc3NlcnQKbG9hZCAwCmxvYWQgMQpjYWxsc3ViIGJvb3RzdHJhcF8wCmludGNfMiAvLyAxCnJldHVybgptYWluX2w0Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CmJueiBtYWluX2w2CmVycgptYWluX2w2Ogp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAo9PQphc3NlcnQKaW50Y18yIC8vIDEKcmV0dXJuCgovLyBib290c3RyYXAKYm9vdHN0cmFwXzA6CnByb3RvIDIgMAppbnRjXzAgLy8gMApieXRlY18wIC8vICIiCmR1cG4gMwppbnRjXzAgLy8gMApkdXAKYnl0ZWNfMCAvLyAiIgpkdXAKaW50Y18wIC8vIDAKYnl0ZWNfMCAvLyAiIgpkdXBuIDYKaW50Y18wIC8vIDAKZHVwCmJ5dGVjXzAgLy8gIiIKZHVwCmludGNfMCAvLyAwCnR4biBTZW5kZXIKZ2xvYmFsIENyZWF0b3JBZGRyZXNzCj09Ci8vIHVuYXV0aG9yaXplZAphc3NlcnQKZnJhbWVfZGlnIC0yCmd0eG5zIFJlY2VpdmVyCmdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25BZGRyZXNzCj09Ci8vIFNlZWQgdHJhbnNhY3Rpb24gbXVzdCBiZSBzZW50IHRvIHRoZSBhcHBsaWNhdGlvbiBhZGRyZXNzLgphc3NlcnQKZnJhbWVfZGlnIC0xCmludGNfMCAvLyAwCmV4dHJhY3RfdWludDE2CmZyYW1lX2J1cnkgMApmcmFtZV9kaWcgMApzdG9yZSAyCmludGNfMCAvLyAwCnN0b3JlIDMKYm9vdHN0cmFwXzBfbDE6CmxvYWQgMwpsb2FkIDIKPApieiBib290c3RyYXBfMF9sNgpmcmFtZV9kaWcgMgpmcmFtZV9idXJ5IDgKZnJhbWVfZGlnIDgKZnJhbWVfYnVyeSA3CnB1c2hpbnQgNiAvLyA2CmZyYW1lX2J1cnkgNQpmcmFtZV9kaWcgNQpmcmFtZV9kaWcgOApsZW4KKwpmcmFtZV9idXJ5IDYKZnJhbWVfZGlnIDYKaW50Y18zIC8vIDY1NTM2CjwKYXNzZXJ0CmZyYW1lX2RpZyA1Cml0b2IKZXh0cmFjdCA2IDAKZnJhbWVfZGlnIDMKZnJhbWVfYnVyeSA4CmZyYW1lX2RpZyA3CmZyYW1lX2RpZyA4CmNvbmNhdApmcmFtZV9idXJ5IDcKZnJhbWVfZGlnIDYKZnJhbWVfYnVyeSA1CmZyYW1lX2RpZyA1CmZyYW1lX2RpZyA4CmxlbgorCmZyYW1lX2J1cnkgNgpmcmFtZV9kaWcgNgppbnRjXzMgLy8gNjU1MzYKPAphc3NlcnQKZnJhbWVfZGlnIDUKaXRvYgpleHRyYWN0IDYgMApjb25jYXQKZnJhbWVfZGlnIDQKZnJhbWVfYnVyeSA4CmZyYW1lX2RpZyA3CmZyYW1lX2RpZyA4CmNvbmNhdApmcmFtZV9idXJ5IDcKZnJhbWVfZGlnIDYKZnJhbWVfYnVyeSA1CmZyYW1lX2RpZyA1Cml0b2IKZXh0cmFjdCA2IDAKY29uY2F0CmZyYW1lX2RpZyA3CmNvbmNhdApmcmFtZV9idXJ5IDEKZnJhbWVfZGlnIC0xCmZyYW1lX2RpZyAtMQppbnRjXzEgLy8gMgpsb2FkIDMKKgppbnRjXzEgLy8gMgorCmV4dHJhY3RfdWludDE2CmludGNfMSAvLyAyCisKbG9hZCAzCmludGNfMiAvLyAxCisKZnJhbWVfZGlnIC0xCmludGNfMCAvLyAwCmV4dHJhY3RfdWludDE2CmZyYW1lX2J1cnkgOQpmcmFtZV9kaWcgOQo9PQpibnogYm9vdHN0cmFwXzBfbDUKZnJhbWVfZGlnIC0xCmludGNfMSAvLyAyCmxvYWQgMwoqCmludGNfMSAvLyAyCisKaW50Y18xIC8vIDIKKwpleHRyYWN0X3VpbnQxNgppbnRjXzEgLy8gMgorCmJvb3RzdHJhcF8wX2w0OgpzdWJzdHJpbmczCmZyYW1lX2J1cnkgMQpmcmFtZV9kaWcgMTEKZnJhbWVfYnVyeSAxMApmcmFtZV9kaWcgMTMKZnJhbWVfYnVyeSAxMgpmcmFtZV9kaWcgMTUKZnJhbWVfYnVyeSAxNApmcmFtZV9kaWcgMQpmcmFtZV9kaWcgMQppbnRjXzAgLy8gMApleHRyYWN0X3VpbnQxNgpmcmFtZV9kaWcgMQppbnRjXzEgLy8gMgpleHRyYWN0X3VpbnQxNgpzdWJzdHJpbmczCmZyYW1lX2J1cnkgMTAKZnJhbWVfZGlnIDEKZnJhbWVfZGlnIDEKaW50Y18xIC8vIDIKZXh0cmFjdF91aW50MTYKZnJhbWVfZGlnIDEKcHVzaGludCA0IC8vIDQKZXh0cmFjdF91aW50MTYKc3Vic3RyaW5nMwpmcmFtZV9idXJ5IDEyCmZyYW1lX2RpZyAxCmZyYW1lX2RpZyAxCnB1c2hpbnQgNCAvLyA0CmV4dHJhY3RfdWludDE2CmRpZyAxCmxlbgpzdWJzdHJpbmczCmZyYW1lX2J1cnkgMTQKaXR4bl9iZWdpbgpwdXNoaW50IDMgLy8gYWNmZwppdHhuX2ZpZWxkIFR5cGVFbnVtCmZyYW1lX2RpZyAxMApleHRyYWN0IDIgMAppdHhuX2ZpZWxkIENvbmZpZ0Fzc2V0TmFtZQpwdXNoYnl0ZXMgMHg0MzUyNTA1NDJkNDM2MTcyNjQyZDdiNjk3ZCAvLyAiQ1JQVC1DYXJkLXtpfSIKaXR4bl9maWVsZCBDb25maWdBc3NldFVuaXROYW1lCmludGMgNCAvLyAxMDAwMAppdHhuX2ZpZWxkIENvbmZpZ0Fzc2V0VG90YWwKaW50Y18wIC8vIDAKaXR4bl9maWVsZCBDb25maWdBc3NldERlY2ltYWxzCmludGNfMCAvLyAwCml0eG5fZmllbGQgQ29uZmlnQXNzZXREZWZhdWx0RnJvemVuCmdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25BZGRyZXNzCml0eG5fZmllbGQgQ29uZmlnQXNzZXRNYW5hZ2VyCmdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25BZGRyZXNzCml0eG5fZmllbGQgQ29uZmlnQXNzZXRSZXNlcnZlCmdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25BZGRyZXNzCml0eG5fZmllbGQgQ29uZmlnQXNzZXRGcmVlemUKZ2xvYmFsIEN1cnJlbnRBcHBsaWNhdGlvbkFkZHJlc3MKaXR4bl9maWVsZCBDb25maWdBc3NldENsYXdiYWNrCmludGNfMCAvLyAwCml0eG5fZmllbGQgRmVlCml0eG5fc3VibWl0CmZyYW1lX2RpZyAxMApmcmFtZV9idXJ5IDIwCmZyYW1lX2RpZyAyMApmcmFtZV9idXJ5IDE5CnB1c2hpbnQgNiAvLyA2CmZyYW1lX2J1cnkgMTcKZnJhbWVfZGlnIDE3CmZyYW1lX2RpZyAyMApsZW4KKwpmcmFtZV9idXJ5IDE4CmZyYW1lX2RpZyAxOAppbnRjXzMgLy8gNjU1MzYKPAphc3NlcnQKZnJhbWVfZGlnIDE3Cml0b2IKZXh0cmFjdCA2IDAKZnJhbWVfZGlnIDEyCmZyYW1lX2J1cnkgMjAKZnJhbWVfZGlnIDE5CmZyYW1lX2RpZyAyMApjb25jYXQKZnJhbWVfYnVyeSAxOQpmcmFtZV9kaWcgMTgKZnJhbWVfYnVyeSAxNwpmcmFtZV9kaWcgMTcKZnJhbWVfZGlnIDIwCmxlbgorCmZyYW1lX2J1cnkgMTgKZnJhbWVfZGlnIDE4CmludGNfMyAvLyA2NTUzNgo8CmFzc2VydApmcmFtZV9kaWcgMTcKaXRvYgpleHRyYWN0IDYgMApjb25jYXQKZnJhbWVfZGlnIDE0CmZyYW1lX2J1cnkgMjAKZnJhbWVfZGlnIDE5CmZyYW1lX2RpZyAyMApjb25jYXQKZnJhbWVfYnVyeSAxOQpmcmFtZV9kaWcgMTgKZnJhbWVfYnVyeSAxNwpmcmFtZV9kaWcgMTcKaXRvYgpleHRyYWN0IDYgMApjb25jYXQKZnJhbWVfZGlnIDE5CmNvbmNhdApmcmFtZV9idXJ5IDE2Cml0eG4gQ3JlYXRlZEFzc2V0SUQKZnJhbWVfYnVyeSAyMQppdHhuIENyZWF0ZWRBc3NldElECml0b2IKYm94X2RlbApwb3AKaXR4biBDcmVhdGVkQXNzZXRJRAppdG9iCmZyYW1lX2RpZyAxNgpib3hfcHV0CnB1c2hieXRlcyAweDYzNjE3MjY0NWY2OTY0NzMgLy8gImNhcmRfaWRzIgpwdXNoaW50IDggLy8gOApieXRlY18xIC8vICJuX2NhcmRzIgphcHBfZ2xvYmFsX2dldAoqCmZyYW1lX2RpZyAyMQppdG9iCmJveF9yZXBsYWNlCml0eG4gQ3JlYXRlZEFzc2V0SUQKaXRvYgpib3hfZGVsCnBvcAppdHhuIENyZWF0ZWRBc3NldElECml0b2IKaW50YyA0IC8vIDEwMDAwCml0b2IKYm94X3B1dApieXRlY18xIC8vICJuX2NhcmRzIgpieXRlY18xIC8vICJuX2NhcmRzIgphcHBfZ2xvYmFsX2dldAppbnRjXzIgLy8gMQorCmFwcF9nbG9iYWxfcHV0CmxvYWQgMwppbnRjXzIgLy8gMQorCnN0b3JlIDMKYiBib290c3RyYXBfMF9sMQpib290c3RyYXBfMF9sNToKZnJhbWVfZGlnIC0xCmxlbgpiIGJvb3RzdHJhcF8wX2w0CmJvb3RzdHJhcF8wX2w2OgpyZXRzdWI=",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKcHVzaGludCAwIC8vIDAKcmV0dXJu"
+    },
+    "state": {
+        "global": {
+            "num_byte_slices": 1,
+            "num_uints": 1
+        },
+        "local": {
+            "num_byte_slices": 0,
+            "num_uints": 0
+        }
+    },
+    "schema": {
+        "global": {
+            "declared": {
+                "governor": {
+                    "type": "bytes",
+                    "key": "governor",
+                    "descr": "Address of the governor of the game."
+                },
+                "n_cards": {
+                    "type": "uint64",
+                    "key": "n_cards",
+                    "descr": "Number of card types in the game."
+                }
+            },
+            "reserved": {}
+        },
+        "local": {
+            "declared": {},
+            "reserved": {}
+        }
+    },
+    "contract": {
+        "name": "Algo Crypt Meta State",
+        "methods": [
+            {
+                "name": "bootstrap",
+                "args": [
+                    {
+                        "type": "pay",
+                        "name": "seed",
+                        "desc": "seeded transaction"
+                    },
+                    {
+                        "type": "(string,string,string)[]",
+                        "name": "card_list"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                },
+                "desc": "Bootstrap the game with a list of cards."
+            }
+        ],
+        "networks": {}
+    },
+    "bare_call_config": {
+        "no_op": "CREATE"
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "name": "Algo Crypt Meta State",
+    "methods": [
+        {
+            "name": "bootstrap",
+            "args": [
+                {
+                    "type": "pay",
+                    "name": "seed",
+                    "desc": "seeded transaction"
+                },
+                {
+                    "type": "(string,string,string)[]",
+                    "name": "card_list"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Bootstrap the game with a list of cards."
+        }
+    ],
+    "networks": {}
+}

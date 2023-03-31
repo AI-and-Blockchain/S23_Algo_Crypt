@@ -35,16 +35,23 @@ class MembershipRecord(pt.abi.NamedTuple):
 
 
 class MembershipState:
-    governor: bk.GlobalStateValue(
+    governor = bk.GlobalStateValue(
         stack_type=pt.TealType.bytes,
         default=pt.Global.creator_address(),
         descr="Address of the governor of the game.",
+    )
+
+    n_cards = bk.GlobalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Number of card types in the game.",
     )
 
     def __init__(self, *, membership_record: type[pt.abi.BaseType], card_type: type[pt.abi.BaseType]):
         self.card_bank = BoxMapping(pt.abi.Uint64, pt.abi.Uint64)  # card_asset_id -> card_count
         self.membership = BoxMapping(pt.abi.Address, membership_record)  # address -> membership_record
         self.all_cards = BoxMapping(pt.abi.Uint64, card_type)  # card_asset_id -> card
+        self.card_ids = BoxList(pt.abi.Uint64, 1000, "card_ids")  # card_asset_id
 
 
 app = bk.Application(
@@ -60,8 +67,6 @@ app = bk.Application(
 def bootstrap(
     seed: pt.abi.PaymentTransaction,
     card_list: pt.abi.DynamicArray[pt.abi.Tuple3[pt.abi.String, pt.abi.String, pt.abi.String]],
-    *,
-    output: pt.abi.DynamicArray[pt.abi.Uint64],
 ) -> pt.Expr:
     """Bootstrap the game with a list of cards.
 
@@ -70,13 +75,13 @@ def bootstrap(
         card_list (pt.abi.Array[
             pt.abi.Tuple3[pt.abi.String, pt.abi.String, pt.abi.String]
             ]): List of cards (name, description, url)
-        output (pt.abi.Array[pt.abi.Uint64]): List of card asset ids
 
     Returns:
         pt.Expr: pyteal expression
     """
     n_cards = pt.ScratchVar(pt.TealType.uint64)
     i = pt.ScratchVar(pt.TealType.uint64)
+    created_asset_id = pt.ScratchVar(pt.TealType.uint64)
     return pt.Seq(
         pt.Assert(
             seed.get().receiver() == pt.Global.current_application_address(),
@@ -84,18 +89,29 @@ def bootstrap(
         ),
         n_cards.store(card_list.length()),
         pt.For(
-            i.store(0),
+            i.store(pt.Int(0)),
             i.load() < n_cards.load(),
-            i.store(i.load() + 1),
+            i.store(i.load() + pt.Int(1)),
+        ).Do(
             pt.Seq(
-                pt.InnerTxnBuilder(
+                (card_details := pt.abi.make(pt.abi.Tuple3[pt.abi.String, pt.abi.String, pt.abi.String])).set(
+                    pt.abi.String(), pt.abi.String(), pt.abi.String()
+                ),
+                card_list[i.load()].store_into(card_details),
+                (card_name := pt.abi.make(pt.abi.String)).set(pt.abi.String()),
+                (card_desc := pt.abi.make(pt.abi.String)).set(pt.abi.String()),
+                (card_url := pt.abi.make(pt.abi.String)).set(pt.abi.String()),
+                card_details[0].store_into(card_name),
+                card_details[1].store_into(card_desc),
+                card_details[2].store_into(card_url),
+                pt.InnerTxnBuilder.Execute(
                     {
                         pt.TxnField.type_enum: pt.TxnType.AssetConfig,
-                        pt.TxnField.config_asset_name: card_list[i.load()][0],
+                        pt.TxnField.config_asset_name: card_name.get(),
                         pt.TxnField.config_asset_unit_name: pt.Bytes("CRPT-Card-{i}"),
-                        pt.TxnField.config_asset_total: 10000,
-                        pt.TxnField.config_asset_decimals: 0,
-                        pt.TxnField.config_asset_default_frozen: False,
+                        pt.TxnField.config_asset_total: pt.Int(10000),
+                        pt.TxnField.config_asset_decimals: pt.Int(0),
+                        pt.TxnField.config_asset_default_frozen: pt.Int(0),
                         pt.TxnField.config_asset_manager: pt.Global.current_application_address(),
                         pt.TxnField.config_asset_reserve: pt.Global.current_application_address(),
                         pt.TxnField.config_asset_freeze: pt.Global.current_application_address(),
@@ -103,12 +119,13 @@ def bootstrap(
                         pt.TxnField.fee: pt.Int(0),
                     }
                 ),
-                (card_name := pt.abi.String()).set(pt.Bytes("{card_list[i.load()][0]}")),
-                (card_desc := pt.abi.String()).set(pt.Bytes("{card_list[i.load()][1]}")),
-                (card_url := pt.abi.String()).set(pt.Bytes("{card_list[i.load()][2]}")),
                 (card_obj := Card()).set(card_name, card_desc, card_url),
-                app.state.all_cards[pt.InnerTxn.asset_id()].set(card_obj),
-                output.set(output.get() + [pt.InnerTxn.asset_id()]),
+                created_asset_id.store(pt.InnerTxn.created_asset_id()),
+                (asset_uint := pt.abi.make(pt.abi.Uint64)).set(created_asset_id.load()),
+                app.state.all_cards[pt.Itob(pt.InnerTxn.created_asset_id())].set(card_obj),
+                app.state.card_ids[app.state.n_cards].set(asset_uint),
+                app.state.card_bank[pt.Itob(pt.InnerTxn.created_asset_id())].set(pt.Itob(pt.Int(10000))),
+                app.state.n_cards.set(app.state.n_cards + pt.Int(1)),
             ),
         ),
     )
