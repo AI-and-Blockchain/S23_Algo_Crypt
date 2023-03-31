@@ -55,6 +55,21 @@
                 "type": "void"
             },
             "desc": "Add a new card to the game."
+        },
+        {
+            "name": "get_card",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "card_id",
+                    "desc": "Card ID"
+                }
+            ],
+            "returns": {
+                "type": "(string,string,string)",
+                "desc": "pyteal expression"
+            },
+            "desc": "Get the card details."
         }
     ],
     "networks": {}

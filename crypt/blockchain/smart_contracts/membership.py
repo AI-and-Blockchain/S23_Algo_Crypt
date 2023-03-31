@@ -201,3 +201,27 @@ def add_card(card_name: pt.abi.String, card_desc: pt.abi.String, card_url: pt.ab
         app.state.card_bank[pt.Itob(pt.InnerTxn.created_asset_id())].set(pt.Itob(pt.Int(10000))),
         app.state.n_cards.set(app.state.n_cards + pt.Int(1)),
     )
+
+
+@app.external
+def get_card(card_id: pt.abi.Uint64, *, output: Card) -> pt.Expr:
+    """Get the card details.
+
+    Args:
+        card_id (pt.abi.Uint64): Card ID
+
+    Returns:
+        pt.Expr: pyteal expression
+    """
+    return pt.Seq(
+        pt.Assert(
+            app.state.all_cards[card_id].exists(),
+            comment="Card does not exist.",
+        ),
+        (card := Card()).set(pt.abi.String(), pt.abi.String(), pt.abi.String()),
+        app.state.all_cards[card_id].store_into(card),
+        (card_name := pt.abi.String()).set(card[0]),
+        (card_desc := pt.abi.String()).set(card[1]),
+        (card_url := pt.abi.String()).set(card[2]),
+        output.set(card_name, card_desc, card_url),
+    )
