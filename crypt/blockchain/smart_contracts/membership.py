@@ -129,3 +129,44 @@ def bootstrap(
             ),
         ),
     )
+
+
+@app.external(authorize=bk.Authorize.only_creator())
+def add_card(card_name: pt.abi.String, card_desc: pt.abi.String, card_url: pt.abi.String) -> pt.Expr:
+    """Add a new card to the game.
+
+    Args:
+        card_name (pt.abi.String): Name of the card
+        card_desc (pt.abi.String): Description of the card
+        card_url (pt.abi.String): URL of the card
+
+    Returns:
+        pt.Expr: pyteal expression
+    """
+    return pt.Seq(
+        pt.Assert(
+            app.state.n_cards < pt.Int(1000),
+            comment="Cannot add more than 1000 cards.",
+        ),
+        pt.InnerTxnBuilder.Execute(
+            {
+                pt.TxnField.type_enum: pt.TxnType.AssetConfig,
+                pt.TxnField.config_asset_name: card_name.get(),
+                pt.TxnField.config_asset_unit_name: pt.Bytes("CRPT-Card-{app.state.n_cards}"),
+                pt.TxnField.config_asset_total: pt.Int(10000),
+                pt.TxnField.config_asset_decimals: pt.Int(0),
+                pt.TxnField.config_asset_default_frozen: pt.Int(0),
+                pt.TxnField.config_asset_manager: pt.Global.current_application_address(),
+                pt.TxnField.config_asset_reserve: pt.Global.current_application_address(),
+                pt.TxnField.config_asset_freeze: pt.Global.current_application_address(),
+                pt.TxnField.config_asset_clawback: pt.Global.current_application_address(),
+                pt.TxnField.fee: pt.Int(0),
+            }
+        ),
+        (card_obj := Card()).set(card_name, card_desc, card_url),
+        (asset_uint := pt.abi.make(pt.abi.Uint64)).set(pt.InnerTxn.created_asset_id()),
+        app.state.all_cards[pt.Itob(pt.InnerTxn.created_asset_id())].set(card_obj),
+        app.state.card_ids[app.state.n_cards].set(asset_uint),
+        app.state.card_bank[pt.Itob(pt.InnerTxn.created_asset_id())].set(pt.Itob(pt.Int(10000))),
+        app.state.n_cards.set(app.state.n_cards + pt.Int(1)),
+    )

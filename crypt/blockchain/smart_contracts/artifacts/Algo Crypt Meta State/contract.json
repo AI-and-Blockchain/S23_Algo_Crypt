@@ -18,6 +18,30 @@
                 "type": "void"
             },
             "desc": "Bootstrap the game with a list of cards."
+        },
+        {
+            "name": "add_card",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "card_name",
+                    "desc": "Name of the card"
+                },
+                {
+                    "type": "string",
+                    "name": "card_desc",
+                    "desc": "Description of the card"
+                },
+                {
+                    "type": "string",
+                    "name": "card_url",
+                    "desc": "URL of the card"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Add a new card to the game."
         }
     ],
     "networks": {}
