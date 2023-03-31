@@ -14,6 +14,8 @@ Named Tuples and Mappings
     card_descriptions: card_name: str -> card_description: str
 
 """
+import typing
+
 import beaker as bk
 import pyteal as pt
 
@@ -52,6 +54,7 @@ class MembershipState:
         self.membership = BoxMapping(pt.abi.Address, membership_record)  # address -> membership_record
         self.all_cards = BoxMapping(pt.abi.Uint64, card_type)  # card_asset_id -> card
         self.card_ids = BoxList(pt.abi.Uint64, 1000, "card_ids")  # card_asset_id
+        self.starting_deck = BoxList(pt.abi.Uint64, 30, "starting_deck")  # card_asset_id
 
 
 app = bk.Application(
@@ -127,6 +130,34 @@ def bootstrap(
                 app.state.card_bank[pt.Itob(pt.InnerTxn.created_asset_id())].set(pt.Itob(pt.Int(10000))),
                 app.state.n_cards.set(app.state.n_cards + pt.Int(1)),
             ),
+        ),
+    )
+
+
+@app.external(authorize=bk.Authorize.only_creator())
+def set_starting_deck(card_list: pt.abi.DynamicArray[pt.abi.Uint64]) -> pt.Expr:
+    """Set the starting deck for new members.
+
+    Args:
+        card_list (pt.abi.Array[
+            pt.abi.Tuple2[pt.abi.Uint64, pt.abi.Uint64]
+            ]): List of cards (card_asset_id, card_count)
+
+    Returns:
+        pt.Expr: pyteal expression
+    """
+    i = pt.ScratchVar(pt.TealType.uint64)
+    return pt.Seq(
+        pt.Assert(
+            card_list.length() == pt.Int(30),
+            comment="Starting deck must have 30 cards.",
+        ),
+        pt.For(
+            i.store(pt.Int(0)),
+            i.load() < card_list.length(),
+            i.store(i.load() + pt.Int(1)),
+        ).Do(
+            card_list[i.load()].use(app.state.starting_deck[i.load()].set),
         ),
     )
 

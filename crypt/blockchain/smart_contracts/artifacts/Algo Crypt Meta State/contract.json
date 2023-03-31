@@ -20,6 +20,19 @@
             "desc": "Bootstrap the game with a list of cards."
         },
         {
+            "name": "set_starting_deck",
+            "args": [
+                {
+                    "type": "uint64[]",
+                    "name": "card_list"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Set the starting deck for new members."
+        },
+        {
             "name": "add_card",
             "args": [
                 {
