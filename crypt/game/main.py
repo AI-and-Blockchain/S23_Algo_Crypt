@@ -70,7 +70,16 @@ def renderGame(window):
   window.blit(gameEngine.player.image, (100, 600))
   #player health
   healthText = font.render("Health: " + str(gameEngine.player.health) + "/" + str(PLAYERHEALTH), True, (200,29,37))
-  window.blit(healthText, (300, 825))
+  window.blit(healthText, (100, 570))
+  #player attack and defense
+  physAttackText = font.render("PhysAttack: " + str(gameEngine.player.physDamage), True, (200,29,37))
+  physDefenseText = font.render("Phys Defense: " + str(gameEngine.player.physDefense), True, (200,29,37))
+  magAttackText = font.render("Mag Attack: " + str(gameEngine.player.magDamage), True, (200,29,37))
+  magDefenseText = font.render("Mag Defense: " + str(gameEngine.player.magDefense), True, (200,29,37))
+  window.blit(physAttackText, (300, 825))
+  window.blit(physDefenseText, (300, 845))
+  window.blit(magAttackText, (300, 865))
+  window.blit(magDefenseText, (300, 885))
   #player damage
   if (gameEngine.state == GameState.DONEPLAY):
     damageText = font.render("-" + str(gameEngine.player.damage), True, (200,29,37))
@@ -83,7 +92,16 @@ def renderGame(window):
   window.blit(gameEngine.enemy.image, (100, 100))
   #enemy health
   healthText = font.render("Health: " + str(gameEngine.enemy.health) + "/" + str(ENEMYHEALTH), True, (200,29,37))
-  window.blit(healthText, (300, 325))
+  window.blit(healthText, (100, 370))
+  #enemy attack and defense
+  physAttackText = font.render("Phys Attack: " + str(gameEngine.enemy.physDamage), True, (200,29,37))
+  magAttackText = font.render("Mag Attack: " + str(gameEngine.enemy.magDamage), True, (200,29,37))
+  physDefenseText = font.render("Phys Defense: " + str(gameEngine.enemy.physDefense), True, (200,29,37))
+  magDefenseText = font.render("Mag Defense: " + str(gameEngine.enemy.magDefense), True, (200,29,37))
+  window.blit(physAttackText, (300, 325))
+  window.blit(physDefenseText, (300, 345))
+  window.blit(magAttackText, (300, 365))
+  window.blit(magDefenseText, (300, 385))
   #enemy damage
   if (gameEngine.state == GameState.DONEPLAY):
     damageText = font.render("-" + str(gameEngine.enemy.damage), True, (200,29,37))
@@ -185,7 +203,7 @@ while run:
   key = None; 
   
   if (gameEngine.state == GameState.DONEPLAY):
-    pygame.time.delay(3000)
+    pygame.time.delay(2000)
     gameEngine.player.resetDamage()
     gameEngine.enemy.resetDamage()
     if (gameEngine.enemy.health==0):

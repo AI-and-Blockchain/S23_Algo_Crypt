@@ -90,48 +90,69 @@ class Player:
     self.hand.append(self.deck.deal())
     self.hand.append(self.deck.deal())
     self.hand.append(self.deck.deal())
-    
+  
+  def damageReduce(self, cardRemoved):
+    if (cardRemoved.type == Types.ATTACK):
+      if (cardRemoved.value == Values.STRENGTH):
+        self.physDamage -= self.strength
+      elif (cardRemoved.value == Values.INTELLIGENCE):
+        self.magDamage -= self.intelligence
+    elif (cardRemoved.type == Types.DEFENSE):
+      if (cardRemoved.value == Values.STRENGTH):
+        self.physDefense -= self.strength
+      elif (cardRemoved.value == Values.INTELLIGENCE):
+        self.magDefense -= self.intelligence
+      else:
+        self.physDefense -= self.dexterity//2
+        self.magDefense -= self.dexterity//2
+  
+  def damageIncrease(self, cardAdded):
+    if (cardAdded.type == Types.ATTACK):
+      if (cardAdded.value == Values.STRENGTH):
+        self.physDamage += self.strength
+      elif (cardAdded.value == Values.INTELLIGENCE):
+        self.magDamage += self.intelligence
+    elif (cardAdded.type == Types.DEFENSE):
+      if (cardAdded.value == Values.STRENGTH):
+        self.physDefense += self.strength
+      elif (cardAdded.value == Values.INTELLIGENCE):
+        self.magDefense += self.intelligence
+    else:
+        self.physDefense += self.dexterity//2
+        self.magDefense += self.dexterity//2
+
   def playCard(self, cardIndex):
     if (self.hand[cardIndex] == 0):
       self.hand[cardIndex] = self.play[0]
       self.play[0] = None
+      self.damageReduce(self.hand[cardIndex])
       return
     elif (self.hand[cardIndex] == 1):
       self.hand[cardIndex] = self.play[1]
       self.play[1] = None
+      self.damageReduce(self.hand[cardIndex])
       return
     elif (self.hand[cardIndex] == 2):
       self.hand[cardIndex] = self.play[2]
       self.play[2] = None
+      self.damageReduce(self.hand[cardIndex])
       return
     
 
     if (self.play[0] == None):
       self.play[0] = self.hand[cardIndex]
       self.hand[cardIndex] = 0
+      self.damageIncrease(self.play[0])
     elif (self.play[1] == None):
       self.play[1] = self.hand[cardIndex]
       self.hand[cardIndex] = 1
+      self.damageIncrease(self.play[1])
     elif (self.play[2] == None):
       self.play[2] = self.hand[cardIndex]
       self.hand[cardIndex] = 2
+      self.damageIncrease(self.play[2])
   
   def action(self):
-    for card in self.play:
-      if (card.type == Types.ATTACK):
-        if (card.value == Values.STRENGTH):
-          self.physDamage += self.strength
-        elif (card.value == Values.INTELLIGENCE):
-          self.magDamage += self.intelligence
-      elif (card.type == Types.DEFENSE):
-        if (card.value == Values.STRENGTH):
-          self.physDefense += self.strength
-        elif (card.value == Values.INTELLIGENCE):
-          self.magDefense += self.intelligence
-      else:
-        self.physDefense += self.dexterity//2
-        self.magDefense += self.dexterity//2
-
     self.discard.cards.append(self.play[0])
     self.discard.cards.append(self.play[1])
     self.discard.cards.append(self.play[2])
@@ -202,7 +223,6 @@ class Enemy:
     self.play[2] = self.hand[drawnCards[2]]
     self.hand[drawnCards[2]] = 2
 
-  def action(self):
     for card in self.play:
       if (card.type == Types.ATTACK):
         if (card.value == Values.STRENGTH):
@@ -217,6 +237,8 @@ class Enemy:
       else:
         self.physDefense += self.dexterity//2
         self.magDefense += self.dexterity//2
+
+  def action(self):
 
     self.discard.cards.append(self.play[0])
     self.discard.cards.append(self.play[1])
