@@ -143,6 +143,16 @@ def renderGame(window):
 
   # Player hand
   if (gameEngine.state == GameState.DRAWING or gameEngine.state == GameState.INPLAY):
+    cardNumberText1 = font.render(str(1), True, (8,126,139))
+    cardNumberText2 = font.render(str(2), True, (8,126,139))
+    cardNumberText3 = font.render(str(3), True, (8,126,139))
+    cardNumberText4 = font.render(str(4), True, (8,126,139))
+    cardNumberText5 = font.render(str(5), True, (8,126,139))
+    window.blit(cardNumberText1, (864, 900))
+    window.blit(cardNumberText2, (1014, 900))
+    window.blit(cardNumberText3, (1164, 900))
+    window.blit(cardNumberText4, (1314, 900))
+    window.blit(cardNumberText5, (1464, 900))
     if (gameEngine.player.hand[0] != None and type(gameEngine.player.hand[0]) == Card):
       window.blit(gameEngine.player.hand[0].image, (800, 700))
     if (gameEngine.player.hand[1] != None and type(gameEngine.player.hand[1]) == Card):
