@@ -16,11 +16,12 @@ from algosdk.v2client.algod import AlgodClient
 from algosdk.v2client.indexer import IndexerClient
 
 from smart_contracts.membership import app as membership_app
+from smart_contracts.nft_exchange import app as nft_exchange_app
 
 logger = logging.getLogger(__name__)
 
 # define contracts to build and/or deploy
-contracts = [membership_app]
+contracts = [membership_app, nft_exchange_app]
 
 
 # define deployment behaviour based on supplied app spec

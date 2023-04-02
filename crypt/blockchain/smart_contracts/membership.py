@@ -14,7 +14,6 @@ Named Tuples and Mappings
     card_descriptions: card_name: str -> card_description: str
 
 """
-import typing
 
 import beaker as bk
 import pyteal as pt
