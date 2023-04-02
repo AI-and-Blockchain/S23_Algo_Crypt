@@ -112,6 +112,7 @@ def bootstrap(
                         pt.TxnField.type_enum: pt.TxnType.AssetConfig,
                         pt.TxnField.config_asset_name: card_name.get(),
                         pt.TxnField.config_asset_unit_name: pt.Bytes("CRPT-Card-{i}"),
+                        pt.TxnField.config_asset_url: card_url.get(),
                         pt.TxnField.config_asset_total: pt.Int(10000),
                         pt.TxnField.config_asset_decimals: pt.Int(0),
                         pt.TxnField.config_asset_default_frozen: pt.Int(0),
