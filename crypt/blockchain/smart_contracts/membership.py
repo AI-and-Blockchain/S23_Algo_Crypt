@@ -225,3 +225,30 @@ def get_card(card_id: pt.abi.Uint64, *, output: Card) -> pt.Expr:
         (card_url := pt.abi.String()).set(card[2]),
         output.set(card_name, card_desc, card_url),
     )
+
+
+@app.external
+def get_card_aid(index: pt.abi.Uint64, *, output: pt.abi.Uint64) -> pt.Expr:
+    """Get asset id for a card in the all_cards array.
+
+    Args:
+        index (pt.abi.Uint64): Index of the card
+
+    Returns:
+        pt.Expr: pyteal expression
+    """
+    return pt.Seq(
+        pt.Assert(
+            index < app.state.n_cards.get(),
+            comment="Index out of range.",
+        ),
+        pt.Assert(
+            app.state.card_ids[index].exists(),
+            comment="Card does not exist.",
+        ),
+        pt.Assert(
+            app.state.n_cards > pt.Int(0),
+            comment="No cards exist.",
+        ),
+        app.state.card_ids[index].store_into(output),
+    )
