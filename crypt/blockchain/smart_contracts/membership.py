@@ -240,16 +240,99 @@ def get_card_aid(index: pt.abi.Uint64, *, output: pt.abi.Uint64) -> pt.Expr:
     """
     return pt.Seq(
         pt.Assert(
-            index < app.state.n_cards.get(),
+            index.get() < app.state.n_cards.get(),
             comment="Index out of range.",
         ),
         pt.Assert(
-            app.state.card_ids[index].exists(),
+            index.get() < app.state.n_cards.get(),
             comment="Card does not exist.",
         ),
         pt.Assert(
             app.state.n_cards > pt.Int(0),
             comment="No cards exist.",
         ),
-        app.state.card_ids[index].store_into(output),
+        app.state.card_ids[index.get()].store_into(output),
+    )
+
+
+@app.external
+def get_card_count(card_id: pt.abi.Uint64, *, output: pt.abi.Uint64) -> pt.Expr:
+    """Get the card count.
+
+    Args:
+        card_id (pt.abi.Uint64): Card ID
+
+    Returns:
+        pt.Expr: pyteal expression
+    """
+    return pt.Seq(
+        pt.Assert(
+            app.state.card_bank[card_id].exists(),
+            comment="Card does not exist.",
+        ),
+        app.state.card_bank[card_id].store_into(output),
+    )
+
+
+@pt.Subroutine(pt.TealType.none)
+def transfer_starting_deck(recipient: pt.abi.Address) -> pt.Expr:
+    """Transfer the starting deck to a new member.
+
+    Args:
+        recipient (pt.abi.Address): Address of the recipient
+
+    Returns:
+        pt.Expr: pyteal expression
+    """
+    i = pt.ScratchVar(pt.TealType.uint64)
+    return pt.Seq(
+        pt.For(
+            i.store(pt.Int(0)),
+            i.load() < pt.Int(30),
+            i.store(i.load() + pt.Int(1)),
+        ).Do(
+            pt.Seq(
+                pt.Assert(
+                    pt.Btoi(app.state.card_bank[app.state.starting_deck[i.load()].get()].get()) > pt.Int(0),
+                    comment="Insufficient cards in the bank.",
+                ),
+                pt.InnerTxnBuilder.Execute(
+                    {
+                        pt.TxnField.type_enum: pt.TxnType.AssetTransfer,
+                        pt.TxnField.xfer_asset: pt.Btoi(app.state.starting_deck[i.load()].get()),
+                        pt.TxnField.asset_amount: pt.Int(1),
+                        pt.TxnField.asset_receiver: recipient.encode(),
+                        pt.TxnField.fee: pt.Int(0),
+                    }
+                ),
+                app.state.card_bank[app.state.starting_deck[i.load()].get()].set(
+                    pt.Itob(pt.Btoi(app.state.card_bank[app.state.starting_deck[i.load()].get()].get()) - pt.Int(1))
+                ),
+            ),
+        ),
+    )
+
+
+@app.external
+def signup(
+    address: pt.abi.Address,
+    strength: pt.abi.Uint8,
+    intelligence: pt.abi.Uint8,
+    dexterity: pt.abi.Uint8,
+) -> pt.Expr:
+    """Sign up for the game.
+
+    Args:
+        address (pt.abi.Address): Address of the player
+        strength (pt.abi.Uint64): Strength
+        intelligence (pt.abi.Uint64): Intelligence
+        dexterity (pt.abi.Uint64): Dexterity
+
+    Returns:
+        pt.Expr: pyteal expression
+    """
+    return pt.Seq(
+        (mr := MembershipRecord()).set(intelligence, strength, dexterity),
+        app.state.membership[address].set(mr),
+        transfer_starting_deck(address),
     )
