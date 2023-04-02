@@ -1,11 +1,12 @@
 import openai
 import random
+import typing
 
 #replace YOUR_API_KEY with your api key
 openai.api_key = "YOUR_API_KEY"
 
 
-def generate_enemy():
+def generate_enemy() -> typing.Tuple[str, str, str]:
     enemy_categories = ["wizard", "elf", "paladin", "hunter", "dragon", "warlock", "demon", "monster", "treant", 
                         "murloc", "thief", "beast", "priest", "shaman", "warrior", "undead", "orc", "titan"]
     category = random.choice(enemy_categories)
@@ -26,7 +27,6 @@ def generate_enemy():
         temperature=0.7,
     )
     description = response1.choices[0].text.strip()
-
 
     prompt_st = f"I am designing a Massively-Multiplayer Online Trading Card Game on the Algorand Blockchain. \
         The game story background is similar to the combination of card games like Hearthstone and Magic: The Gathering. \
@@ -52,11 +52,9 @@ def generate_enemy():
     )
 
     stats = response2.choices[0].text.strip()
-
-
     image_prompt = f"Based on the description here: {description}; \
-        I will need an appropriate, beautiful, attarcting, and realistic digital painting \
-        in the style of Hearthstone with intriguing background\
+        I will need an appropriate, beautiful, and attractive image \
+        in a Pixel Art style with intriguing background\
         to represent this enemy, so I need you to generate an image generation prompt \
         for this enemy that can be used in dall e. \
         This image will be used as a NFT in the card game later, so it should have high quality. "
@@ -72,13 +70,8 @@ def generate_enemy():
 
     dalle_prompt = response3.choices[0].text.strip()
 
-
-    #print(dalle_prompt)
-    #print()
-
-
     response = openai.Image.create(
-        prompt = dalle_prompt,
+        prompt=dalle_prompt,
         n=1,
         size="256x256",
     )
@@ -86,6 +79,7 @@ def generate_enemy():
     image = response["data"][0]["url"]
 
     return (description, stats, image)
+
 
 def generate_enemies(n):
     enemies = []
@@ -97,7 +91,41 @@ def generate_enemies(n):
     return enemies
 
 
-enemies = generate_enemies(1)
-print(enemies)
+def ipfs_upload(image_url: str) -> str:
+    """Upload image at given url to IPFS.
+
+    Args:
+        image_url (str): url of image to upload
+
+    Returns:
+        str: IPFS uri of uploaded image
+    """
+    raise NotImplementedError
 
 
+def create_contract(name: str, description: str, stats: str, image: str) -> str:
+    """Create a contract for an enemy.
+
+    Args:
+        name (str): name of enemy
+        description (str): description of enemy
+        stats (str): stats of enemy
+        image (str): ipfs uri of image of enemy
+
+    Returns:
+        str: address of contract
+    """
+    raise NotImplementedError
+
+
+def main(num_enemies: int = 10):
+    enemies = generate_enemies(num_enemies)
+
+    for enemy in enemies:
+        description, stats, image = enemy
+        image = ipfs_upload(image)
+        create_contract(description, stats, image)
+
+
+if __name__ == "__main__":
+    main()
