@@ -71,15 +71,17 @@ def renderGame(window):
   #player health
   healthText = font.render("Health: " + str(gameEngine.player.health) + "/" + str(PLAYERHEALTH), True, (200,29,37))
   window.blit(healthText, (100, 570))
+  pygame.draw.rect(window, (200,29,37), (100, 550, 180, 10))
+  pygame.draw.rect(window, (0,128,0), (100, 550, max(180 - (2 * (PLAYERHEALTH - gameEngine.player.health)),2), 10))
   #player attack and defense
-  physAttackText = font.render("PhysAttack: " + str(gameEngine.player.physDamage), True, (200,29,37))
-  physDefenseText = font.render("Phys Defense: " + str(gameEngine.player.physDefense), True, (200,29,37))
-  magAttackText = font.render("Mag Attack: " + str(gameEngine.player.magDamage), True, (200,29,37))
-  magDefenseText = font.render("Mag Defense: " + str(gameEngine.player.magDefense), True, (200,29,37))
-  window.blit(physAttackText, (300, 825))
-  window.blit(physDefenseText, (300, 845))
-  window.blit(magAttackText, (300, 865))
-  window.blit(magDefenseText, (300, 885))
+  physAttackText = font.render("Phys Att.: " + str(gameEngine.player.physDamage), True, (200,29,37))
+  physDefenseText = font.render("Phys Def.: " + str(gameEngine.player.physDefense), True, (200,29,37))
+  magAttackText = font.render("Mag Att.: " + str(gameEngine.player.magDamage), True, (200,29,37))
+  magDefenseText = font.render("Mag Def.: " + str(gameEngine.player.magDefense), True, (200,29,37))
+  window.blit(physAttackText, (300, 790))
+  window.blit(physDefenseText, (300, 810))
+  window.blit(magAttackText, (300, 830))
+  window.blit(magDefenseText, (300, 850))
   #player damage
   if (gameEngine.state == GameState.DONEPLAY):
     damageText = font.render("-" + str(gameEngine.player.damage), True, (200,29,37))
@@ -93,15 +95,17 @@ def renderGame(window):
   #enemy health
   healthText = font.render("Health: " + str(gameEngine.enemy.health) + "/" + str(ENEMYHEALTH), True, (200,29,37))
   window.blit(healthText, (100, 370))
+  pygame.draw.rect(window, (200,29,37), (100, 400, 180, 10))
+  pygame.draw.rect(window, (0,128,0), (100, 400, max(180 - (2 * (ENEMYHEALTH - gameEngine.enemy.health)),2), 10))
   #enemy attack and defense
-  physAttackText = font.render("Phys Attack: " + str(gameEngine.enemy.physDamage), True, (200,29,37))
-  magAttackText = font.render("Mag Attack: " + str(gameEngine.enemy.magDamage), True, (200,29,37))
-  physDefenseText = font.render("Phys Defense: " + str(gameEngine.enemy.physDefense), True, (200,29,37))
-  magDefenseText = font.render("Mag Defense: " + str(gameEngine.enemy.magDefense), True, (200,29,37))
-  window.blit(physAttackText, (300, 325))
-  window.blit(physDefenseText, (300, 345))
-  window.blit(magAttackText, (300, 365))
-  window.blit(magDefenseText, (300, 385))
+  physAttackText = font.render("Phys Att.: " + str(gameEngine.enemy.physDamage), True, (200,29,37))
+  magAttackText = font.render("Mag Att.: " + str(gameEngine.enemy.magDamage), True, (200,29,37))
+  physDefenseText = font.render("Phys Def.: " + str(gameEngine.enemy.physDefense), True, (200,29,37))
+  magDefenseText = font.render("Mag Def.: " + str(gameEngine.enemy.magDefense), True, (200,29,37))
+  window.blit(physAttackText, (300, 290))
+  window.blit(physDefenseText, (300, 310))
+  window.blit(magAttackText, (300, 330))
+  window.blit(magDefenseText, (300, 350))
   #enemy damage
   if (gameEngine.state == GameState.DONEPLAY):
     damageText = font.render("-" + str(gameEngine.enemy.damage), True, (200,29,37))
@@ -243,6 +247,4 @@ while run:
   renderGame(window)
   pygame.display.update()
 
-  # if gameEngine.state == GameState.SNAPPING:
-  #   pygame.time.delay(3000)
-  #   gameEngine.state = GameState.PLAYING
+ 
