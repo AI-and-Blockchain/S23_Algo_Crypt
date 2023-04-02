@@ -308,6 +308,12 @@ def transfer_starting_deck(recipient: pt.abi.Address) -> pt.Expr:
                 app.state.card_bank[app.state.starting_deck[i.load()].get()].set(
                     pt.Itob(pt.Btoi(app.state.card_bank[app.state.starting_deck[i.load()].get()].get()) - pt.Int(1))
                 ),
+                (mr := MembershipRecord()).set(pt.abi.Uint8(), pt.abi.Uint8(), pt.abi.Uint8()),
+                (card := pt.abi.Uint64()).set(pt.abi.Uint64()),
+                app.state.membership[recipient].store_into(mr),
+                app.state.starting_deck[i.load()].store_into(card),
+                mr.library[i.load()].set(card),
+                app.state.membership[recipient].set(mr),
             ),
         ),
     )
