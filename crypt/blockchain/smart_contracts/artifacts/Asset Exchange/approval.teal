@@ -168,4 +168,12 @@ bytec_0 // "price"
 app_global_get
 itxn_field Amount
 itxn_submit
+itxn_begin
+pushint 6 // appl
+itxn_field TypeEnum
+global CurrentApplicationID
+itxn_field ApplicationID
+pushint 5 // DeleteApplication
+itxn_field OnCompletion
+itxn_submit
 retsub

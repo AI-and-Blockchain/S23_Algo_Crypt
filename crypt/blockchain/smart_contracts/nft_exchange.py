@@ -112,4 +112,11 @@ def buy(txn: pt.abi.PaymentTransaction):
                 pt.TxnField.amount: app.state.price.get(),
             }
         ),
+        pt.InnerTxnBuilder.Execute(
+            {
+                pt.TxnField.type_enum: pt.TxnType.ApplicationCall,
+                pt.TxnField.application_id: pt.Global.current_application_id(),
+                pt.TxnField.on_completion: pt.OnComplete.DeleteApplication,
+            }
+        ),
     )
