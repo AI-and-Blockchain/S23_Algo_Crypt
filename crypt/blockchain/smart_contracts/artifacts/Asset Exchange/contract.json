@@ -42,6 +42,20 @@
                 "type": "void"
             },
             "desc": "Update the contract."
+        },
+        {
+            "name": "buy",
+            "args": [
+                {
+                    "type": "pay",
+                    "name": "txn",
+                    "desc": "transaction"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Buy the NFT."
         }
     ],
     "networks": {}

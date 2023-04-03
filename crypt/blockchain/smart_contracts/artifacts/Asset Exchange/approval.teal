@@ -1,16 +1,42 @@
 #pragma version 8
 intcblock 0 1
-bytecblock 0x 0x61737365745f6964 0x6465736372 0x696d6167655f757269 0x6e616d65 0x6f776e6572 0x7072696365
+bytecblock 0x7072696365 0x61737365745f6964 0x 0x6f776e6572 0x6465736372 0x696d6167655f757269 0x6e616d65
 txna ApplicationArgs 0
 pushbytes 0x4c5c61ba // "create()void"
 ==
-bnz main_l4
+bnz main_l6
 txna ApplicationArgs 0
 pushbytes 0x47876946 // "update(string,string,string,uint64,uint64)void"
 ==
-bnz main_l3
+bnz main_l5
+txna ApplicationArgs 0
+pushbytes 0x958d3df9 // "buy(pay)void"
+==
+bnz main_l4
 err
-main_l3:
+main_l4:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txn GroupIndex
+intc_1 // 1
+-
+store 5
+load 5
+gtxns TypeEnum
+intc_1 // pay
+==
+assert
+load 5
+callsub buy_2
+intc_1 // 1
+return
+main_l5:
 txn OnCompletion
 intc_0 // NoOp
 ==
@@ -39,7 +65,7 @@ load 4
 callsub update_1
 intc_1 // 1
 return
-main_l4:
+main_l6:
 txn OnCompletion
 intc_0 // NoOp
 ==
@@ -58,19 +84,19 @@ proto 0 0
 bytec_1 // "asset_id"
 intc_0 // 0
 app_global_put
-bytec_2 // "descr"
-bytec_0 // ""
+bytec 4 // "descr"
+bytec_2 // ""
 app_global_put
-bytec_3 // "image_uri"
-bytec_0 // ""
+bytec 5 // "image_uri"
+bytec_2 // ""
 app_global_put
-bytec 4 // "name"
-bytec_0 // ""
+bytec 6 // "name"
+bytec_2 // ""
 app_global_put
-bytec 5 // "owner"
+bytec_3 // "owner"
 global CreatorAddress
 app_global_put
-bytec 6 // "price"
+bytec_0 // "price"
 intc_0 // 0
 app_global_put
 retsub
@@ -79,27 +105,67 @@ retsub
 update_1:
 proto 5 0
 txn Sender
-bytec 5 // "owner"
+bytec_3 // "owner"
 app_global_get
 ==
 // unauthorized
 assert
-bytec 4 // "name"
+bytec 6 // "name"
 frame_dig -5
 extract 2 0
 app_global_put
-bytec_2 // "descr"
+bytec 4 // "descr"
 frame_dig -4
 extract 2 0
 app_global_put
-bytec_3 // "image_uri"
+bytec 5 // "image_uri"
 frame_dig -3
 extract 2 0
 app_global_put
 bytec_1 // "asset_id"
 frame_dig -2
 app_global_put
-bytec 6 // "price"
+bytec_0 // "price"
 frame_dig -1
 app_global_put
+retsub
+
+// buy
+buy_2:
+proto 1 0
+frame_dig -1
+gtxns Receiver
+global CurrentApplicationAddress
+==
+assert
+frame_dig -1
+gtxns Amount
+bytec_0 // "price"
+app_global_get
+==
+assert
+itxn_begin
+pushint 4 // axfer
+itxn_field TypeEnum
+frame_dig -1
+gtxns Sender
+itxn_field AssetReceiver
+intc_1 // 1
+itxn_field AssetAmount
+global ZeroAddress
+itxn_field AssetCloseTo
+bytec_1 // "asset_id"
+app_global_get
+itxn_field XferAsset
+itxn_submit
+itxn_begin
+intc_1 // pay
+itxn_field TypeEnum
+bytec_3 // "owner"
+app_global_get
+itxn_field Receiver
+bytec_0 // "price"
+app_global_get
+itxn_field Amount
+itxn_submit
 retsub

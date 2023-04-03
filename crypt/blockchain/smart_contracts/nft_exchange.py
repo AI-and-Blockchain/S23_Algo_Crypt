@@ -83,3 +83,33 @@ def update(
         app.state.asset_id.set(asset_id.get()),
         app.state.price.set(price.get()),
     )
+
+
+@app.external
+def buy(txn: pt.abi.PaymentTransaction):
+    """Buy the NFT.
+
+    Args:
+        txn (pt.abi.AssetTransferTransaction): transaction
+    """
+    txn = txn.get()
+    return pt.Seq(
+        pt.Assert(txn.receiver() == pt.Global.current_application_address()),
+        pt.Assert(txn.amount() == app.state.price.get()),
+        pt.InnerTxnBuilder.Execute(
+            {
+                pt.TxnField.type_enum: pt.TxnType.AssetTransfer,
+                pt.TxnField.asset_receiver: txn.sender(),
+                pt.TxnField.asset_amount: pt.Int(1),
+                pt.TxnField.asset_close_to: pt.Global.zero_address(),
+                pt.TxnField.xfer_asset: app.state.asset_id.get(),
+            }
+        ),
+        pt.InnerTxnBuilder.Execute(
+            {
+                pt.TxnField.type_enum: pt.TxnType.Payment,
+                pt.TxnField.receiver: app.state.owner.get(),
+                pt.TxnField.amount: app.state.price.get(),
+            }
+        ),
+    )
