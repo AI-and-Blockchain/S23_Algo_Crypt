@@ -55,6 +55,8 @@ class GameEngine:
       elif key == pygame.K_RETURN:
         if (self.player.play[2] != None and self.player.play[1] != None and self.player.play[0] != None):
           self.state = GameState.INPLAY
+          # (enemyTurn, gameState) = self.player.submitTurnToBlockchain(self.enemy)
+          # self.enemy.playCard(enemyTurn, gameState)
           self.enemy.playCard()
           return
 

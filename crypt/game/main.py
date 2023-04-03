@@ -229,7 +229,7 @@ while run:
 
   if (gameEngine.state == GameState.INPLAY):
     pygame.time.delay(3000)
-    gameEngine.player.action()
+    gameEngine.player.action(gameEngine.enemy)
     gameEngine.enemy.action()
     damageCalc(gameEngine.player, gameEngine.enemy)
     gameEngine.state = GameState.DONEPLAY

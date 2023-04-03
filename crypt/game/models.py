@@ -1,6 +1,12 @@
 from enum import Enum
 import pygame
 import random
+import os
+import sys
+# import gameplay.py from the chain_interaction where crypt is the parent directory of this directory
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from chain_interaction import gameplay
+
 
 class Types(Enum):
   ATTACK = 0
@@ -152,7 +158,23 @@ class Player:
       self.hand[cardIndex] = 2
       self.damageIncrease(self.play[2])
   
-  def action(self):
+  def getTypeAndValue(self, card):
+    if (card == None):
+      return "None", "None"
+    if (card.type == Types.ATTACK):
+      if (card.value == Values.STRENGTH):
+        return "ATTACK", "STRENGTH"
+      elif (card.value == Values.INTELLIGENCE):
+        return "ATTACK", "INTELLIGENCE"
+    elif (card.type == Types.DEFENSE):
+      if (card.value == Values.STRENGTH):
+        return "DEFENSE", "STRENGTH"
+      elif (card.value == Values.INTELLIGENCE):
+        return "DEFENSE", "INTELLIGENCE"
+    elif (card.type == Types.DODGE):
+      return "DODGE", "DEXTERITY"
+
+  def action(self, enemy):
     self.discard.cards.append(self.play[0])
     self.discard.cards.append(self.play[1])
     self.discard.cards.append(self.play[2])
@@ -162,6 +184,15 @@ class Player:
       if (self.hand[i] != 0 and self.hand[i] != 1 and self.hand[i] != 2):
         self.discard.cards.append(self.hand[i])
     self.hand.clear()
+
+  def submitTurnToBlockchain(self, enemy):
+    card0Type, card0Value = self.getTypeAndValue(self.play[0])
+    card1Type, card1Value = self.getTypeAndValue(self.play[1])
+    card2Type, card2Value = self.getTypeAndValue(self.play[2])
+
+    (enemyTurn, gameState) = gameplay.submit_turn(self.name, enemy.name, 
+                                                  [[card0Type, card0Value], [card1Type, card1Value], [card2Type, card2Value]])
+    return (enemyTurn, gameState)
   
   def resetDamage(self):
     self.physDamage = 0
@@ -212,14 +243,33 @@ class Enemy:
     self.hand.append(self.deck.deal())
     self.hand.append(self.deck.deal())
   
-  def playCard(self):
+  def getCardFromChainInfo(self, cardInfo):
+    if (cardInfo[0] == "ATTACK"):
+      if (cardInfo[1] == "STRENGTH"):
+        return Card(Types.ATTACK, Values.STRENGTH, "images/SWORDATTACKSTR.png.png")
+      elif (cardInfo[1] == "INTELLIGENCE"):
+        return Card(Types.ATTACK, Values.INTELLIGENCE, "images/LIGHTNINGATTACKINTELL.png")
+    elif (cardInfo[0] == "DEFENSE"):
+      if (cardInfo[1] == "STRENGTH"):
+        return Card(Types.DEFENSE, Values.STRENGTH, "images/SHIELDDEFENSESTR.png")
+      elif (cardInfo[1] == "INTELLIGENCE"):
+        return Card(Types.DEFENSE, Values.INTELLIGENCE, "images/ELIXIRDEFENSEINTELL.png")
+    elif (cardInfo[0] == "DODGE"):
+      return Card(Types.DODGE, Values.DEXTERITY, "images/DODGE.png")
+    else:
+      return None
+    
+  def playCard(self, enemyTurn=None, gameState=None):
     drawnCards = random.sample(range(0,5),3)
+    # self.play[0] = self.getCardFromChainInfo(enemyTurn[0])
     self.play[0] = self.hand[drawnCards[0]]
     self.hand[drawnCards[0]] = 0
 
+    # self.play[1] = self.getCardFromChainInfo(enemyTurn[1])
     self.play[1] = self.hand[drawnCards[1]]
     self.hand[drawnCards[1]] = 1
 
+    # self.play[2] = self.getCardFromChainInfo(enemyTurn[2])
     self.play[2] = self.hand[drawnCards[2]]
     self.hand[drawnCards[2]] = 2
 
@@ -239,10 +289,13 @@ class Enemy:
         self.magDefense += self.dexterity//2
 
   def action(self):
+    
 
     self.discard.cards.append(self.play[0])
     self.discard.cards.append(self.play[1])
     self.discard.cards.append(self.play[2])
+    
+
 
     self.play = [None] * 3
     for i in range(5):
