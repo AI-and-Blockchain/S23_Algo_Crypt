@@ -1,0 +1,55 @@
+{
+    "name": "Enemy Contract",
+    "methods": [
+        {
+            "name": "create",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Create the contract."
+        },
+        {
+            "name": "bootstrap",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "name"
+                },
+                {
+                    "type": "string",
+                    "name": "descr"
+                },
+                {
+                    "type": "string",
+                    "name": "image_uri"
+                },
+                {
+                    "type": "uint64",
+                    "name": "intelligence"
+                },
+                {
+                    "type": "uint64",
+                    "name": "strength"
+                },
+                {
+                    "type": "uint64",
+                    "name": "dexterity"
+                },
+                {
+                    "type": "uint64",
+                    "name": "hp"
+                },
+                {
+                    "type": "uint64",
+                    "name": "price"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Bootstrap the contract."
+        }
+    ],
+    "networks": {}
+}

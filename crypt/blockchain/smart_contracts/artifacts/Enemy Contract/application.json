@@ -1,0 +1,161 @@
+{
+    "hints": {
+        "create()void": {
+            "call_config": {
+                "no_op": "CREATE"
+            }
+        },
+        "bootstrap(string,string,string,uint64,uint64,uint64,uint64,uint64)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMQpieXRlY2Jsb2NrIDB4IDB4NjQ2NTczNjM3MiAweDY0NjU3ODc0NjU3MjY5NzQ3OSAweDY4NzAgMHg2OTZkNjE2NzY1NWY3NTcyNjkgMHg2OTZlNzQ2NTZjNmM2OTY3NjU2ZTYzNjUgMHg2ZTYxNmQ2NSAweDZmNzc2ZTY1NzIgMHg3MDcyNjk2MzY1IDB4NzM3NDcyNjU2ZTY3NzQ2OAp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweDRjNWM2MWJhIC8vICJjcmVhdGUoKXZvaWQiCj09CmJueiBtYWluX2w0CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4YjJhNmRjY2IgLy8gImJvb3RzdHJhcChzdHJpbmcsc3RyaW5nLHN0cmluZyx1aW50NjQsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0KXZvaWQiCj09CmJueiBtYWluX2wzCmVycgptYWluX2wzOgp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydAp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCnN0b3JlIDAKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgpzdG9yZSAxCnR4bmEgQXBwbGljYXRpb25BcmdzIDMKc3RvcmUgMgp0eG5hIEFwcGxpY2F0aW9uQXJncyA0CmJ0b2kKc3RvcmUgMwp0eG5hIEFwcGxpY2F0aW9uQXJncyA1CmJ0b2kKc3RvcmUgNAp0eG5hIEFwcGxpY2F0aW9uQXJncyA2CmJ0b2kKc3RvcmUgNQp0eG5hIEFwcGxpY2F0aW9uQXJncyA3CmJ0b2kKc3RvcmUgNgp0eG5hIEFwcGxpY2F0aW9uQXJncyA4CmJ0b2kKc3RvcmUgNwpsb2FkIDAKbG9hZCAxCmxvYWQgMgpsb2FkIDMKbG9hZCA0CmxvYWQgNQpsb2FkIDYKbG9hZCA3CmNhbGxzdWIgYm9vdHN0cmFwXzEKaW50Y18xIC8vIDEKcmV0dXJuCm1haW5fbDQ6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKPT0KJiYKYXNzZXJ0CmNhbGxzdWIgY3JlYXRlXzAKaW50Y18xIC8vIDEKcmV0dXJuCgovLyBjcmVhdGUKY3JlYXRlXzA6CnByb3RvIDAgMApwdXNoYnl0ZXMgMHg2Mzc1NzI3MjY1NmU3NDVmNjM2ODYxNmM2YzY1NmU2NzY1NzIgLy8gImN1cnJlbnRfY2hhbGxlbmdlciIKYnl0ZWNfMCAvLyAiIgphcHBfZ2xvYmFsX3B1dApieXRlY18xIC8vICJkZXNjciIKYnl0ZWNfMCAvLyAiIgphcHBfZ2xvYmFsX3B1dApieXRlY18yIC8vICJkZXh0ZXJpdHkiCmludGNfMCAvLyAwCmFwcF9nbG9iYWxfcHV0CnB1c2hieXRlcyAweDY3NjE2ZDY1NWY2MTYzNzQ2OTc2NjUgLy8gImdhbWVfYWN0aXZlIgppbnRjXzAgLy8gMAphcHBfZ2xvYmFsX3B1dApieXRlY18zIC8vICJocCIKaW50Y18wIC8vIDAKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgNCAvLyAiaW1hZ2VfdXJpIgpieXRlY18wIC8vICIiCmFwcF9nbG9iYWxfcHV0CmJ5dGVjIDUgLy8gImludGVsbGlnZW5jZSIKaW50Y18wIC8vIDAKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgNiAvLyAibmFtZSIKYnl0ZWNfMCAvLyAiIgphcHBfZ2xvYmFsX3B1dApieXRlYyA3IC8vICJvd25lciIKZ2xvYmFsIENyZWF0b3JBZGRyZXNzCmFwcF9nbG9iYWxfcHV0CmJ5dGVjIDggLy8gInByaWNlIgppbnRjXzAgLy8gMAphcHBfZ2xvYmFsX3B1dApieXRlYyA5IC8vICJzdHJlbmd0aCIKaW50Y18wIC8vIDAKYXBwX2dsb2JhbF9wdXQKcmV0c3ViCgovLyBib290c3RyYXAKYm9vdHN0cmFwXzE6CnByb3RvIDggMAp0eG4gU2VuZGVyCmJ5dGVjIDcgLy8gIm93bmVyIgphcHBfZ2xvYmFsX2dldAo9PQovLyB1bmF1dGhvcml6ZWQKYXNzZXJ0CmJ5dGVjIDYgLy8gIm5hbWUiCmZyYW1lX2RpZyAtOApleHRyYWN0IDIgMAphcHBfZ2xvYmFsX3B1dApieXRlY18xIC8vICJkZXNjciIKZnJhbWVfZGlnIC03CmV4dHJhY3QgMiAwCmFwcF9nbG9iYWxfcHV0CmJ5dGVjIDQgLy8gImltYWdlX3VyaSIKZnJhbWVfZGlnIC02CmV4dHJhY3QgMiAwCmFwcF9nbG9iYWxfcHV0CmJ5dGVjIDUgLy8gImludGVsbGlnZW5jZSIKZnJhbWVfZGlnIC01CmFwcF9nbG9iYWxfcHV0CmJ5dGVjIDkgLy8gInN0cmVuZ3RoIgpmcmFtZV9kaWcgLTQKYXBwX2dsb2JhbF9wdXQKYnl0ZWNfMiAvLyAiZGV4dGVyaXR5IgpmcmFtZV9kaWcgLTMKYXBwX2dsb2JhbF9wdXQKYnl0ZWNfMyAvLyAiaHAiCmZyYW1lX2RpZyAtMgphcHBfZ2xvYmFsX3B1dApieXRlYyA4IC8vICJwcmljZSIKZnJhbWVfZGlnIC0xCmFwcF9nbG9iYWxfcHV0CnJldHN1Yg==",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKcHVzaGludCAwIC8vIDAKcmV0dXJu"
+    },
+    "state": {
+        "global": {
+            "num_byte_slices": 5,
+            "num_uints": 6
+        },
+        "local": {
+            "num_byte_slices": 0,
+            "num_uints": 2
+        }
+    },
+    "schema": {
+        "global": {
+            "declared": {
+                "current_challenger": {
+                    "type": "bytes",
+                    "key": "current_challenger",
+                    "descr": "Address of the current challenger."
+                },
+                "descr": {
+                    "type": "bytes",
+                    "key": "descr",
+                    "descr": "description of the enemy."
+                },
+                "dexterity": {
+                    "type": "uint64",
+                    "key": "dexterity",
+                    "descr": "Dexterity of the enemy."
+                },
+                "game_active": {
+                    "type": "uint64",
+                    "key": "game_active",
+                    "descr": "Boolean indicating if a game is active."
+                },
+                "hp": {
+                    "type": "uint64",
+                    "key": "hp",
+                    "descr": "Hit points of the enemy."
+                },
+                "image_uri": {
+                    "type": "bytes",
+                    "key": "image_uri",
+                    "descr": "IPFS URI of the image of the enemy."
+                },
+                "intelligence": {
+                    "type": "uint64",
+                    "key": "intelligence",
+                    "descr": "Intelligence of the enemy."
+                },
+                "name": {
+                    "type": "bytes",
+                    "key": "name",
+                    "descr": "Name of the enemy."
+                },
+                "owner": {
+                    "type": "bytes",
+                    "key": "owner",
+                    "descr": "Owner of the contract."
+                },
+                "price": {
+                    "type": "uint64",
+                    "key": "price",
+                    "descr": "Price to challenge the enemy."
+                },
+                "strength": {
+                    "type": "uint64",
+                    "key": "strength",
+                    "descr": "Strength of the enemy."
+                }
+            },
+            "reserved": {}
+        },
+        "local": {
+            "declared": {
+                "current_enemy_hp": {
+                    "type": "uint64",
+                    "key": "current_enemy_hp",
+                    "descr": "Current enemy hit points."
+                },
+                "current_player_hp": {
+                    "type": "uint64",
+                    "key": "current_player_hp",
+                    "descr": "Current player hit points."
+                }
+            },
+            "reserved": {}
+        }
+    },
+    "contract": {
+        "name": "Enemy Contract",
+        "methods": [
+            {
+                "name": "create",
+                "args": [],
+                "returns": {
+                    "type": "void"
+                },
+                "desc": "Create the contract."
+            },
+            {
+                "name": "bootstrap",
+                "args": [
+                    {
+                        "type": "string",
+                        "name": "name"
+                    },
+                    {
+                        "type": "string",
+                        "name": "descr"
+                    },
+                    {
+                        "type": "string",
+                        "name": "image_uri"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "intelligence"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "strength"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "dexterity"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "hp"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "price"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                },
+                "desc": "Bootstrap the contract."
+            }
+        ],
+        "networks": {}
+    },
+    "bare_call_config": {}
+}
