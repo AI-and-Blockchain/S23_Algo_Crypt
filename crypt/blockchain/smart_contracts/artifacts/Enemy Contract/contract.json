@@ -1,0 +1,103 @@
+{
+    "name": "Enemy Contract",
+    "methods": [
+        {
+            "name": "create",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Create the contract."
+        },
+        {
+            "name": "bootstrap",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "name"
+                },
+                {
+                    "type": "string",
+                    "name": "descr"
+                },
+                {
+                    "type": "string",
+                    "name": "image_uri"
+                },
+                {
+                    "type": "uint64",
+                    "name": "intelligence"
+                },
+                {
+                    "type": "uint64",
+                    "name": "strength"
+                },
+                {
+                    "type": "uint64",
+                    "name": "dexterity"
+                },
+                {
+                    "type": "uint64",
+                    "name": "hp"
+                },
+                {
+                    "type": "uint64",
+                    "name": "price"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Bootstrap the contract."
+        },
+        {
+            "name": "challenge",
+            "args": [
+                {
+                    "type": "pay",
+                    "name": "txn"
+                },
+                {
+                    "type": "uint64",
+                    "name": "player_hp"
+                },
+                {
+                    "type": "uint64",
+                    "name": "player_intelligence"
+                },
+                {
+                    "type": "uint64",
+                    "name": "player_strength"
+                },
+                {
+                    "type": "uint64",
+                    "name": "player_dexterity"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Challenge the enemy."
+        },
+        {
+            "name": "submit_plays",
+            "args": [
+                {
+                    "type": "string[]",
+                    "name": "actions",
+                    "desc": "A list of three actions."
+                },
+                {
+                    "type": "string[]",
+                    "name": "attributes"
+                }
+            ],
+            "returns": {
+                "type": "(uint64,uint64,bool)",
+                "desc": "A GameState object."
+            },
+            "desc": "Submit a hand of three cards."
+        }
+    ],
+    "networks": {}
+}

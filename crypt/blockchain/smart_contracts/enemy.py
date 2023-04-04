@@ -117,7 +117,7 @@ class EnemyContractState:
     )
 
     def __init__(self, deck_size: int):
-        self.deck = BoxList(pt.abi.Uint64, deck_size)
+        self.deck = BoxList(pt.abi.Uint64, deck_size, "EnemyDeck")
 
 
 app = bk.Application(
@@ -258,6 +258,14 @@ def submit_plays(
     player_phys_def = pt.ScratchVar(pt.TealType.uint64)
     i = pt.ScratchVar(pt.TealType.uint64)
     return pt.Seq(
+        enemy_mag_def.store(pt.Int(0)),
+        enemy_phys_def.store(pt.Int(0)),
+        player_mag_def.store(pt.Int(0)),
+        player_phys_def.store(pt.Int(0)),
+        enemy_mag_dmg.store(pt.Int(0)),
+        enemy_phys_dmg.store(pt.Int(0)),
+        player_mag_dmg.store(pt.Int(0)),
+        player_phys_dmg.store(pt.Int(0)),
         pt.Assert(app.state.game_active.get() == pt.Int(1)),
         pt.For(
             i.store(pt.Int(0)),
@@ -341,4 +349,8 @@ def submit_plays(
             app.state.current_player_hp.get() <= pt.Int(0),
         )
         .Then(app.state.game_active.set(pt.Int(0)), app.state.current_challenger.set(pt.Global.zero_address())),
+        (player_hp := pt.abi.make(pt.abi.Uint64)).set(app.state.current_player_hp.get()),
+        (enemy_hp := pt.abi.make(pt.abi.Uint64)).set(app.state.current_enemy_hp.get()),
+        (game_active := pt.abi.make(pt.abi.Bool)).set(app.state.game_active.get()),
+        output.set(player_hp, enemy_hp, game_active),
     )
