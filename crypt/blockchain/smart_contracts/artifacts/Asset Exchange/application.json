@@ -1,0 +1,137 @@
+{
+    "hints": {
+        "create()void": {
+            "call_config": {
+                "no_op": "CREATE"
+            }
+        },
+        "update(string,string,string,uint64,uint64)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "buy(pay)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMQpieXRlY2Jsb2NrIDB4NzA3MjY5NjM2NSAweDYxNzM3MzY1NzQ1ZjY5NjQgMHggMHg2Zjc3NmU2NTcyIDB4NjQ2NTczNjM3MiAweDY5NmQ2MTY3NjU1Zjc1NzI2OSAweDZlNjE2ZDY1CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4NGM1YzYxYmEgLy8gImNyZWF0ZSgpdm9pZCIKPT0KYm56IG1haW5fbDYKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHg0Nzg3Njk0NiAvLyAidXBkYXRlKHN0cmluZyxzdHJpbmcsc3RyaW5nLHVpbnQ2NCx1aW50NjQpdm9pZCIKPT0KYm56IG1haW5fbDUKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHg5NThkM2RmOSAvLyAiYnV5KHBheSl2b2lkIgo9PQpibnogbWFpbl9sNAplcnIKbWFpbl9sNDoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKdHhuIEdyb3VwSW5kZXgKaW50Y18xIC8vIDEKLQpzdG9yZSA1CmxvYWQgNQpndHhucyBUeXBlRW51bQppbnRjXzEgLy8gcGF5Cj09CmFzc2VydApsb2FkIDUKY2FsbHN1YiBidXlfMgppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sNToKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQpzdG9yZSAwCnR4bmEgQXBwbGljYXRpb25BcmdzIDIKc3RvcmUgMQp0eG5hIEFwcGxpY2F0aW9uQXJncyAzCnN0b3JlIDIKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgNApidG9pCnN0b3JlIDMKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgNQpidG9pCnN0b3JlIDQKbG9hZCAwCmxvYWQgMQpsb2FkIDIKbG9hZCAzCmxvYWQgNApjYWxsc3ViIHVwZGF0ZV8xCmludGNfMSAvLyAxCnJldHVybgptYWluX2w2Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCj09CiYmCmFzc2VydApjYWxsc3ViIGNyZWF0ZV8wCmludGNfMSAvLyAxCnJldHVybgoKLy8gY3JlYXRlCmNyZWF0ZV8wOgpwcm90byAwIDAKYnl0ZWNfMSAvLyAiYXNzZXRfaWQiCmludGNfMCAvLyAwCmFwcF9nbG9iYWxfcHV0CmJ5dGVjIDQgLy8gImRlc2NyIgpieXRlY18yIC8vICIiCmFwcF9nbG9iYWxfcHV0CmJ5dGVjIDUgLy8gImltYWdlX3VyaSIKYnl0ZWNfMiAvLyAiIgphcHBfZ2xvYmFsX3B1dApieXRlYyA2IC8vICJuYW1lIgpieXRlY18yIC8vICIiCmFwcF9nbG9iYWxfcHV0CmJ5dGVjXzMgLy8gIm93bmVyIgpnbG9iYWwgQ3JlYXRvckFkZHJlc3MKYXBwX2dsb2JhbF9wdXQKYnl0ZWNfMCAvLyAicHJpY2UiCmludGNfMCAvLyAwCmFwcF9nbG9iYWxfcHV0CnJldHN1YgoKLy8gdXBkYXRlCnVwZGF0ZV8xOgpwcm90byA1IDAKdHhuIFNlbmRlcgpieXRlY18zIC8vICJvd25lciIKYXBwX2dsb2JhbF9nZXQKPT0KLy8gdW5hdXRob3JpemVkCmFzc2VydApieXRlYyA2IC8vICJuYW1lIgpmcmFtZV9kaWcgLTUKZXh0cmFjdCAyIDAKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgNCAvLyAiZGVzY3IiCmZyYW1lX2RpZyAtNApleHRyYWN0IDIgMAphcHBfZ2xvYmFsX3B1dApieXRlYyA1IC8vICJpbWFnZV91cmkiCmZyYW1lX2RpZyAtMwpleHRyYWN0IDIgMAphcHBfZ2xvYmFsX3B1dApieXRlY18xIC8vICJhc3NldF9pZCIKZnJhbWVfZGlnIC0yCmFwcF9nbG9iYWxfcHV0CmJ5dGVjXzAgLy8gInByaWNlIgpmcmFtZV9kaWcgLTEKYXBwX2dsb2JhbF9wdXQKcmV0c3ViCgovLyBidXkKYnV5XzI6CnByb3RvIDEgMApmcmFtZV9kaWcgLTEKZ3R4bnMgUmVjZWl2ZXIKZ2xvYmFsIEN1cnJlbnRBcHBsaWNhdGlvbkFkZHJlc3MKPT0KYXNzZXJ0CmZyYW1lX2RpZyAtMQpndHhucyBBbW91bnQKYnl0ZWNfMCAvLyAicHJpY2UiCmFwcF9nbG9iYWxfZ2V0Cj09CmFzc2VydAppdHhuX2JlZ2luCnB1c2hpbnQgNCAvLyBheGZlcgppdHhuX2ZpZWxkIFR5cGVFbnVtCmZyYW1lX2RpZyAtMQpndHhucyBTZW5kZXIKaXR4bl9maWVsZCBBc3NldFJlY2VpdmVyCmludGNfMSAvLyAxCml0eG5fZmllbGQgQXNzZXRBbW91bnQKZ2xvYmFsIFplcm9BZGRyZXNzCml0eG5fZmllbGQgQXNzZXRDbG9zZVRvCmJ5dGVjXzEgLy8gImFzc2V0X2lkIgphcHBfZ2xvYmFsX2dldAppdHhuX2ZpZWxkIFhmZXJBc3NldAppdHhuX3N1Ym1pdAppdHhuX2JlZ2luCmludGNfMSAvLyBwYXkKaXR4bl9maWVsZCBUeXBlRW51bQpieXRlY18zIC8vICJvd25lciIKYXBwX2dsb2JhbF9nZXQKaXR4bl9maWVsZCBSZWNlaXZlcgpieXRlY18wIC8vICJwcmljZSIKYXBwX2dsb2JhbF9nZXQKaXR4bl9maWVsZCBBbW91bnQKaXR4bl9zdWJtaXQKaXR4bl9iZWdpbgpwdXNoaW50IDYgLy8gYXBwbAppdHhuX2ZpZWxkIFR5cGVFbnVtCmdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25JRAppdHhuX2ZpZWxkIEFwcGxpY2F0aW9uSUQKcHVzaGludCA1IC8vIERlbGV0ZUFwcGxpY2F0aW9uCml0eG5fZmllbGQgT25Db21wbGV0aW9uCml0eG5fc3VibWl0CnJldHN1Yg==",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKcHVzaGludCAwIC8vIDAKcmV0dXJu"
+    },
+    "state": {
+        "global": {
+            "num_byte_slices": 4,
+            "num_uints": 2
+        },
+        "local": {
+            "num_byte_slices": 0,
+            "num_uints": 0
+        }
+    },
+    "schema": {
+        "global": {
+            "declared": {
+                "asset_id": {
+                    "type": "uint64",
+                    "key": "asset_id",
+                    "descr": "Asset ID of the NFT."
+                },
+                "descr": {
+                    "type": "bytes",
+                    "key": "descr",
+                    "descr": "description of the contract."
+                },
+                "image_uri": {
+                    "type": "bytes",
+                    "key": "image_uri",
+                    "descr": "URI of the image of the contract."
+                },
+                "name": {
+                    "type": "bytes",
+                    "key": "name",
+                    "descr": "Name of the contract."
+                },
+                "owner": {
+                    "type": "bytes",
+                    "key": "owner",
+                    "descr": "Owner of the contract."
+                },
+                "price": {
+                    "type": "uint64",
+                    "key": "price",
+                    "descr": "Price of the NFT."
+                }
+            },
+            "reserved": {}
+        },
+        "local": {
+            "declared": {},
+            "reserved": {}
+        }
+    },
+    "contract": {
+        "name": "Asset Exchange",
+        "methods": [
+            {
+                "name": "create",
+                "args": [],
+                "returns": {
+                    "type": "void"
+                },
+                "desc": "Create the contract."
+            },
+            {
+                "name": "update",
+                "args": [
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "desc": "name of NFT"
+                    },
+                    {
+                        "type": "string",
+                        "name": "descr",
+                        "desc": "descrription of NFT"
+                    },
+                    {
+                        "type": "string",
+                        "name": "image_uri",
+                        "desc": "URI of image of NFT"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "asset_id",
+                        "desc": "asset ID of NFT"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "price",
+                        "desc": "price of NFT"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                },
+                "desc": "Update the contract."
+            },
+            {
+                "name": "buy",
+                "args": [
+                    {
+                        "type": "pay",
+                        "name": "txn",
+                        "desc": "transaction"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                },
+                "desc": "Buy the NFT."
+            }
+        ],
+        "networks": {}
+    },
+    "bare_call_config": {}
+}

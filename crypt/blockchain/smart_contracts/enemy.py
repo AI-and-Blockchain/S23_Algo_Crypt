@@ -1,278 +1,356 @@
-""" Enemy contract.
-
-Fields:
-    Enemy Details: abi.NamedTuple (Global)
-        name: str
-        health: int
-        strength: int
-        intelligence: int
-        dexterity: int
-        image_uri: str
-        description: str
-
-    Challenger Details: abi.NamedTuple (Local)
-        name: str
-        health: int
-        strength: int
-        intelligence: int
-        dexterity: int
-
-    Game State: abi.NamedTuple (Local)
-        challenger: Challenger Details
-        enemy: Enemy Details
-        turn: int
-        current_enemy_health: int
-        current_challenger_health: int
-        challenger_won: bool
-        enemy_won: bool
-
-Methods:
-    challenge: (Challenger Details) -> (Game State)
-        Starts a new game with the given challenger details.
-    
-    attack: (str) -> (Game State)
-        Attacks the enemy with the given attack type.
-        Valid attack types are "strength" and "intelligence".
-
-    defend: (str) -> (Game State)
-        Defends against the enemy's attack with the given defense type.
-        Valid defense types are "strength" and "intelligence".
-
-    dodge: () -> (Game State)
-        Dodges the enemy's attack.
-
-    surrender: () -> (Game State)
-        Surrenders the game.
-
-    reset: () -> (Game State)
-        Resets the game to the initial state.
+"""This contract contains logic for challenging an enemy
+    and playing the game.
 """
 
-from beaker import *
-from pyteal import *
+import pyteal as pt
+import beaker as bk
+
+from beaker.lib.storage import BoxList, BoxMapping
 
 
-class Enemy(abi.NamedTuple):
-    name: abi.Field[abi.String]
-    health: abi.Field[abi.Uint64]
-    strength: abi.Field[abi.Uint64]
-    intelligence: abi.Field[abi.Uint64]
-    dexterity: abi.Field[abi.Uint64]
-    image_uri: abi.Field[abi.String]
-    description: abi.Field[abi.String]
+class GameState(pt.abi.NamedTuple):
+    player_hp: pt.abi.Field[pt.abi.Uint64]
+    enemy_hp: pt.abi.Field[pt.abi.Uint64]
+    game_over: pt.abi.Field[pt.abi.Bool]
 
 
-class Challenger(abi.NamedTuple):
-    name: abi.Field[abi.String]
-    user: abi.Field[abi.Address]
-    health: abi.Field[abi.Uint64]
-    strength: abi.Field[abi.Uint64]
-    intelligence: abi.Field[abi.Uint64]
-    dexterity: abi.Field[abi.Uint64]
+class EnemyContractState:
+    """State of the enemy contract."""
 
-
-class GameState(abi.NamedTuple):
-    challenger: abi.Field[Challenger]
-    enemy: abi.Field[Enemy]
-    turn: abi.Field[abi.Uint64]
-    current_enemy_health: abi.Field[abi.Uint64]
-    current_challenger_health: abi.Field[abi.Uint64]
-    challenger_won: abi.Field[abi.Bool]
-    enemy_won: abi.Field[abi.Bool]
-
-
-class EnemyState:
-    owner: GlobalStateValue(
-        stack_type=abi.Address,
-        descr="Owner of the contract",
-        default=Global.creator_address(),
+    owner = bk.GlobalStateValue(
+        stack_type=pt.TealType.bytes,
+        default=pt.Global.creator_address(),
+        descr="Owner of the contract.",
     )
 
-    enemy: GlobalStateValue(
-        stack_type=Enemy,
-        descr="Enemy Details",
-        default=Enemy(
-            name="",
-            health=0,
-            strength=0,
-            intelligence=0,
-            dexterity=0,
-            image_uri="",
-            description="",
-        ),
+    name = bk.GlobalStateValue(
+        stack_type=pt.TealType.bytes,
+        default=pt.Bytes(""),
+        descr="Name of the enemy.",
     )
-    game_state: LocalStateValue(
-        stack_type=GameState,
-        descr="Game State",
-        default=GameState(
-            challenger=Challenger(
-                name="",
-                user=Global.zero_address(),
-                health=0,
-                strength=0,
-                intelligence=0,
-                dexterity=0,
-            ),
-            enemy=Enemy(
-                name="",
-                health=0,
-                strength=0,
-                intelligence=0,
-                dexterity=0,
-                image_uri="",
-                description="",
-            ),
-            turn=0,
-            current_enemy_health=0,
-            current_challenger_health=0,
-            challenger_won=False,
-            enemy_won=False,
-        ),
+    descr = bk.GlobalStateValue(
+        stack_type=pt.TealType.bytes,
+        default=pt.Bytes(""),
+        descr="description of the enemy.",
     )
 
-
-enemy = Application("Algocrypt Enemy Contract", EnemyState)
-
-# Methods
-
-
-@enemy.create
-def create() -> Expr:
-    return enemy.initialize_global_state()
-
-
-@enemy.external(authorize=Authorize.only(enemy.owner))
-def set_enemy_details(
-    name: str, health: int, strength: int, intelligence: int, dexterity: int, image_uri: str, description: str
-) -> Expr:
-    return enemy.state.enemy.set(
-        Enemy(
-            name=name,
-            health=health,
-            strength=strength,
-            intelligence=intelligence,
-            dexterity=dexterity,
-            image_uri=image_uri,
-            description=description,
-        )
+    image_uri = bk.GlobalStateValue(
+        stack_type=pt.TealType.bytes,
+        default=pt.Bytes(""),
+        descr="IPFS URI of the image of the enemy.",
     )
 
-
-@enemy.external
-def challenge(challenger: Challenger) -> Expr:
-    return enemy.state.game_state.set(
-        GameState(
-            challenger=challenger,
-            enemy=enemy.enemy.get(),
-            turn=0,
-            current_enemy_health=enemy.enemy.get().health,
-            current_challenger_health=challenger.health,
-            challenger_won=False,
-            enemy_won=False,
-        )
+    intelligence = bk.GlobalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Intelligence of the enemy.",
+    )
+    strength = bk.GlobalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Strength of the enemy.",
+    )
+    dexterity = bk.GlobalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Dexterity of the enemy.",
     )
 
-
-@enemy.external
-def play_turn(
-    cards: abi.Tuple3[
-        abi.Tuple2[abi.String, abi.String], abi.Tuple2[abi.String, abi.String], abi.Tuple2[abi.String, abi.String]
-    ]
-) -> Expr:
-    game_state = enemy.state.game_state.get()
-    enemy_details = game_state.enemy
-    challenger_details = game_state.challenger
-
-    phys_damage = 0
-    mag_damage = 0
-    phys_defense = 0
-    mag_defense = 0
-    for card in cards:
-        if card[0] == "attack":
-            if card[1] == "strength":
-                phys_damage += challenger_details.strength
-            elif card[1] == "intelligence":
-                mag_damage += challenger_details.intelligence
-        elif card[0] == "defense":
-            if card[1] == "strength":
-                phys_defense += challenger_details.strength
-            elif card[1] == "intelligence":
-                mag_defense += challenger_details.intelligence
-        else:
-            phys_defense += challenger_details.dexterity // 2
-            mag_defense += challenger_details.dexterity // 2
-
-    dex_diff = challenger_details.dexterity - enemy_details.dexterity
-    str_diff = challenger_details.strength - enemy_details.strength
-    int_diff = challenger_details.intelligence - enemy_details.intelligence
-
-    preferred_def = "dodge" if dex_diff > 0 else "defense"
-    if preferred_def == "defense":
-        preferred_def = "strength" if str_diff > int_diff else "intelligence"
-    preferred_att = "strength" if str_diff > int_diff else "intelligence"
-
-    enemy_phys_damage = 0
-    enemy_mag_damage = 0
-    enemy_phys_defense = 0
-    enemy_mag_defense = 0
-    if preferred_att == "strength":
-        enemy_phys_damage += enemy_details.strength
-    else:
-        enemy_mag_damage += enemy_details.intelligence
-
-    if preferred_def == "intelligence":
-        enemy_mag_defense += enemy_details.intelligence
-    elif preferred_def == "strength":
-        enemy_phys_defense += enemy_details.strength
-    else:
-        enemy_phys_defense += enemy_details.dexterity // 2
-        enemy_mag_defense += enemy_details.dexterity // 2
-
-    damage_to_enemy = max(0, phys_damage - enemy_phys_defense) + max(0, mag_damage - enemy_mag_defense)
-    damage_to_challenger = max(0, enemy_phys_damage - phys_defense) + max(0, enemy_mag_damage - mag_defense)
-
-    return enemy.state.game_state.set(
-        game_state.set(
-            turn=game_state.turn + 1,
-            current_enemy_health=game_state.current_enemy_health - damage_to_enemy,
-            current_challenger_health=game_state.current_challenger_health - damage_to_challenger,
-        )
+    hp = bk.GlobalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Hit points of the enemy.",
     )
 
-
-@Subroutine(TealType.none)
-def end_game() -> Expr:
-    raise NotImplementedError
-
-
-@Subroutine(TealType.none)
-def attack_challenger(attack_type: abi.String) -> Expr:
-    game_state = enemy.state.game_state.get()
-    enemy_details = game_state.enemy
-    challenger_details = game_state.challenger
-
-    if attack_type == "strength":
-        damage = enemy_details.strength
-    elif attack_type == "intelligence":
-        damage = enemy_details.intelligence
-    else:
-        return enemy.state.game_state.set(game_state)
-
-    return enemy.state.game_state.set(
-        game_state.set(
-            current_challenger_health=game_state.current_challenger_health - damage,
-        )
+    price = bk.GlobalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Price to challenge the enemy.",
     )
 
+    current_challenger = bk.GlobalStateValue(
+        stack_type=pt.TealType.bytes,
+        default=pt.Bytes(""),
+        descr="Address of the current challenger.",
+    )
 
-client = client.ApplicationClient(
-    client=sandbox.get_algod_client(), app=enemy, signer=sandbox.get_accounts().pop().signer
+    current_enemy_hp = bk.LocalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Current enemy hit points.",
+    )
+
+    current_player_hp = bk.LocalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Current player hit points.",
+    )
+
+    current_player_intelligence = bk.LocalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Current player intelligence.",
+    )
+
+    current_player_strength = bk.LocalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Current player strength.",
+    )
+
+    current_player_dexterity = bk.LocalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Current player dexterity.",
+    )
+
+    game_active = bk.GlobalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Boolean indicating if a game is active.",
+    )
+
+    enemy_defeated = bk.GlobalStateValue(
+        stack_type=pt.TealType.uint64,
+        default=pt.Int(0),
+        descr="Boolean indicating if the enemy has been defeated.",
+    )
+
+    def __init__(self, deck_size: int):
+        self.deck = BoxList(pt.abi.Uint64, deck_size, "EnemyDeck")
+
+
+app = bk.Application(
+    name="Enemy Contract",
+    state=EnemyContractState(30),
 )
 
-app_id, app_addr, txid = client.create()
-print(
-    f"""Deployed app in txid {txid}
-    App ID: {app_id} 
-    Address: {app_addr} 
-"""
-)
+
+@app.create
+def create() -> pt.Expr:
+    """Create the contract."""
+    return app.initialize_global_state()
+
+
+@app.external(authorize=bk.Authorize.only(app.state.owner.get()))
+def bootstrap(
+    name: pt.abi.String,
+    descr: pt.abi.String,
+    image_uri: pt.abi.String,
+    intelligence: pt.abi.Uint64,
+    strength: pt.abi.Uint64,
+    dexterity: pt.abi.Uint64,
+    hp: pt.abi.Uint64,
+    price: pt.abi.Uint64,
+) -> pt.Expr:
+    """Bootstrap the contract."""
+    return pt.Seq(
+        app.state.name.set(name.get()),
+        app.state.descr.set(descr.get()),
+        app.state.image_uri.set(image_uri.get()),
+        app.state.intelligence.set(intelligence.get()),
+        app.state.strength.set(strength.get()),
+        app.state.dexterity.set(dexterity.get()),
+        app.state.hp.set(hp.get()),
+        app.state.price.set(price.get()),
+    )
+
+
+@app.external
+def challenge(
+    txn: pt.abi.PaymentTransaction,
+    player_hp: pt.abi.Uint64,
+    player_intelligence: pt.abi.Uint64,
+    player_strength: pt.abi.Uint64,
+    player_dexterity: pt.abi.Uint64,
+) -> pt.Expr:
+    """Challenge the enemy."""
+    txn = txn.get()
+    return pt.Seq(
+        pt.Assert(
+            pt.And(
+                app.state.game_active.get() == pt.Int(0),
+                app.state.enemy_defeated.get() == pt.Int(0),
+                app.state.price.get() >= txn.amount(),
+            )
+        ),
+        pt.Seq(
+            app.state.game_active.set(pt.Int(1)),
+            app.state.current_challenger.set(txn.sender()),
+            app.state.current_enemy_hp.set(app.state.hp.get()),
+            app.state.current_player_hp.set(player_hp.get()),
+            app.state.current_player_intelligence.set(player_intelligence.get()),
+            app.state.current_player_strength.set(player_strength.get()),
+            app.state.current_player_dexterity.set(player_dexterity.get()),
+        ),
+    )
+
+
+@pt.Subroutine(pt.TealType.none)
+def player_win(address: pt.abi.Address) -> pt.Expr:
+    """Player wins."""
+    i = pt.ScratchVar(pt.TealType.uint64)
+    return pt.Seq(
+        pt.For(
+            i.store(pt.Int(0)),
+            i.load() < pt.Int(3),
+            i.store(i.load() + pt.Int(1)),
+        ).Do(
+            (card := pt.abi.make(pt.abi.Uint64)).set(pt.abi.Uint64()),
+            app.state.deck[i.load()].store_into(card),
+            pt.InnerTxnBuilder.Execute(
+                {
+                    pt.TxnField.type_enum: pt.TxnType.AssetTransfer,
+                    pt.TxnField.xfer_asset: card.get(),
+                    pt.TxnField.asset_amount: pt.Int(1),
+                    pt.TxnField.receiver: address.get(),
+                }
+            ),
+        ),
+        pt.InnerTxnBuilder.Execute(
+            {
+                pt.TxnField.type_enum: pt.TxnType.AssetConfig,
+                pt.TxnField.config_asset_name: app.state.name.get(),
+                pt.TxnField.config_asset_unit_name: pt.Bytes("CRPT-NME"),
+                pt.TxnField.config_asset_total: pt.Int(1),
+                pt.TxnField.config_asset_default_frozen: pt.Int(0),
+                pt.TxnField.config_asset_manager: app.state.owner.get(),
+                pt.TxnField.config_asset_reserve: app.state.owner.get(),
+                pt.TxnField.config_asset_freeze: app.state.owner.get(),
+                pt.TxnField.config_asset_clawback: app.state.owner.get(),
+                pt.TxnField.config_asset_url: app.state.image_uri.get(),
+                pt.TxnField.config_asset_decimals: pt.Int(0),
+            }
+        ),
+        pt.InnerTxnBuilder.Execute(
+            {
+                pt.TxnField.type_enum: pt.TxnType.AssetTransfer,
+                pt.TxnField.xfer_asset: pt.InnerTxn.created_asset_id(),
+                pt.TxnField.asset_amount: pt.Int(1),
+                pt.TxnField.receiver: address.get(),
+            }
+        ),
+    )
+
+
+@app.external(authorize=bk.Authorize.only(app.state.current_challenger.get()))
+def submit_plays(
+    actions: pt.abi.DynamicArray[pt.abi.String],
+    attributes: pt.abi.DynamicArray[pt.abi.String],
+    *,
+    output: GameState,
+) -> pt.Expr:
+    """Submit a hand of three cards.
+
+    Args:
+        actions: A list of three actions.
+
+    Returns:
+        A GameState object.
+    """
+    enemy_mag_dmg = pt.ScratchVar(pt.TealType.uint64)
+    enemy_phys_dmg = pt.ScratchVar(pt.TealType.uint64)
+    player_mag_dmg = pt.ScratchVar(pt.TealType.uint64)
+    player_phys_dmg = pt.ScratchVar(pt.TealType.uint64)
+    enemy_mag_def = pt.ScratchVar(pt.TealType.uint64)
+    enemy_phys_def = pt.ScratchVar(pt.TealType.uint64)
+    player_mag_def = pt.ScratchVar(pt.TealType.uint64)
+    player_phys_def = pt.ScratchVar(pt.TealType.uint64)
+    i = pt.ScratchVar(pt.TealType.uint64)
+    return pt.Seq(
+        enemy_mag_def.store(pt.Int(0)),
+        enemy_phys_def.store(pt.Int(0)),
+        player_mag_def.store(pt.Int(0)),
+        player_phys_def.store(pt.Int(0)),
+        enemy_mag_dmg.store(pt.Int(0)),
+        enemy_phys_dmg.store(pt.Int(0)),
+        player_mag_dmg.store(pt.Int(0)),
+        player_phys_dmg.store(pt.Int(0)),
+        pt.Assert(app.state.game_active.get() == pt.Int(1)),
+        pt.For(
+            i.store(pt.Int(0)),
+            i.load() < pt.Int(3),
+            i.store(i.load() + pt.Int(1)),
+        ).Do(
+            pt.Seq(
+                (action := pt.abi.make(pt.abi.String)).set(pt.abi.String()),
+                (attribute := pt.abi.make(pt.abi.String)).set(pt.abi.String()),
+                actions[i.load()].store_into(action),
+                attributes[i.load()].store_into(attribute),
+                pt.If(
+                    action.encode() == pt.Bytes("attack"),
+                    pt.If(
+                        attribute.encode() == pt.Bytes("intelligence"),
+                        player_mag_dmg.store(player_mag_dmg.load() + app.state.current_player_intelligence.get()),
+                        player_phys_dmg.store(player_phys_dmg.load() + app.state.current_player_strength.get()),
+                    ),
+                    pt.If(
+                        action.encode() == pt.Bytes("defend"),
+                        pt.If(
+                            attribute.encode() == pt.Bytes("intelligence"),
+                            player_mag_def.store(player_mag_def.load() + app.state.current_player_intelligence.get()),
+                            player_phys_def.store(player_phys_def.load() + app.state.current_player_strength.get()),
+                        ),
+                        pt.Seq(
+                            player_mag_def.store(
+                                player_mag_def.load() + pt.Div(app.state.current_player_intelligence.get(), pt.Int(2))
+                            ),
+                            player_phys_def.store(
+                                player_phys_def.load() + pt.Div(app.state.current_player_strength.get(), pt.Int(2))
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        enemy_mag_def.store(pt.Div(app.state.dexterity.get(), pt.Int(2))),
+        enemy_phys_def.store(pt.Div(app.state.dexterity.get(), pt.Int(2))),
+        enemy_mag_dmg.store(app.state.intelligence.get()),
+        enemy_phys_dmg.store(app.state.strength.get()),
+        pt.If(
+            player_mag_dmg.load() > enemy_mag_def.load(),
+        ).Then(
+            app.state.current_enemy_hp.set(
+                app.state.current_enemy_hp.get() - (player_mag_dmg.load() - enemy_mag_def.load())
+            )
+        ),
+        pt.If(
+            player_phys_dmg.load() > enemy_phys_def.load(),
+        ).Then(
+            app.state.current_enemy_hp.set(
+                app.state.current_enemy_hp.get() - (player_phys_dmg.load() - enemy_phys_def.load())
+            )
+        ),
+        pt.If(
+            enemy_mag_dmg.load() > player_mag_def.load(),
+        ).Then(
+            app.state.current_player_hp.set(
+                app.state.current_player_hp.get() - (enemy_mag_dmg.load() - player_mag_def.load())
+            )
+        ),
+        pt.If(
+            enemy_phys_dmg.load() > player_phys_def.load(),
+        ).Then(
+            app.state.current_player_hp.set(
+                app.state.current_player_hp.get() - (enemy_phys_dmg.load() - player_phys_def.load())
+            )
+        ),
+        pt.If(
+            app.state.current_enemy_hp.get() <= pt.Int(0),
+        )
+        .Then(
+            app.state.game_active.set(pt.Int(0)),
+            app.state.enemy_defeated.set(pt.Int(1)),
+            (player := pt.abi.make(pt.abi.Address)).set(pt.abi.Address()),
+            player.set(app.state.current_challenger.get()),
+            player_win(player),
+        )
+        .ElseIf(
+            app.state.current_player_hp.get() <= pt.Int(0),
+        )
+        .Then(app.state.game_active.set(pt.Int(0)), app.state.current_challenger.set(pt.Global.zero_address())),
+        (player_hp := pt.abi.make(pt.abi.Uint64)).set(app.state.current_player_hp.get()),
+        (enemy_hp := pt.abi.make(pt.abi.Uint64)).set(app.state.current_enemy_hp.get()),
+        (game_active := pt.abi.make(pt.abi.Bool)).set(app.state.game_active.get()),
+        output.set(player_hp, enemy_hp, game_active),
+    )

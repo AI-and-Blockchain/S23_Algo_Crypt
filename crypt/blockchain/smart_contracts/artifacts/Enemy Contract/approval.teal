@@ -1,0 +1,690 @@
+#pragma version 8
+intcblock 0 2 1 3
+bytecblock 0x 0x67616d655f616374697665 0x63757272656e745f656e656d795f6870 0x63757272656e745f706c617965725f6870 0x6f776e6572 0x63757272656e745f6368616c6c656e676572 0x696e74656c6c6967656e6365 0x646578746572697479 0x63757272656e745f706c617965725f696e74656c6c6967656e6365 0x63757272656e745f706c617965725f737472656e677468 0x656e656d795f6465666561746564 0x6870 0x696d6167655f757269 0x6e616d65 0x7072696365 0x737472656e677468 0x6465736372
+txna ApplicationArgs 0
+pushbytes 0x4c5c61ba // "create()void"
+==
+bnz main_l8
+txna ApplicationArgs 0
+pushbytes 0xb2a6dccb // "bootstrap(string,string,string,uint64,uint64,uint64,uint64,uint64)void"
+==
+bnz main_l7
+txna ApplicationArgs 0
+pushbytes 0x33f2e806 // "challenge(pay,uint64,uint64,uint64,uint64)void"
+==
+bnz main_l6
+txna ApplicationArgs 0
+pushbytes 0xdfbf5dbd // "submit_plays(string[],string[])(uint64,uint64,bool)"
+==
+bnz main_l5
+err
+main_l5:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+store 13
+txna ApplicationArgs 2
+store 14
+load 13
+load 14
+callsub submitplays_4
+store 15
+pushbytes 0x151f7c75 // 0x151f7c75
+load 15
+concat
+log
+intc_2 // 1
+return
+main_l6:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+btoi
+store 9
+txna ApplicationArgs 2
+btoi
+store 10
+txna ApplicationArgs 3
+btoi
+store 11
+txna ApplicationArgs 4
+btoi
+store 12
+txn GroupIndex
+intc_2 // 1
+-
+store 8
+load 8
+gtxns TypeEnum
+intc_2 // pay
+==
+assert
+load 8
+load 9
+load 10
+load 11
+load 12
+callsub challenge_2
+intc_2 // 1
+return
+main_l7:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+store 0
+txna ApplicationArgs 2
+store 1
+txna ApplicationArgs 3
+store 2
+txna ApplicationArgs 4
+btoi
+store 3
+txna ApplicationArgs 5
+btoi
+store 4
+txna ApplicationArgs 6
+btoi
+store 5
+txna ApplicationArgs 7
+btoi
+store 6
+txna ApplicationArgs 8
+btoi
+store 7
+load 0
+load 1
+load 2
+load 3
+load 4
+load 5
+load 6
+load 7
+callsub bootstrap_1
+intc_2 // 1
+return
+main_l8:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+==
+&&
+assert
+callsub create_0
+intc_2 // 1
+return
+
+// create
+create_0:
+proto 0 0
+bytec 5 // "current_challenger"
+bytec_0 // ""
+app_global_put
+bytec 16 // "descr"
+bytec_0 // ""
+app_global_put
+bytec 7 // "dexterity"
+intc_0 // 0
+app_global_put
+bytec 10 // "enemy_defeated"
+intc_0 // 0
+app_global_put
+bytec_1 // "game_active"
+intc_0 // 0
+app_global_put
+bytec 11 // "hp"
+intc_0 // 0
+app_global_put
+bytec 12 // "image_uri"
+bytec_0 // ""
+app_global_put
+bytec 6 // "intelligence"
+intc_0 // 0
+app_global_put
+bytec 13 // "name"
+bytec_0 // ""
+app_global_put
+bytec 4 // "owner"
+global CreatorAddress
+app_global_put
+bytec 14 // "price"
+intc_0 // 0
+app_global_put
+bytec 15 // "strength"
+intc_0 // 0
+app_global_put
+retsub
+
+// bootstrap
+bootstrap_1:
+proto 8 0
+txn Sender
+bytec 4 // "owner"
+app_global_get
+==
+// unauthorized
+assert
+bytec 13 // "name"
+frame_dig -8
+extract 2 0
+app_global_put
+bytec 16 // "descr"
+frame_dig -7
+extract 2 0
+app_global_put
+bytec 12 // "image_uri"
+frame_dig -6
+extract 2 0
+app_global_put
+bytec 6 // "intelligence"
+frame_dig -5
+app_global_put
+bytec 15 // "strength"
+frame_dig -4
+app_global_put
+bytec 7 // "dexterity"
+frame_dig -3
+app_global_put
+bytec 11 // "hp"
+frame_dig -2
+app_global_put
+bytec 14 // "price"
+frame_dig -1
+app_global_put
+retsub
+
+// challenge
+challenge_2:
+proto 5 0
+bytec_1 // "game_active"
+app_global_get
+intc_0 // 0
+==
+bytec 10 // "enemy_defeated"
+app_global_get
+intc_0 // 0
+==
+&&
+bytec 14 // "price"
+app_global_get
+frame_dig -5
+gtxns Amount
+>=
+&&
+assert
+bytec_1 // "game_active"
+intc_2 // 1
+app_global_put
+bytec 5 // "current_challenger"
+frame_dig -5
+gtxns Sender
+app_global_put
+txn Sender
+bytec_2 // "current_enemy_hp"
+bytec 11 // "hp"
+app_global_get
+app_local_put
+txn Sender
+bytec_3 // "current_player_hp"
+frame_dig -4
+app_local_put
+txn Sender
+bytec 8 // "current_player_intelligence"
+frame_dig -3
+app_local_put
+txn Sender
+bytec 9 // "current_player_strength"
+frame_dig -2
+app_local_put
+txn Sender
+pushbytes 0x63757272656e745f706c617965725f646578746572697479 // "current_player_dexterity"
+frame_dig -1
+app_local_put
+retsub
+
+// player_win
+playerwin_3:
+proto 1 0
+intc_0 // 0
+dup
+intc_0 // 0
+store 25
+playerwin_3_l1:
+load 25
+intc_3 // 3
+<
+bz playerwin_3_l3
+frame_dig 1
+frame_bury 0
+pushbytes 0x456e656d794465636b // "EnemyDeck"
+pushint 8 // 8
+load 25
+*
+pushint 8 // 8
+box_extract
+btoi
+frame_bury 0
+itxn_begin
+pushint 4 // axfer
+itxn_field TypeEnum
+frame_dig 0
+itxn_field XferAsset
+intc_2 // 1
+itxn_field AssetAmount
+frame_dig -1
+itxn_field Receiver
+itxn_submit
+load 25
+intc_2 // 1
++
+store 25
+b playerwin_3_l1
+playerwin_3_l3:
+itxn_begin
+intc_3 // acfg
+itxn_field TypeEnum
+bytec 13 // "name"
+app_global_get
+itxn_field ConfigAssetName
+pushbytes 0x435250542d4e4d45 // "CRPT-NME"
+itxn_field ConfigAssetUnitName
+intc_2 // 1
+itxn_field ConfigAssetTotal
+intc_0 // 0
+itxn_field ConfigAssetDefaultFrozen
+bytec 4 // "owner"
+app_global_get
+itxn_field ConfigAssetManager
+bytec 4 // "owner"
+app_global_get
+itxn_field ConfigAssetReserve
+bytec 4 // "owner"
+app_global_get
+itxn_field ConfigAssetFreeze
+bytec 4 // "owner"
+app_global_get
+itxn_field ConfigAssetClawback
+bytec 12 // "image_uri"
+app_global_get
+itxn_field ConfigAssetURL
+intc_0 // 0
+itxn_field ConfigAssetDecimals
+itxn_submit
+itxn_begin
+pushint 4 // axfer
+itxn_field TypeEnum
+itxn CreatedAssetID
+itxn_field XferAsset
+intc_2 // 1
+itxn_field AssetAmount
+frame_dig -1
+itxn_field Receiver
+itxn_submit
+retsub
+
+// submit_plays
+submitplays_4:
+proto 2 1
+bytec_0 // ""
+dupn 4
+intc_0 // 0
+dup
+bytec_0 // ""
+dup
+intc_0 // 0
+dupn 4
+bytec_0 // ""
+dup
+txn Sender
+bytec 5 // "current_challenger"
+app_global_get
+==
+// unauthorized
+assert
+intc_0 // 0
+store 20
+intc_0 // 0
+store 21
+intc_0 // 0
+store 22
+intc_0 // 0
+store 23
+intc_0 // 0
+store 16
+intc_0 // 0
+store 17
+intc_0 // 0
+store 18
+intc_0 // 0
+store 19
+bytec_1 // "game_active"
+app_global_get
+intc_2 // 1
+==
+assert
+intc_0 // 0
+store 24
+submitplays_4_l1:
+load 24
+intc_3 // 3
+<
+bnz submitplays_4_l14
+bytec 7 // "dexterity"
+app_global_get
+intc_1 // 2
+/
+store 20
+bytec 7 // "dexterity"
+app_global_get
+intc_1 // 2
+/
+store 21
+bytec 6 // "intelligence"
+app_global_get
+store 16
+bytec 15 // "strength"
+app_global_get
+store 17
+load 18
+load 20
+>
+bnz submitplays_4_l13
+submitplays_4_l3:
+load 19
+load 21
+>
+bnz submitplays_4_l12
+submitplays_4_l4:
+load 16
+load 22
+>
+bnz submitplays_4_l11
+submitplays_4_l5:
+load 17
+load 23
+>
+bnz submitplays_4_l10
+submitplays_4_l6:
+txn Sender
+bytec_2 // "current_enemy_hp"
+app_local_get
+intc_0 // 0
+<=
+bnz submitplays_4_l9
+txn Sender
+bytec_3 // "current_player_hp"
+app_local_get
+intc_0 // 0
+<=
+bz submitplays_4_l30
+bytec_1 // "game_active"
+intc_0 // 0
+app_global_put
+bytec 5 // "current_challenger"
+global ZeroAddress
+app_global_put
+b submitplays_4_l30
+submitplays_4_l9:
+bytec_1 // "game_active"
+intc_0 // 0
+app_global_put
+bytec 10 // "enemy_defeated"
+intc_2 // 1
+app_global_put
+frame_dig 8
+frame_bury 7
+bytec 5 // "current_challenger"
+app_global_get
+frame_bury 7
+frame_dig 7
+len
+pushint 32 // 32
+==
+assert
+frame_dig 7
+callsub playerwin_3
+b submitplays_4_l30
+submitplays_4_l10:
+txn Sender
+bytec_3 // "current_player_hp"
+txn Sender
+bytec_3 // "current_player_hp"
+app_local_get
+load 17
+load 23
+-
+-
+app_local_put
+b submitplays_4_l6
+submitplays_4_l11:
+txn Sender
+bytec_3 // "current_player_hp"
+txn Sender
+bytec_3 // "current_player_hp"
+app_local_get
+load 16
+load 22
+-
+-
+app_local_put
+b submitplays_4_l5
+submitplays_4_l12:
+txn Sender
+bytec_2 // "current_enemy_hp"
+txn Sender
+bytec_2 // "current_enemy_hp"
+app_local_get
+load 19
+load 21
+-
+-
+app_local_put
+b submitplays_4_l4
+submitplays_4_l13:
+txn Sender
+bytec_2 // "current_enemy_hp"
+txn Sender
+bytec_2 // "current_enemy_hp"
+app_local_get
+load 18
+load 20
+-
+-
+app_local_put
+b submitplays_4_l3
+submitplays_4_l14:
+frame_dig 2
+frame_bury 1
+frame_dig 4
+frame_bury 3
+frame_dig -2
+frame_dig -2
+intc_1 // 2
+load 24
+*
+intc_1 // 2
++
+extract_uint16
+intc_1 // 2
++
+load 24
+intc_2 // 1
++
+frame_dig -2
+intc_0 // 0
+extract_uint16
+frame_bury 5
+frame_dig 5
+==
+bnz submitplays_4_l29
+frame_dig -2
+intc_1 // 2
+load 24
+*
+intc_1 // 2
++
+intc_1 // 2
++
+extract_uint16
+intc_1 // 2
++
+submitplays_4_l16:
+substring3
+frame_bury 1
+frame_dig -1
+frame_dig -1
+intc_1 // 2
+load 24
+*
+intc_1 // 2
++
+extract_uint16
+intc_1 // 2
++
+load 24
+intc_2 // 1
++
+frame_dig -1
+intc_0 // 0
+extract_uint16
+frame_bury 6
+frame_dig 6
+==
+bnz submitplays_4_l28
+frame_dig -1
+intc_1 // 2
+load 24
+*
+intc_1 // 2
++
+intc_1 // 2
++
+extract_uint16
+intc_1 // 2
++
+submitplays_4_l18:
+substring3
+frame_bury 3
+frame_dig 1
+pushbytes 0x61747461636b // "attack"
+==
+bnz submitplays_4_l25
+frame_dig 1
+pushbytes 0x646566656e64 // "defend"
+==
+bnz submitplays_4_l22
+load 22
+txn Sender
+bytec 8 // "current_player_intelligence"
+app_local_get
+intc_1 // 2
+/
++
+store 22
+load 23
+txn Sender
+bytec 9 // "current_player_strength"
+app_local_get
+intc_1 // 2
+/
++
+store 23
+submitplays_4_l21:
+load 24
+intc_2 // 1
++
+store 24
+b submitplays_4_l1
+submitplays_4_l22:
+frame_dig 3
+bytec 6 // "intelligence"
+==
+bnz submitplays_4_l24
+load 23
+txn Sender
+bytec 9 // "current_player_strength"
+app_local_get
++
+store 23
+b submitplays_4_l21
+submitplays_4_l24:
+load 22
+txn Sender
+bytec 8 // "current_player_intelligence"
+app_local_get
++
+store 22
+b submitplays_4_l21
+submitplays_4_l25:
+frame_dig 3
+bytec 6 // "intelligence"
+==
+bnz submitplays_4_l27
+load 19
+txn Sender
+bytec 9 // "current_player_strength"
+app_local_get
++
+store 19
+b submitplays_4_l21
+submitplays_4_l27:
+load 18
+txn Sender
+bytec 8 // "current_player_intelligence"
+app_local_get
++
+store 18
+b submitplays_4_l21
+submitplays_4_l28:
+frame_dig -1
+len
+b submitplays_4_l18
+submitplays_4_l29:
+frame_dig -2
+len
+b submitplays_4_l16
+submitplays_4_l30:
+txn Sender
+bytec_3 // "current_player_hp"
+app_local_get
+frame_bury 9
+txn Sender
+bytec_2 // "current_enemy_hp"
+app_local_get
+frame_bury 10
+bytec_1 // "game_active"
+app_global_get
+!
+!
+frame_bury 11
+frame_dig 9
+itob
+frame_dig 10
+itob
+concat
+pushbytes 0x00 // 0x00
+intc_0 // 0
+frame_dig 11
+setbit
+concat
+frame_bury 0
+retsub

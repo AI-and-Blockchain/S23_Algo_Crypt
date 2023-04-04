@@ -1,0 +1,62 @@
+{
+    "name": "Asset Exchange",
+    "methods": [
+        {
+            "name": "create",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Create the contract."
+        },
+        {
+            "name": "update",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "name",
+                    "desc": "name of NFT"
+                },
+                {
+                    "type": "string",
+                    "name": "descr",
+                    "desc": "descrription of NFT"
+                },
+                {
+                    "type": "string",
+                    "name": "image_uri",
+                    "desc": "URI of image of NFT"
+                },
+                {
+                    "type": "uint64",
+                    "name": "asset_id",
+                    "desc": "asset ID of NFT"
+                },
+                {
+                    "type": "uint64",
+                    "name": "price",
+                    "desc": "price of NFT"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Update the contract."
+        },
+        {
+            "name": "buy",
+            "args": [
+                {
+                    "type": "pay",
+                    "name": "txn",
+                    "desc": "transaction"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Buy the NFT."
+        }
+    ],
+    "networks": {}
+}

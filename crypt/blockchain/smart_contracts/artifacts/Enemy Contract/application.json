@@ -1,0 +1,258 @@
+{
+    "hints": {
+        "create()void": {
+            "call_config": {
+                "no_op": "CREATE"
+            }
+        },
+        "bootstrap(string,string,string,uint64,uint64,uint64,uint64,uint64)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "challenge(pay,uint64,uint64,uint64,uint64)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "submit_plays(string[],string[])(uint64,uint64,bool)": {
+            "structs": {
+                "output": {
+                    "name": "GameState",
+                    "elements": [
+                        [
+                            "player_hp",
+                            "uint64"
+                        ],
+                        [
+                            "enemy_hp",
+                            "uint64"
+                        ],
+                        [
+                            "game_over",
+                            "bool"
+                        ]
+                    ]
+                }
+            },
+            "call_config": {
+                "no_op": "CALL"
+            }
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMiAxIDMKYnl0ZWNibG9jayAweCAweDY3NjE2ZDY1NWY2MTYzNzQ2OTc2NjUgMHg2Mzc1NzI3MjY1NmU3NDVmNjU2ZTY1NmQ3OTVmNjg3MCAweDYzNzU3MjcyNjU2ZTc0NWY3MDZjNjE3OTY1NzI1ZjY4NzAgMHg2Zjc3NmU2NTcyIDB4NjM3NTcyNzI2NTZlNzQ1ZjYzNjg2MTZjNmM2NTZlNjc2NTcyIDB4Njk2ZTc0NjU2YzZjNjk2NzY1NmU2MzY1IDB4NjQ2NTc4NzQ2NTcyNjk3NDc5IDB4NjM3NTcyNzI2NTZlNzQ1ZjcwNmM2MTc5NjU3MjVmNjk2ZTc0NjU2YzZjNjk2NzY1NmU2MzY1IDB4NjM3NTcyNzI2NTZlNzQ1ZjcwNmM2MTc5NjU3MjVmNzM3NDcyNjU2ZTY3NzQ2OCAweDY1NmU2NTZkNzk1ZjY0NjU2NjY1NjE3NDY1NjQgMHg2ODcwIDB4Njk2ZDYxNjc2NTVmNzU3MjY5IDB4NmU2MTZkNjUgMHg3MDcyNjk2MzY1IDB4NzM3NDcyNjU2ZTY3NzQ2OCAweDY0NjU3MzYzNzIKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHg0YzVjNjFiYSAvLyAiY3JlYXRlKCl2b2lkIgo9PQpibnogbWFpbl9sOAp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweGIyYTZkY2NiIC8vICJib290c3RyYXAoc3RyaW5nLHN0cmluZyxzdHJpbmcsdWludDY0LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCl2b2lkIgo9PQpibnogbWFpbl9sNwp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweDMzZjJlODA2IC8vICJjaGFsbGVuZ2UocGF5LHVpbnQ2NCx1aW50NjQsdWludDY0LHVpbnQ2NCl2b2lkIgo9PQpibnogbWFpbl9sNgp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweGRmYmY1ZGJkIC8vICJzdWJtaXRfcGxheXMoc3RyaW5nW10sc3RyaW5nW10pKHVpbnQ2NCx1aW50NjQsYm9vbCkiCj09CmJueiBtYWluX2w1CmVycgptYWluX2w1Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydAp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCnN0b3JlIDEzCnR4bmEgQXBwbGljYXRpb25BcmdzIDIKc3RvcmUgMTQKbG9hZCAxMwpsb2FkIDE0CmNhbGxzdWIgc3VibWl0cGxheXNfNApzdG9yZSAxNQpwdXNoYnl0ZXMgMHgxNTFmN2M3NSAvLyAweDE1MWY3Yzc1CmxvYWQgMTUKY29uY2F0CmxvZwppbnRjXzIgLy8gMQpyZXR1cm4KbWFpbl9sNjoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQpidG9pCnN0b3JlIDkKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgpidG9pCnN0b3JlIDEwCnR4bmEgQXBwbGljYXRpb25BcmdzIDMKYnRvaQpzdG9yZSAxMQp0eG5hIEFwcGxpY2F0aW9uQXJncyA0CmJ0b2kKc3RvcmUgMTIKdHhuIEdyb3VwSW5kZXgKaW50Y18yIC8vIDEKLQpzdG9yZSA4CmxvYWQgOApndHhucyBUeXBlRW51bQppbnRjXzIgLy8gcGF5Cj09CmFzc2VydApsb2FkIDgKbG9hZCA5CmxvYWQgMTAKbG9hZCAxMQpsb2FkIDEyCmNhbGxzdWIgY2hhbGxlbmdlXzIKaW50Y18yIC8vIDEKcmV0dXJuCm1haW5fbDc6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKIT0KJiYKYXNzZXJ0CnR4bmEgQXBwbGljYXRpb25BcmdzIDEKc3RvcmUgMAp0eG5hIEFwcGxpY2F0aW9uQXJncyAyCnN0b3JlIDEKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMwpzdG9yZSAyCnR4bmEgQXBwbGljYXRpb25BcmdzIDQKYnRvaQpzdG9yZSAzCnR4bmEgQXBwbGljYXRpb25BcmdzIDUKYnRvaQpzdG9yZSA0CnR4bmEgQXBwbGljYXRpb25BcmdzIDYKYnRvaQpzdG9yZSA1CnR4bmEgQXBwbGljYXRpb25BcmdzIDcKYnRvaQpzdG9yZSA2CnR4bmEgQXBwbGljYXRpb25BcmdzIDgKYnRvaQpzdG9yZSA3CmxvYWQgMApsb2FkIDEKbG9hZCAyCmxvYWQgMwpsb2FkIDQKbG9hZCA1CmxvYWQgNgpsb2FkIDcKY2FsbHN1YiBib290c3RyYXBfMQppbnRjXzIgLy8gMQpyZXR1cm4KbWFpbl9sODoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAo9PQomJgphc3NlcnQKY2FsbHN1YiBjcmVhdGVfMAppbnRjXzIgLy8gMQpyZXR1cm4KCi8vIGNyZWF0ZQpjcmVhdGVfMDoKcHJvdG8gMCAwCmJ5dGVjIDUgLy8gImN1cnJlbnRfY2hhbGxlbmdlciIKYnl0ZWNfMCAvLyAiIgphcHBfZ2xvYmFsX3B1dApieXRlYyAxNiAvLyAiZGVzY3IiCmJ5dGVjXzAgLy8gIiIKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgNyAvLyAiZGV4dGVyaXR5IgppbnRjXzAgLy8gMAphcHBfZ2xvYmFsX3B1dApieXRlYyAxMCAvLyAiZW5lbXlfZGVmZWF0ZWQiCmludGNfMCAvLyAwCmFwcF9nbG9iYWxfcHV0CmJ5dGVjXzEgLy8gImdhbWVfYWN0aXZlIgppbnRjXzAgLy8gMAphcHBfZ2xvYmFsX3B1dApieXRlYyAxMSAvLyAiaHAiCmludGNfMCAvLyAwCmFwcF9nbG9iYWxfcHV0CmJ5dGVjIDEyIC8vICJpbWFnZV91cmkiCmJ5dGVjXzAgLy8gIiIKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgNiAvLyAiaW50ZWxsaWdlbmNlIgppbnRjXzAgLy8gMAphcHBfZ2xvYmFsX3B1dApieXRlYyAxMyAvLyAibmFtZSIKYnl0ZWNfMCAvLyAiIgphcHBfZ2xvYmFsX3B1dApieXRlYyA0IC8vICJvd25lciIKZ2xvYmFsIENyZWF0b3JBZGRyZXNzCmFwcF9nbG9iYWxfcHV0CmJ5dGVjIDE0IC8vICJwcmljZSIKaW50Y18wIC8vIDAKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgMTUgLy8gInN0cmVuZ3RoIgppbnRjXzAgLy8gMAphcHBfZ2xvYmFsX3B1dApyZXRzdWIKCi8vIGJvb3RzdHJhcApib290c3RyYXBfMToKcHJvdG8gOCAwCnR4biBTZW5kZXIKYnl0ZWMgNCAvLyAib3duZXIiCmFwcF9nbG9iYWxfZ2V0Cj09Ci8vIHVuYXV0aG9yaXplZAphc3NlcnQKYnl0ZWMgMTMgLy8gIm5hbWUiCmZyYW1lX2RpZyAtOApleHRyYWN0IDIgMAphcHBfZ2xvYmFsX3B1dApieXRlYyAxNiAvLyAiZGVzY3IiCmZyYW1lX2RpZyAtNwpleHRyYWN0IDIgMAphcHBfZ2xvYmFsX3B1dApieXRlYyAxMiAvLyAiaW1hZ2VfdXJpIgpmcmFtZV9kaWcgLTYKZXh0cmFjdCAyIDAKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgNiAvLyAiaW50ZWxsaWdlbmNlIgpmcmFtZV9kaWcgLTUKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgMTUgLy8gInN0cmVuZ3RoIgpmcmFtZV9kaWcgLTQKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgNyAvLyAiZGV4dGVyaXR5IgpmcmFtZV9kaWcgLTMKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgMTEgLy8gImhwIgpmcmFtZV9kaWcgLTIKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgMTQgLy8gInByaWNlIgpmcmFtZV9kaWcgLTEKYXBwX2dsb2JhbF9wdXQKcmV0c3ViCgovLyBjaGFsbGVuZ2UKY2hhbGxlbmdlXzI6CnByb3RvIDUgMApieXRlY18xIC8vICJnYW1lX2FjdGl2ZSIKYXBwX2dsb2JhbF9nZXQKaW50Y18wIC8vIDAKPT0KYnl0ZWMgMTAgLy8gImVuZW15X2RlZmVhdGVkIgphcHBfZ2xvYmFsX2dldAppbnRjXzAgLy8gMAo9PQomJgpieXRlYyAxNCAvLyAicHJpY2UiCmFwcF9nbG9iYWxfZ2V0CmZyYW1lX2RpZyAtNQpndHhucyBBbW91bnQKPj0KJiYKYXNzZXJ0CmJ5dGVjXzEgLy8gImdhbWVfYWN0aXZlIgppbnRjXzIgLy8gMQphcHBfZ2xvYmFsX3B1dApieXRlYyA1IC8vICJjdXJyZW50X2NoYWxsZW5nZXIiCmZyYW1lX2RpZyAtNQpndHhucyBTZW5kZXIKYXBwX2dsb2JhbF9wdXQKdHhuIFNlbmRlcgpieXRlY18yIC8vICJjdXJyZW50X2VuZW15X2hwIgpieXRlYyAxMSAvLyAiaHAiCmFwcF9nbG9iYWxfZ2V0CmFwcF9sb2NhbF9wdXQKdHhuIFNlbmRlcgpieXRlY18zIC8vICJjdXJyZW50X3BsYXllcl9ocCIKZnJhbWVfZGlnIC00CmFwcF9sb2NhbF9wdXQKdHhuIFNlbmRlcgpieXRlYyA4IC8vICJjdXJyZW50X3BsYXllcl9pbnRlbGxpZ2VuY2UiCmZyYW1lX2RpZyAtMwphcHBfbG9jYWxfcHV0CnR4biBTZW5kZXIKYnl0ZWMgOSAvLyAiY3VycmVudF9wbGF5ZXJfc3RyZW5ndGgiCmZyYW1lX2RpZyAtMgphcHBfbG9jYWxfcHV0CnR4biBTZW5kZXIKcHVzaGJ5dGVzIDB4NjM3NTcyNzI2NTZlNzQ1ZjcwNmM2MTc5NjU3MjVmNjQ2NTc4NzQ2NTcyNjk3NDc5IC8vICJjdXJyZW50X3BsYXllcl9kZXh0ZXJpdHkiCmZyYW1lX2RpZyAtMQphcHBfbG9jYWxfcHV0CnJldHN1YgoKLy8gcGxheWVyX3dpbgpwbGF5ZXJ3aW5fMzoKcHJvdG8gMSAwCmludGNfMCAvLyAwCmR1cAppbnRjXzAgLy8gMApzdG9yZSAyNQpwbGF5ZXJ3aW5fM19sMToKbG9hZCAyNQppbnRjXzMgLy8gMwo8CmJ6IHBsYXllcndpbl8zX2wzCmZyYW1lX2RpZyAxCmZyYW1lX2J1cnkgMApwdXNoYnl0ZXMgMHg0NTZlNjU2ZDc5NDQ2NTYzNmIgLy8gIkVuZW15RGVjayIKcHVzaGludCA4IC8vIDgKbG9hZCAyNQoqCnB1c2hpbnQgOCAvLyA4CmJveF9leHRyYWN0CmJ0b2kKZnJhbWVfYnVyeSAwCml0eG5fYmVnaW4KcHVzaGludCA0IC8vIGF4ZmVyCml0eG5fZmllbGQgVHlwZUVudW0KZnJhbWVfZGlnIDAKaXR4bl9maWVsZCBYZmVyQXNzZXQKaW50Y18yIC8vIDEKaXR4bl9maWVsZCBBc3NldEFtb3VudApmcmFtZV9kaWcgLTEKaXR4bl9maWVsZCBSZWNlaXZlcgppdHhuX3N1Ym1pdApsb2FkIDI1CmludGNfMiAvLyAxCisKc3RvcmUgMjUKYiBwbGF5ZXJ3aW5fM19sMQpwbGF5ZXJ3aW5fM19sMzoKaXR4bl9iZWdpbgppbnRjXzMgLy8gYWNmZwppdHhuX2ZpZWxkIFR5cGVFbnVtCmJ5dGVjIDEzIC8vICJuYW1lIgphcHBfZ2xvYmFsX2dldAppdHhuX2ZpZWxkIENvbmZpZ0Fzc2V0TmFtZQpwdXNoYnl0ZXMgMHg0MzUyNTA1NDJkNGU0ZDQ1IC8vICJDUlBULU5NRSIKaXR4bl9maWVsZCBDb25maWdBc3NldFVuaXROYW1lCmludGNfMiAvLyAxCml0eG5fZmllbGQgQ29uZmlnQXNzZXRUb3RhbAppbnRjXzAgLy8gMAppdHhuX2ZpZWxkIENvbmZpZ0Fzc2V0RGVmYXVsdEZyb3plbgpieXRlYyA0IC8vICJvd25lciIKYXBwX2dsb2JhbF9nZXQKaXR4bl9maWVsZCBDb25maWdBc3NldE1hbmFnZXIKYnl0ZWMgNCAvLyAib3duZXIiCmFwcF9nbG9iYWxfZ2V0Cml0eG5fZmllbGQgQ29uZmlnQXNzZXRSZXNlcnZlCmJ5dGVjIDQgLy8gIm93bmVyIgphcHBfZ2xvYmFsX2dldAppdHhuX2ZpZWxkIENvbmZpZ0Fzc2V0RnJlZXplCmJ5dGVjIDQgLy8gIm93bmVyIgphcHBfZ2xvYmFsX2dldAppdHhuX2ZpZWxkIENvbmZpZ0Fzc2V0Q2xhd2JhY2sKYnl0ZWMgMTIgLy8gImltYWdlX3VyaSIKYXBwX2dsb2JhbF9nZXQKaXR4bl9maWVsZCBDb25maWdBc3NldFVSTAppbnRjXzAgLy8gMAppdHhuX2ZpZWxkIENvbmZpZ0Fzc2V0RGVjaW1hbHMKaXR4bl9zdWJtaXQKaXR4bl9iZWdpbgpwdXNoaW50IDQgLy8gYXhmZXIKaXR4bl9maWVsZCBUeXBlRW51bQppdHhuIENyZWF0ZWRBc3NldElECml0eG5fZmllbGQgWGZlckFzc2V0CmludGNfMiAvLyAxCml0eG5fZmllbGQgQXNzZXRBbW91bnQKZnJhbWVfZGlnIC0xCml0eG5fZmllbGQgUmVjZWl2ZXIKaXR4bl9zdWJtaXQKcmV0c3ViCgovLyBzdWJtaXRfcGxheXMKc3VibWl0cGxheXNfNDoKcHJvdG8gMiAxCmJ5dGVjXzAgLy8gIiIKZHVwbiA0CmludGNfMCAvLyAwCmR1cApieXRlY18wIC8vICIiCmR1cAppbnRjXzAgLy8gMApkdXBuIDQKYnl0ZWNfMCAvLyAiIgpkdXAKdHhuIFNlbmRlcgpieXRlYyA1IC8vICJjdXJyZW50X2NoYWxsZW5nZXIiCmFwcF9nbG9iYWxfZ2V0Cj09Ci8vIHVuYXV0aG9yaXplZAphc3NlcnQKaW50Y18wIC8vIDAKc3RvcmUgMjAKaW50Y18wIC8vIDAKc3RvcmUgMjEKaW50Y18wIC8vIDAKc3RvcmUgMjIKaW50Y18wIC8vIDAKc3RvcmUgMjMKaW50Y18wIC8vIDAKc3RvcmUgMTYKaW50Y18wIC8vIDAKc3RvcmUgMTcKaW50Y18wIC8vIDAKc3RvcmUgMTgKaW50Y18wIC8vIDAKc3RvcmUgMTkKYnl0ZWNfMSAvLyAiZ2FtZV9hY3RpdmUiCmFwcF9nbG9iYWxfZ2V0CmludGNfMiAvLyAxCj09CmFzc2VydAppbnRjXzAgLy8gMApzdG9yZSAyNApzdWJtaXRwbGF5c180X2wxOgpsb2FkIDI0CmludGNfMyAvLyAzCjwKYm56IHN1Ym1pdHBsYXlzXzRfbDE0CmJ5dGVjIDcgLy8gImRleHRlcml0eSIKYXBwX2dsb2JhbF9nZXQKaW50Y18xIC8vIDIKLwpzdG9yZSAyMApieXRlYyA3IC8vICJkZXh0ZXJpdHkiCmFwcF9nbG9iYWxfZ2V0CmludGNfMSAvLyAyCi8Kc3RvcmUgMjEKYnl0ZWMgNiAvLyAiaW50ZWxsaWdlbmNlIgphcHBfZ2xvYmFsX2dldApzdG9yZSAxNgpieXRlYyAxNSAvLyAic3RyZW5ndGgiCmFwcF9nbG9iYWxfZ2V0CnN0b3JlIDE3CmxvYWQgMTgKbG9hZCAyMAo+CmJueiBzdWJtaXRwbGF5c180X2wxMwpzdWJtaXRwbGF5c180X2wzOgpsb2FkIDE5CmxvYWQgMjEKPgpibnogc3VibWl0cGxheXNfNF9sMTIKc3VibWl0cGxheXNfNF9sNDoKbG9hZCAxNgpsb2FkIDIyCj4KYm56IHN1Ym1pdHBsYXlzXzRfbDExCnN1Ym1pdHBsYXlzXzRfbDU6CmxvYWQgMTcKbG9hZCAyMwo+CmJueiBzdWJtaXRwbGF5c180X2wxMApzdWJtaXRwbGF5c180X2w2Ogp0eG4gU2VuZGVyCmJ5dGVjXzIgLy8gImN1cnJlbnRfZW5lbXlfaHAiCmFwcF9sb2NhbF9nZXQKaW50Y18wIC8vIDAKPD0KYm56IHN1Ym1pdHBsYXlzXzRfbDkKdHhuIFNlbmRlcgpieXRlY18zIC8vICJjdXJyZW50X3BsYXllcl9ocCIKYXBwX2xvY2FsX2dldAppbnRjXzAgLy8gMAo8PQpieiBzdWJtaXRwbGF5c180X2wzMApieXRlY18xIC8vICJnYW1lX2FjdGl2ZSIKaW50Y18wIC8vIDAKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgNSAvLyAiY3VycmVudF9jaGFsbGVuZ2VyIgpnbG9iYWwgWmVyb0FkZHJlc3MKYXBwX2dsb2JhbF9wdXQKYiBzdWJtaXRwbGF5c180X2wzMApzdWJtaXRwbGF5c180X2w5OgpieXRlY18xIC8vICJnYW1lX2FjdGl2ZSIKaW50Y18wIC8vIDAKYXBwX2dsb2JhbF9wdXQKYnl0ZWMgMTAgLy8gImVuZW15X2RlZmVhdGVkIgppbnRjXzIgLy8gMQphcHBfZ2xvYmFsX3B1dApmcmFtZV9kaWcgOApmcmFtZV9idXJ5IDcKYnl0ZWMgNSAvLyAiY3VycmVudF9jaGFsbGVuZ2VyIgphcHBfZ2xvYmFsX2dldApmcmFtZV9idXJ5IDcKZnJhbWVfZGlnIDcKbGVuCnB1c2hpbnQgMzIgLy8gMzIKPT0KYXNzZXJ0CmZyYW1lX2RpZyA3CmNhbGxzdWIgcGxheWVyd2luXzMKYiBzdWJtaXRwbGF5c180X2wzMApzdWJtaXRwbGF5c180X2wxMDoKdHhuIFNlbmRlcgpieXRlY18zIC8vICJjdXJyZW50X3BsYXllcl9ocCIKdHhuIFNlbmRlcgpieXRlY18zIC8vICJjdXJyZW50X3BsYXllcl9ocCIKYXBwX2xvY2FsX2dldApsb2FkIDE3CmxvYWQgMjMKLQotCmFwcF9sb2NhbF9wdXQKYiBzdWJtaXRwbGF5c180X2w2CnN1Ym1pdHBsYXlzXzRfbDExOgp0eG4gU2VuZGVyCmJ5dGVjXzMgLy8gImN1cnJlbnRfcGxheWVyX2hwIgp0eG4gU2VuZGVyCmJ5dGVjXzMgLy8gImN1cnJlbnRfcGxheWVyX2hwIgphcHBfbG9jYWxfZ2V0CmxvYWQgMTYKbG9hZCAyMgotCi0KYXBwX2xvY2FsX3B1dApiIHN1Ym1pdHBsYXlzXzRfbDUKc3VibWl0cGxheXNfNF9sMTI6CnR4biBTZW5kZXIKYnl0ZWNfMiAvLyAiY3VycmVudF9lbmVteV9ocCIKdHhuIFNlbmRlcgpieXRlY18yIC8vICJjdXJyZW50X2VuZW15X2hwIgphcHBfbG9jYWxfZ2V0CmxvYWQgMTkKbG9hZCAyMQotCi0KYXBwX2xvY2FsX3B1dApiIHN1Ym1pdHBsYXlzXzRfbDQKc3VibWl0cGxheXNfNF9sMTM6CnR4biBTZW5kZXIKYnl0ZWNfMiAvLyAiY3VycmVudF9lbmVteV9ocCIKdHhuIFNlbmRlcgpieXRlY18yIC8vICJjdXJyZW50X2VuZW15X2hwIgphcHBfbG9jYWxfZ2V0CmxvYWQgMTgKbG9hZCAyMAotCi0KYXBwX2xvY2FsX3B1dApiIHN1Ym1pdHBsYXlzXzRfbDMKc3VibWl0cGxheXNfNF9sMTQ6CmZyYW1lX2RpZyAyCmZyYW1lX2J1cnkgMQpmcmFtZV9kaWcgNApmcmFtZV9idXJ5IDMKZnJhbWVfZGlnIC0yCmZyYW1lX2RpZyAtMgppbnRjXzEgLy8gMgpsb2FkIDI0CioKaW50Y18xIC8vIDIKKwpleHRyYWN0X3VpbnQxNgppbnRjXzEgLy8gMgorCmxvYWQgMjQKaW50Y18yIC8vIDEKKwpmcmFtZV9kaWcgLTIKaW50Y18wIC8vIDAKZXh0cmFjdF91aW50MTYKZnJhbWVfYnVyeSA1CmZyYW1lX2RpZyA1Cj09CmJueiBzdWJtaXRwbGF5c180X2wyOQpmcmFtZV9kaWcgLTIKaW50Y18xIC8vIDIKbG9hZCAyNAoqCmludGNfMSAvLyAyCisKaW50Y18xIC8vIDIKKwpleHRyYWN0X3VpbnQxNgppbnRjXzEgLy8gMgorCnN1Ym1pdHBsYXlzXzRfbDE2OgpzdWJzdHJpbmczCmZyYW1lX2J1cnkgMQpmcmFtZV9kaWcgLTEKZnJhbWVfZGlnIC0xCmludGNfMSAvLyAyCmxvYWQgMjQKKgppbnRjXzEgLy8gMgorCmV4dHJhY3RfdWludDE2CmludGNfMSAvLyAyCisKbG9hZCAyNAppbnRjXzIgLy8gMQorCmZyYW1lX2RpZyAtMQppbnRjXzAgLy8gMApleHRyYWN0X3VpbnQxNgpmcmFtZV9idXJ5IDYKZnJhbWVfZGlnIDYKPT0KYm56IHN1Ym1pdHBsYXlzXzRfbDI4CmZyYW1lX2RpZyAtMQppbnRjXzEgLy8gMgpsb2FkIDI0CioKaW50Y18xIC8vIDIKKwppbnRjXzEgLy8gMgorCmV4dHJhY3RfdWludDE2CmludGNfMSAvLyAyCisKc3VibWl0cGxheXNfNF9sMTg6CnN1YnN0cmluZzMKZnJhbWVfYnVyeSAzCmZyYW1lX2RpZyAxCnB1c2hieXRlcyAweDYxNzQ3NDYxNjM2YiAvLyAiYXR0YWNrIgo9PQpibnogc3VibWl0cGxheXNfNF9sMjUKZnJhbWVfZGlnIDEKcHVzaGJ5dGVzIDB4NjQ2NTY2NjU2ZTY0IC8vICJkZWZlbmQiCj09CmJueiBzdWJtaXRwbGF5c180X2wyMgpsb2FkIDIyCnR4biBTZW5kZXIKYnl0ZWMgOCAvLyAiY3VycmVudF9wbGF5ZXJfaW50ZWxsaWdlbmNlIgphcHBfbG9jYWxfZ2V0CmludGNfMSAvLyAyCi8KKwpzdG9yZSAyMgpsb2FkIDIzCnR4biBTZW5kZXIKYnl0ZWMgOSAvLyAiY3VycmVudF9wbGF5ZXJfc3RyZW5ndGgiCmFwcF9sb2NhbF9nZXQKaW50Y18xIC8vIDIKLworCnN0b3JlIDIzCnN1Ym1pdHBsYXlzXzRfbDIxOgpsb2FkIDI0CmludGNfMiAvLyAxCisKc3RvcmUgMjQKYiBzdWJtaXRwbGF5c180X2wxCnN1Ym1pdHBsYXlzXzRfbDIyOgpmcmFtZV9kaWcgMwpieXRlYyA2IC8vICJpbnRlbGxpZ2VuY2UiCj09CmJueiBzdWJtaXRwbGF5c180X2wyNApsb2FkIDIzCnR4biBTZW5kZXIKYnl0ZWMgOSAvLyAiY3VycmVudF9wbGF5ZXJfc3RyZW5ndGgiCmFwcF9sb2NhbF9nZXQKKwpzdG9yZSAyMwpiIHN1Ym1pdHBsYXlzXzRfbDIxCnN1Ym1pdHBsYXlzXzRfbDI0Ogpsb2FkIDIyCnR4biBTZW5kZXIKYnl0ZWMgOCAvLyAiY3VycmVudF9wbGF5ZXJfaW50ZWxsaWdlbmNlIgphcHBfbG9jYWxfZ2V0CisKc3RvcmUgMjIKYiBzdWJtaXRwbGF5c180X2wyMQpzdWJtaXRwbGF5c180X2wyNToKZnJhbWVfZGlnIDMKYnl0ZWMgNiAvLyAiaW50ZWxsaWdlbmNlIgo9PQpibnogc3VibWl0cGxheXNfNF9sMjcKbG9hZCAxOQp0eG4gU2VuZGVyCmJ5dGVjIDkgLy8gImN1cnJlbnRfcGxheWVyX3N0cmVuZ3RoIgphcHBfbG9jYWxfZ2V0CisKc3RvcmUgMTkKYiBzdWJtaXRwbGF5c180X2wyMQpzdWJtaXRwbGF5c180X2wyNzoKbG9hZCAxOAp0eG4gU2VuZGVyCmJ5dGVjIDggLy8gImN1cnJlbnRfcGxheWVyX2ludGVsbGlnZW5jZSIKYXBwX2xvY2FsX2dldAorCnN0b3JlIDE4CmIgc3VibWl0cGxheXNfNF9sMjEKc3VibWl0cGxheXNfNF9sMjg6CmZyYW1lX2RpZyAtMQpsZW4KYiBzdWJtaXRwbGF5c180X2wxOApzdWJtaXRwbGF5c180X2wyOToKZnJhbWVfZGlnIC0yCmxlbgpiIHN1Ym1pdHBsYXlzXzRfbDE2CnN1Ym1pdHBsYXlzXzRfbDMwOgp0eG4gU2VuZGVyCmJ5dGVjXzMgLy8gImN1cnJlbnRfcGxheWVyX2hwIgphcHBfbG9jYWxfZ2V0CmZyYW1lX2J1cnkgOQp0eG4gU2VuZGVyCmJ5dGVjXzIgLy8gImN1cnJlbnRfZW5lbXlfaHAiCmFwcF9sb2NhbF9nZXQKZnJhbWVfYnVyeSAxMApieXRlY18xIC8vICJnYW1lX2FjdGl2ZSIKYXBwX2dsb2JhbF9nZXQKIQohCmZyYW1lX2J1cnkgMTEKZnJhbWVfZGlnIDkKaXRvYgpmcmFtZV9kaWcgMTAKaXRvYgpjb25jYXQKcHVzaGJ5dGVzIDB4MDAgLy8gMHgwMAppbnRjXzAgLy8gMApmcmFtZV9kaWcgMTEKc2V0Yml0CmNvbmNhdApmcmFtZV9idXJ5IDAKcmV0c3Vi",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKcHVzaGludCAwIC8vIDAKcmV0dXJu"
+    },
+    "state": {
+        "global": {
+            "num_byte_slices": 5,
+            "num_uints": 7
+        },
+        "local": {
+            "num_byte_slices": 0,
+            "num_uints": 5
+        }
+    },
+    "schema": {
+        "global": {
+            "declared": {
+                "current_challenger": {
+                    "type": "bytes",
+                    "key": "current_challenger",
+                    "descr": "Address of the current challenger."
+                },
+                "descr": {
+                    "type": "bytes",
+                    "key": "descr",
+                    "descr": "description of the enemy."
+                },
+                "dexterity": {
+                    "type": "uint64",
+                    "key": "dexterity",
+                    "descr": "Dexterity of the enemy."
+                },
+                "enemy_defeated": {
+                    "type": "uint64",
+                    "key": "enemy_defeated",
+                    "descr": "Boolean indicating if the enemy has been defeated."
+                },
+                "game_active": {
+                    "type": "uint64",
+                    "key": "game_active",
+                    "descr": "Boolean indicating if a game is active."
+                },
+                "hp": {
+                    "type": "uint64",
+                    "key": "hp",
+                    "descr": "Hit points of the enemy."
+                },
+                "image_uri": {
+                    "type": "bytes",
+                    "key": "image_uri",
+                    "descr": "IPFS URI of the image of the enemy."
+                },
+                "intelligence": {
+                    "type": "uint64",
+                    "key": "intelligence",
+                    "descr": "Intelligence of the enemy."
+                },
+                "name": {
+                    "type": "bytes",
+                    "key": "name",
+                    "descr": "Name of the enemy."
+                },
+                "owner": {
+                    "type": "bytes",
+                    "key": "owner",
+                    "descr": "Owner of the contract."
+                },
+                "price": {
+                    "type": "uint64",
+                    "key": "price",
+                    "descr": "Price to challenge the enemy."
+                },
+                "strength": {
+                    "type": "uint64",
+                    "key": "strength",
+                    "descr": "Strength of the enemy."
+                }
+            },
+            "reserved": {}
+        },
+        "local": {
+            "declared": {
+                "current_enemy_hp": {
+                    "type": "uint64",
+                    "key": "current_enemy_hp",
+                    "descr": "Current enemy hit points."
+                },
+                "current_player_dexterity": {
+                    "type": "uint64",
+                    "key": "current_player_dexterity",
+                    "descr": "Current player dexterity."
+                },
+                "current_player_hp": {
+                    "type": "uint64",
+                    "key": "current_player_hp",
+                    "descr": "Current player hit points."
+                },
+                "current_player_intelligence": {
+                    "type": "uint64",
+                    "key": "current_player_intelligence",
+                    "descr": "Current player intelligence."
+                },
+                "current_player_strength": {
+                    "type": "uint64",
+                    "key": "current_player_strength",
+                    "descr": "Current player strength."
+                }
+            },
+            "reserved": {}
+        }
+    },
+    "contract": {
+        "name": "Enemy Contract",
+        "methods": [
+            {
+                "name": "create",
+                "args": [],
+                "returns": {
+                    "type": "void"
+                },
+                "desc": "Create the contract."
+            },
+            {
+                "name": "bootstrap",
+                "args": [
+                    {
+                        "type": "string",
+                        "name": "name"
+                    },
+                    {
+                        "type": "string",
+                        "name": "descr"
+                    },
+                    {
+                        "type": "string",
+                        "name": "image_uri"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "intelligence"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "strength"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "dexterity"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "hp"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "price"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                },
+                "desc": "Bootstrap the contract."
+            },
+            {
+                "name": "challenge",
+                "args": [
+                    {
+                        "type": "pay",
+                        "name": "txn"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "player_hp"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "player_intelligence"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "player_strength"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "player_dexterity"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                },
+                "desc": "Challenge the enemy."
+            },
+            {
+                "name": "submit_plays",
+                "args": [
+                    {
+                        "type": "string[]",
+                        "name": "actions",
+                        "desc": "A list of three actions."
+                    },
+                    {
+                        "type": "string[]",
+                        "name": "attributes"
+                    }
+                ],
+                "returns": {
+                    "type": "(uint64,uint64,bool)",
+                    "desc": "A GameState object."
+                },
+                "desc": "Submit a hand of three cards."
+            }
+        ],
+        "networks": {}
+    },
+    "bare_call_config": {}
+}
