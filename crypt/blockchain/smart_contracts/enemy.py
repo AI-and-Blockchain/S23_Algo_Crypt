@@ -116,10 +116,13 @@ class EnemyContractState:
         descr="Boolean indicating if the enemy has been defeated.",
     )
 
+    def __init__(self, deck_size: int):
+        self.deck = BoxList(pt.abi.Uint64, deck_size)
+
 
 app = bk.Application(
     name="Enemy Contract",
-    state=EnemyContractState,
+    state=EnemyContractState(30),
 )
 
 
@@ -186,7 +189,48 @@ def challenge(
 @pt.Subroutine(pt.TealType.none)
 def player_win(address: pt.abi.Address) -> pt.Expr:
     """Player wins."""
-    raise NotImplementedError
+    i = pt.ScratchVar(pt.TealType.uint64)
+    return pt.Seq(
+        pt.For(
+            i.store(pt.Int(0)),
+            i.load() < pt.Int(3),
+            i.store(i.load() + pt.Int(1)),
+        ).Do(
+            (card := pt.abi.make(pt.abi.Uint64)).set(pt.abi.Uint64()),
+            app.state.deck[i.load()].store_into(card),
+            pt.InnerTxnBuilder.Execute(
+                {
+                    pt.TxnField.type_enum: pt.TxnType.AssetTransfer,
+                    pt.TxnField.xfer_asset: card.get(),
+                    pt.TxnField.asset_amount: pt.Int(1),
+                    pt.TxnField.receiver: address.get(),
+                }
+            ),
+        ),
+        pt.InnerTxnBuilder.Execute(
+            {
+                pt.TxnField.type_enum: pt.TxnType.AssetConfig,
+                pt.TxnField.config_asset_name: app.state.name.get(),
+                pt.TxnField.config_asset_unit_name: pt.Bytes("CRPT-NME"),
+                pt.TxnField.config_asset_total: pt.Int(1),
+                pt.TxnField.config_asset_default_frozen: pt.Int(0),
+                pt.TxnField.config_asset_manager: app.state.owner.get(),
+                pt.TxnField.config_asset_reserve: app.state.owner.get(),
+                pt.TxnField.config_asset_freeze: app.state.owner.get(),
+                pt.TxnField.config_asset_clawback: app.state.owner.get(),
+                pt.TxnField.config_asset_url: app.state.image_uri.get(),
+                pt.TxnField.config_asset_decimals: pt.Int(0),
+            }
+        ),
+        pt.InnerTxnBuilder.Execute(
+            {
+                pt.TxnField.type_enum: pt.TxnType.AssetTransfer,
+                pt.TxnField.xfer_asset: pt.InnerTxn.created_asset_id(),
+                pt.TxnField.asset_amount: pt.Int(1),
+                pt.TxnField.receiver: address.get(),
+            }
+        ),
+    )
 
 
 @app.external(authorize=bk.Authorize.only(app.state.current_challenger.get()))
