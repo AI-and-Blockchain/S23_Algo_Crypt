@@ -58,5 +58,9 @@ def deploy(
                 logger.info(f"New app created, funding with {transfer_parameters.micro_algos}µ algos")
                 transfer(algod_client, transfer_parameters)
 
+                with open("../.env", "w+") as envfile:
+                    envfile.write(f"METASTATE_APP_ID={app_client.app_id}")
+                    envfile.write("\n")
+                    envfile.write(f"METASTATE_APP_ADDRESS={app_client.app_address}")
         case _:
             pass
