@@ -162,16 +162,17 @@ def challenge(
     player_dexterity: pt.abi.Uint64,
 ) -> pt.Expr:
     """Challenge the enemy."""
+    txn = txn.get()
     return pt.Seq(
         pt.Assert(
             pt.And(
-                app.state.game_active.get() == 0,
-                app.state.enemy_defeated.get() == 0,
+                app.state.game_active.get() == pt.Int(0),
+                app.state.enemy_defeated.get() == pt.Int(0),
                 app.state.price.get() >= txn.amount(),
             )
         ),
         pt.Seq(
-            app.state.game_active.set(1),
+            app.state.game_active.set(pt.Int(1)),
             app.state.current_challenger.set(txn.sender()),
             app.state.current_enemy_hp.set(app.state.hp.get()),
             app.state.current_player_hp.set(player_hp.get()),
@@ -182,7 +183,7 @@ def challenge(
     )
 
 
-@pt.Subroutine
+@pt.Subroutine(pt.TealType.none)
 def player_win(address: pt.abi.Address) -> pt.Expr:
     """Player wins."""
     raise NotImplementedError
@@ -190,23 +191,15 @@ def player_win(address: pt.abi.Address) -> pt.Expr:
 
 @app.external(authorize=bk.Authorize.only(app.state.current_challenger.get()))
 def submit_plays(
-    actions: pt.abi.Tuple3[
-        pt.abi.Tuple2[pt.abi.String, pt.abi.String],
-        pt.abi.Tuple2[pt.abi.String, pt.abi.String],
-        pt.abi.Tuple2[pt.abi.String, pt.abi.String],
-    ],
+    actions: pt.abi.DynamicArray[pt.abi.String],
+    attributes: pt.abi.DynamicArray[pt.abi.String],
     *,
     output: GameState,
 ) -> pt.Expr:
     """Submit a hand of three cards.
 
     Args:
-        action1: action of first card
-        action2: action of second card
-        action3: action of third card
-        attribute1: attribute of first card
-        attribute2: attribute of second card
-        attribute3: attribute of third card
+        actions: A list of three actions.
 
     Returns:
         A GameState object.
@@ -221,70 +214,54 @@ def submit_plays(
     player_phys_def = pt.ScratchVar(pt.TealType.uint64)
     i = pt.ScratchVar(pt.TealType.uint64)
     return pt.Seq(
-        pt.Assert(app.state.game_active.get() == 1),
+        pt.Assert(app.state.game_active.get() == pt.Int(1)),
         pt.For(
-            i.store(0),
-            i.load() < 3,
-            i.store(i.load() + 1),
+            i.store(pt.Int(0)),
+            i.load() < pt.Int(3),
+            i.store(i.load() + pt.Int(1)),
         ).Do(
-            (action := actions[i.load()][0]),
-            (attribute := actions[i.load()][1]),
-            pt.If(
-                action == "attack",
-            ).Then(
+            pt.Seq(
+                (action := pt.abi.make(pt.abi.String)).set(pt.abi.String()),
+                (attribute := pt.abi.make(pt.abi.String)).set(pt.abi.String()),
+                actions[i.load()].store_into(action),
+                attributes[i.load()].store_into(attribute),
                 pt.If(
-                    attribute == "intelligence",
-                ).Then(
-                    player_mag_dmg.store(
-                        player_mag_dmg.load() + app.state.current_player_intelligence.get()
+                    action.encode() == pt.Bytes("attack"),
+                    pt.If(
+                        attribute.encode() == pt.Bytes("intelligence"),
+                        player_mag_dmg.store(player_mag_dmg.load() + app.state.current_player_intelligence.get()),
+                        player_phys_dmg.store(player_phys_dmg.load() + app.state.current_player_strength.get()),
                     ),
-                ).Else(
-                    player_phys_dmg.store(
-                        player_phys_dmg.load() + app.state.current_player_strength.get()
+                    pt.If(
+                        action.encode() == pt.Bytes("defend"),
+                        pt.If(
+                            attribute.encode() == pt.Bytes("intelligence"),
+                            player_mag_def.store(player_mag_def.load() + app.state.current_player_intelligence.get()),
+                            player_phys_def.store(player_phys_def.load() + app.state.current_player_strength.get()),
+                        ),
+                        pt.Seq(
+                            player_mag_def.store(
+                                player_mag_def.load() + pt.Div(app.state.current_player_intelligence.get(), pt.Int(2))
+                            ),
+                            player_phys_def.store(
+                                player_phys_def.load() + pt.Div(app.state.current_player_strength.get(), pt.Int(2))
+                            ),
+                        ),
                     ),
-                )
-            ).ElseIf(
-                action == "defend",
-            ).Then(
-                pt.If(
-                    attribute == "intelligence",
-                ).Then(
-                    player_mag_def.store(
-                        player_mag_def.load() + app.state.current_player_intelligence.get()
-                    ),
-                ).Else(
-                    player_phys_def.store(
-                        player_phys_def.load() + app.state.current_player_strength.get()
-                    ),
-                )
-            ).Else(
-                player_mag_def.store(
-                    player_mag_def.load() + pt.Div(app.state.current_player_dexterity.get(), pt.Int(2))
                 ),
-                player_phys_def.store(
-                    player_phys_def.load() + pt.Div(app.state.current_player_dexterity.get(), pt.Int(2))
-                ),
-            )
+            ),
         ),
-        enemy_mag_def.store(
-            pt.Div(app.state.current_enemy_dexterity.get(), pt.Int(2))
-        ),
-        enemy_phys_def.store(
-            pt.Div(app.state.current_enemy_dexterity.get(), pt.Int(2))
-        ),
-        enemy_mag_dmg.store(
-            app.state.current_enemy_intelligence.get()
-        ),
-        enemy_phys_dmg.store(
-            app.state.current_enemy_strength.get()
-        ),
+        enemy_mag_def.store(pt.Div(app.state.dexterity.get(), pt.Int(2))),
+        enemy_phys_def.store(pt.Div(app.state.dexterity.get(), pt.Int(2))),
+        enemy_mag_dmg.store(app.state.intelligence.get()),
+        enemy_phys_dmg.store(app.state.strength.get()),
         pt.If(
             player_mag_dmg.load() > enemy_mag_def.load(),
         ).Then(
             app.state.current_enemy_hp.set(
                 app.state.current_enemy_hp.get() - (player_mag_dmg.load() - enemy_mag_def.load())
             )
-        )
+        ),
         pt.If(
             player_phys_dmg.load() > enemy_phys_def.load(),
         ).Then(
@@ -308,9 +285,16 @@ def submit_plays(
         ),
         pt.If(
             app.state.current_enemy_hp.get() <= pt.Int(0),
-        ).Then(
-            app.state.game_active.set(0),
-            app.state.enemy_defeated.set(1),
-            player_win(app.state.current_challenger.get()),
         )
+        .Then(
+            app.state.game_active.set(pt.Int(0)),
+            app.state.enemy_defeated.set(pt.Int(1)),
+            (player := pt.abi.make(pt.abi.Address)).set(pt.abi.Address()),
+            player.set(app.state.current_challenger.get()),
+            player_win(player),
+        )
+        .ElseIf(
+            app.state.current_player_hp.get() <= pt.Int(0),
+        )
+        .Then(app.state.game_active.set(pt.Int(0)), app.state.current_challenger.set(pt.Global.zero_address())),
     )
