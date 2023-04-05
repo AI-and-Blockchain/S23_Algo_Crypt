@@ -14,7 +14,27 @@ The blockchain component runs on Algorand. All cards and enemies are represented
 
 # Instructions
 
-## Install
+## Installation
+
+### Dependencies
+
+The blockchain component of this project demo uses algokit, which requires Docker. Please install Docker Engine before attempting to run this demo.
+
+### Install
+
+Start by cloning this repository.
+
+```
+git clone git@github.com:AI-and-Blockchain/S23_Algo_Crypt.git
+```
+
+In the root directory, run
+
+```
+./bootstrap.sh
+```
+
+This script will install all dependencies, start an algokit localnet sandbox, and deploy the Membership contract that controls card distribution and game membership. You will then be redirected to the signup/login page.
 
 ## Run API
 
