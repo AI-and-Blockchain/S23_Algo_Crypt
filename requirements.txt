@@ -20,7 +20,6 @@ jsonify==0.5
 MarkupSafe==2.1.2
 msgpack==1.0.5
 packaging==23.0
-pasteboard==0.3.3
 pathspec==0.11.1
 plumbum==1.8.1
 prompt-toolkit==3.0.38
