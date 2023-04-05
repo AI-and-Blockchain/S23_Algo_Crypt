@@ -91,7 +91,7 @@
         }
     },
     "contract": {
-        "name": "Algo Crypt Meta State",
+        "name": "MetaState",
         "methods": [
             {
                 "name": "bootstrap",

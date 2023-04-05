@@ -57,7 +57,7 @@ class MembershipState:
 
 
 app = bk.Application(
-    name="Algo Crypt Meta State",
+    name="MetaState",
     state=MembershipState(
         membership_record=MembershipRecord,
         card_type=Card,
