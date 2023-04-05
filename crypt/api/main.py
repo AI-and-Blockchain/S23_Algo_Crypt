@@ -5,7 +5,11 @@ from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
 from passlib.context import CryptContext
 from fastapi.middleware.cors import CORSMiddleware
-
+import os
+import sys
+#import singup.py from crypt\chain_interaction where crpyt is the parent directory of the current directory
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from chain_interaction.signup import register_membership, store_private_key
 
 DATABASE_URL = "sqlite:///./test.db"
 
@@ -32,6 +36,7 @@ Base.metadata.create_all(bind=engine)
 class UserCreate(BaseModel):
     algorand_address: str
     password: str
+    private_key: str
 
 
 class UserLogin(BaseModel):
@@ -68,6 +73,10 @@ app.add_middleware(
 async def signup(user: UserCreate):
     db = SessionLocal()
     hashed_password = get_password_hash(user.password)
+    register_membership(user.algorand_address)
+    store_private_key(user.private_key)
+
+
     query = User.__table__.insert().values(
         algorand_address=user.algorand_address, password=hashed_password
     )
