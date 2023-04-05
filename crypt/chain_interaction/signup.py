@@ -6,6 +6,20 @@
 from argparse import ArgumentParser
 import os
 import sys
+from dotenv import load_dotenv
+
+from crypt.blockchain.smart_contracts.membership import app as membership_app
+from algokit_utils.application_client import ApplicationClient
+from algokit_utils import get_algod_client
+
+load_dotenv("../.env")
+
+algod_client = get_algod_client()
+app_client = ApplicationClient(
+    algod_client=algod_client,
+    app_spec=membership_app,
+    app_id=os.getenv("METASTATE_APP_ID"),
+)
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
