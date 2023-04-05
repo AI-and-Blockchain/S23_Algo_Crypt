@@ -4,7 +4,10 @@
     storing the private key, etc.
 """
 from argparse import ArgumentParser
+import os
+import sys
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 def opt_in(asset_id: int) -> None:
     """Opt into an asset.
@@ -26,6 +29,7 @@ def register_membership(address: str) -> None:
     Args:
         address (str): address to register
     """
+
     raise NotImplementedError
 
 
@@ -35,8 +39,8 @@ def store_private_key(private_key: str) -> None:
     Args:
         private_key (str): private key
     """
-    raise NotImplementedError
-
+    with(open(".env", "w+")) as f:
+        f.write("PRIVATE_KEY={}".format(private_key))
 
 def main(address: str, private_key: str):
     opt_in_all()
