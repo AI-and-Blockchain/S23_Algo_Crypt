@@ -5,6 +5,7 @@
 """
 from argparse import ArgumentParser
 import os
+import sys
 from dotenv import load_dotenv
 
 from crypt.blockchain.smart_contracts.membership import app as membership_app

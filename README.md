@@ -14,7 +14,27 @@ The blockchain component runs on Algorand. All cards and enemies are represented
 
 # Instructions
 
-## Install
+## Installation
+
+### Dependencies
+
+The blockchain component of this project demo uses algokit, which requires Docker. Please install Docker Engine before attempting to run this demo.
+
+### Install
+
+Start by cloning this repository.
+
+```
+git clone git@github.com:AI-and-Blockchain/S23_Algo_Crypt.git
+```
+
+In the root directory, run
+
+```
+./bootstrap.sh
+```
+
+This script will install all dependencies, start an algokit localnet sandbox, and deploy the Membership contract that controls card distribution and game membership. You will then be redirected to the signup/login page.
 
 ## Run API
 
@@ -23,6 +43,17 @@ The blockchain component runs on Algorand. All cards and enemies are represented
 ## Challenge an Enemy
 
 ## How to Play
+
+- On startup you will be shown your player image, the enemy's image, both health bars, relevant stats, and a draw and discard pile. 
+- To start the game you can press the space bar to draw cards into your hand. 
+- You will be shown five cards and can toggle which cards you want to play by pressing the 1,2,3,4,5 keys (Each card in your hand corresponds to a different number)
+- If you press a key to play a card it will show up in the play area where three cards can be played and you will see your attack and defense updated towards your left
+- If you did not want to play that card you could press the number you originally pressed to play it to put it back in your hand. 
+- Once you have 3 cards played you cant press enter/return to actually play your cards.
+- You will see what cards the enemy played and their stats updated as well and see how much damage both you and the enemy took from the cards played. 
+- If both of you still have enough health points to go on you can press the space bar again to draw cards and start the next round of play.
+- If you have 0 health points and the enemy has a number greater than 0 you lose, and you will lose a certain amount of CRPT.
+- If you the enemy has 0 health points (even if you reach 0 health points at the same time), you win the game and receive an NFT of the enemy and a subset of their deck. 
 
 ## Browse Marketplace
 
