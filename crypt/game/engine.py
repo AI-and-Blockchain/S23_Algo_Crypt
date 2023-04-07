@@ -35,7 +35,7 @@ class GameEngine:
     if key == None: 
       return
      
-    if key == pygame.K_SPACE and self.state == GameState.STARTUP:
+    if key == pygame.K_d and self.state == GameState.STARTUP:
       self.state = GameState.DRAWING
       self.player.draw()
       self.enemy.draw()
