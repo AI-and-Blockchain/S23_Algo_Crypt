@@ -33,7 +33,7 @@ PLAYERHEALTH = gameEngine.player.health
 ENEMYHEALTH = gameEngine.enemy.health
 
 # Image used for draw and discard piles
-cardBack = pygame.image.load('images/BACK.png')
+cardBack = pygame.image.load('images/REALCARDBACK.png')
 cardBack = pygame.transform.scale(cardBack, (int(238*0.6), int(332*0.6)))
 
 def renderGame(window):
@@ -63,7 +63,7 @@ def renderGame(window):
 
 
   if (gameEngine.state == GameState.STARTUP):
-    startPlayText = font.render("Press The Space Bar To Draw", True, (191,215,234))
+    startPlayText = font.render("Press The 'D' Key To Draw", True, (191,215,234))
     window.blit(startPlayText, (950,450))
 
   #player image

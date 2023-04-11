@@ -11,17 +11,23 @@ from dotenv import load_dotenv
 from crypt.blockchain.smart_contracts.membership import app as membership_app
 from algokit_utils.application_client import ApplicationClient
 from algokit_utils import get_algod_client
+from beaker import client, sandbox 
 
 load_dotenv("../.env")
 
+
+accts = sandbox.get_accounts()
+
+acct1 = accts.pop() #admin address?
+
 algod_client = get_algod_client()
-app_client = ApplicationClient(
-    algod_client=algod_client,
+app_client = client.ApplicationClient(
+    client=algod_client,
     app_spec=membership_app,
     app_id=os.getenv("METASTATE_APP_ID"),
+    signer = acct1
 )
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 def opt_in(asset_id: int) -> None:
     """Opt into an asset.
@@ -43,8 +49,9 @@ def register_membership(address: str) -> None:
     Args:
         address (str): address to register
     """
-
-    raise NotImplementedError
+    app_client.opt_in()
+    app_client.call("signup", address = address, strengh = 5, intelligence = 5, dexterity = 5)
+    
 
 
 def store_private_key(private_key: str) -> None:
