@@ -59,7 +59,7 @@ def submit_turn(
         algod_client=algod_client,
         app_spec=os.path.join(
             os.path.dirname(__file__),
-            "../blockchain/smart_contracts/artifacts/Enemy\ Contract/application.json"
+            "../blockchain/smart_contracts/artifacts/Enemy Contract/application.json"
         ),
         app_id=enemy_app_id,
         sender=get_account(algod_client, address)
