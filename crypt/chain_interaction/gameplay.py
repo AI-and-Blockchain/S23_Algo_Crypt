@@ -24,6 +24,7 @@ load_dotenv(os.path.join(
     "../.env"
 ))
 
+
 class GameState:
     """Class for storing the state of the game."""
     player_hp: int
