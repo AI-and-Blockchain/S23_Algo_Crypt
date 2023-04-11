@@ -17,21 +17,14 @@ class GameState:
 
 
 def submit_turn(
-        address: str, 
+        address: str,
         enemy_contract: str,
         actions: typing.Tuple[
             typing.Tuple[str, str],
             typing.Tuple[str, str],
             typing.Tuple[str, str]
             ]
-) -> typing.Tuple[
-        typing.Tuple[
-            typing.Tuple[str, str],
-            typing.Tuple[str, str],
-            typing.Tuple[str, str]
-            ],
-        GameState
-        ]:
+) -> GameState:
     """Submit a turn to the enemy contract.
 
     Args:
@@ -42,11 +35,7 @@ def submit_turn(
             actions represented by 2-Tuples of action and attribute.
 
     Returns:
-        Tuple[
-            Tuple[Tuple[str, str],
-            Tuple[str, str],
-            Tuple[str, str]],
-        GameState]:
+        GameState:
             the enemy's actions, and the new game state
     """
     raise NotImplementedError
