@@ -7,7 +7,22 @@
 """
 from argparse import ArgumentParser
 import typing
+import os
 
+from dotenv import load_dotenv
+
+import pyteal as pt
+from algosdk.v2client.algod import AlgodClient
+
+from algokit_utils import (
+    ApplicationClient,
+    get_account
+)
+
+load_dotenv(os.path.join(
+    os.path.dirname(__file__),
+    "../.env"
+))
 
 class GameState:
     """Class for storing the state of the game."""
@@ -17,8 +32,9 @@ class GameState:
 
 
 def submit_turn(
+        algod_client: AlgodClient,
+        enemy_app_id: int,
         address: str,
-        enemy_contract: str,
         actions: typing.Tuple[
             typing.Tuple[str, str],
             typing.Tuple[str, str],
@@ -36,9 +52,25 @@ def submit_turn(
 
     Returns:
         GameState:
-            the enemy's actions, and the new game state
+            the state of the game after the turn has been submitted.
     """
-    raise NotImplementedError
+    app_client = ApplicationClient(
+        algod_client=algod_client,
+        app_spec=os.path.join(
+            os.path.dirname(__file__),
+            "../blockchain/smart_contracts/artifacts/Enemy\ Contract/application.json"
+        ),
+        app_id=enemy_app_id,
+        sender=get_account(algod_client, address)
+    )
+    gs = GameState()
+    app_client.call(
+        "submit_plays",
+        [x[0] for x in actions],
+        [x[1] for x in actions],
+        output=gs
+    )
+    return gs
 
 
 def main():
