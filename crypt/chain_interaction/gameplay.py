@@ -15,7 +15,7 @@ import pyteal as pt
 from algosdk.v2client.algod import AlgodClient
 from algosdk.atomic_transaction_composer import TransactionWithSigner
 from algosdk import transaction
-from beaker import consts
+from beaker import consts, sandbox
 
 from algokit_utils import (
     ApplicationClient,
@@ -62,7 +62,7 @@ def challenge(
             "../blockchain/smart_contracts/artifacts/Enemy Contract/application.json"
         ),
         app_id=enemy_app_id,
-        sender=sender
+        sender=sender.address
     )
     
     txn = TransactionWithSigner(
