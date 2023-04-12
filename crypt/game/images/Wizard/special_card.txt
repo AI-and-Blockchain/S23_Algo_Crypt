@@ -1,0 +1,64 @@
+Magical Attack Cards:
+a. Name: Arcane Nova
+Description: Unleash a devastating burst of arcane energy that shatters the very fabric of reality.
+Image Prompt: Depict a mage with arms outstretched, channeling a powerful, swirling explosion of arcane energy.
+
+b. Name: Giant Fireball
+Description: Conjure a massive, searing fireball that engulfs your enemies in flames.
+Image Prompt: Illustrate a mage casting a colossal fireball, engulfing the surroundings in a blazing inferno.
+
+c. Name: Ice Shard Barrage
+Description: Summon a storm of razor-sharp ice shards that pierce through your foes.
+Image Prompt: Portray a mage wielding a flurry of ice shards, propelled with immense force towards enemies.
+
+d. Name: Chain Lightning
+Description: Call forth a devastating lightning bolt that leaps between multiple enemies.
+Image Prompt: Show a mage summoning a powerful lightning bolt that branches out, striking multiple foes.
+
+e. Name: Eldritch Blast
+Description: Release a wave of dark energy that tears your enemies apart from within.
+Image Prompt: Depict a mage casting a sinister beam of eldritch power, disintegrating enemies caught in its path.
+
+Magical Defense Cards:
+a. Name: Arcane Ward
+Description: Erect a shimmering barrier that absorbs incoming magical attacks.
+Image Prompt: Illustrate a mage surrounded by a glowing, translucent shield, deflecting magical energy.
+
+b. Name: Elemental Aegis
+Description: Summon a protective aura that neutralizes fire, ice, and lightning damage.
+Image Prompt: Show a mage enveloped in a swirling elemental aura, negating elemental attacks.
+
+c. Name: Spell Reflection
+Description: Create a magic mirror that reflects enemy spells back at the caster.
+Image Prompt: Depict a mage with a reflective barrier, sending enemy spells back to their origin.
+
+d. Name: Mana Siphon
+Description: Drain the magical energy from enemy spells to replenish your own reserves.
+Image Prompt: Illustrate a mage absorbing incoming magical energy, converting it into their own power.
+
+e. Name: Time Warp
+Description: Bend time to your will, allowing you to dodge and counter enemy spells.
+Image Prompt: Show a mage manipulating the flow of time, avoiding and redirecting enemy magic.
+
+Dodge Cards:
+a. Name: Blink Step
+Description: Teleport a short distance, evading physical and magical attacks.
+Image Prompt: Portray a mage disappearing in a flash of light, reappearing a short distance away.
+
+b. Name: Ethereal Dodge
+Description: Temporarily shift into the ethereal plane, making you impervious to harm.
+Image Prompt: Illustrate a mage phasing into a ghostly, transparent form, evading all incoming attacks.
+
+c. Name: Illusionary Decoy
+Description: Create a magical duplicate to confuse enemies and draw their fire.
+Image Prompt: Depict a mage conjuring an identical illusion, distracting enemies and avoiding harm.
+
+Physical Attack Card:
+a. Name: Arcane Smite
+Description: Infuse your staff with arcane energy, delivering a crushing blow to your foe.
+Image Prompt: Show a mage wielding a staff glowing with powerful energy, striking an enemy with immense force.
+
+Physical Defense Card:
+a. Name: Mystic Barrier
+Description: Summon a mystical forcefield that deflects incoming physical attacks.
+Image Prompt: Illustrate a mage surrounded by a swirling, translucent barrier, repelling enemy melee and ranged assaults.

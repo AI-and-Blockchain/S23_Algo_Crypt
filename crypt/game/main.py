@@ -1,7 +1,55 @@
 import pygame
 import random
+import json
+import sys
 from models import *
 from engine import *
+
+
+
+def loadInCardData(json_file):
+  '''
+  Load in player deck and enemy deck from the json file
+
+  Load in player name, enemy name, player health, 
+  enemy health, player strength, enemy strength, 
+  player intelligence, enemy intelligence, player dexterity,
+  enemy dexterity, player image path, enemy image path
+
+  Instantiate gameEngine with the above data
+  
+  '''
+  with open(json_file) as f:
+    data = json.load(f)
+  # get player and enemy decks first
+  Deck = []
+  for card in data['deck']:
+    Deck.append(Card(card['type'],card['value'],card['image_path']))
+
+gameEngine = None
+GAMESTAKE = 0
+CARDSTOWIN = []
+
+# n = len(sys.argv)
+# player_health = sys.argv[1]
+# enemy_health = sys.argv[2]
+# player_strength = sys.argv[3]
+# enemy_strength = sys.argv[4]
+# player_intelligence = sys.argv[5]
+# enemy_intelligence = sys.argv[6]
+# player_dexterity = sys.argv[7]
+# enemy_dexterity = sys.argv[8]
+# player_name = sys.argv[9]
+# enemy_name = sys.argv[10]
+# player_image_path = sys.argv[11]
+# enemy_image_path = sys.argv[12]
+# GAMESTAKE = sys.argv[13]
+# player_deck = loadInCardData(sys.argv[14])
+# enemy_deck = loadInCardData(sys.argv[15])
+# CARDSTOWIN = loadInCardData(sys.argv[16])
+
+
+
 
 pygame.init()
 # Set Up
@@ -10,11 +58,11 @@ screen_width,screen_height = info.current_w,info.current_h
 window_width,window_height = screen_width-10,screen_height-50
 window = pygame.display.set_mode((window_width,window_height))
 algocrypt_icon = pygame.image.load('images/logo.png')
-GAMESTAKE = 24
+
 pygame.display.set_icon(algocrypt_icon)
 pygame.display.set_caption("AlgoCrypt")
 
-gameEngine = None
+
 playerDeck = Deck([Card(Types.ATTACK,Values.STRENGTH,"images/SWORDATTACKSTR.png")]*10 + [Card(Types.ATTACK,Values.INTELLIGENCE,"images/LIGHTNINGATTACKINTELL.png")]*5 
                   + [Card(Types.DODGE,Values.DEXTERITY,"images/DODGE.png")]*5 + [Card(Types.DEFENSE,Values.STRENGTH,"images/SHIELDDEFENSESTR.png")]*5 + 
                   [Card(Types.DEFENSE,Values.INTELLIGENCE,"images/ELIXIRDEFENSEINTELL.png")]*5)
@@ -27,8 +75,8 @@ gameEngine = GameEngine(playerDeck,enemyDeck,
                         playerStrength=5,enemyStrength=2,
                         playerIntelligence=2,enemyIntelligence=10,
                         playerDexterity=4,enemyDexterity=2,
-                        playerImagePath="images/pala.png",enemyImagePath="images/wizard.png")
-ENEMY_IMAGE_PATH = "images/wizard.png"
+                        playerImagePath="images/pala.png",enemyImagePath="images/Archmage_Zanthorius.png")
+
 PLAYERHEALTH = gameEngine.player.health
 ENEMYHEALTH = gameEngine.enemy.health
 
@@ -36,19 +84,7 @@ ENEMYHEALTH = gameEngine.enemy.health
 cardBack = pygame.image.load('images/REALCARDBACK.png')
 cardBack = pygame.transform.scale(cardBack, (int(238*0.6), int(332*0.6)))
 
-def loadInGameData(json_file, gameEngine):
-  '''
-  Load in player deck and enemy deck from the json file
 
-  Load in player name, enemy name, player health, 
-  enemy health, player strength, enemy strength, 
-  player intelligence, enemy intelligence, player dexterity,
-  enemy dexterity, player image path, enemy image path
-
-  Instantiate gameEngine with the above data
-  
-  '''
-  pass
 
 def renderGame(window):
   window.fill((12,9,13))
@@ -59,12 +95,9 @@ def renderGame(window):
     winText = font.render("You Win!", True, (8,126,139))
     window.blit(winText, (window.get_width()/2 - winText.get_width()/2, window.get_height()/2 - winText.get_height()/2))
     window.blit(gameEngine.enemy.image, (700, 600))
-    gameEngine.player.winNFTImagePath = ENEMY_IMAGE_PATH
     gameEngine.enemy.replenishDeck()
-    for i in range(5):
-      cardWon = gameEngine.enemy.deck.cards[random.randint(0,gameEngine.enemy.deck.length()-1)]
-      gameEngine.player.wonCards.append(cardWon)
-      window.blit(cardWon.image, (700 + ((i+2)*100), 600))
+    for i in range(3):
+      window.blit(CARDSTOWIN[i].image, (700 + ((i+2)*100), 600))
     gameEngine.state = GameState.ENDED
     return
   elif (gameEngine.state == GameState.LOSE):

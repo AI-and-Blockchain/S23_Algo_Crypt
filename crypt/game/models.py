@@ -3,6 +3,8 @@ import pygame
 import random
 import os
 import sys
+import io
+from urllib.request import urlopen
 # import gameplay.py from the chain_interaction where crypt is the parent directory of this directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from chain_interaction import gameplay
@@ -24,7 +26,7 @@ class Card:
   
   def __init__(self, type, value, imagePath):
     self.type = type
-    self.value = value
+    self.value = value    
     self.image = pygame.image.load(imagePath)
     self.image = pygame.transform.scale(self.image, (int(238*0.6), int(332*0.6)))
 
@@ -65,9 +67,6 @@ class Player:
   magDamage = 0
   physDefense = 0
   magDefense = 0
-
-  winNFTImagePath = None
-  wonCards = []
 
   damage = 0
 
