@@ -5,6 +5,7 @@ import base64
 import os
 import json
 import ipfshttpclient
+import requests
 from algokit_utils import get_algod_client, get_account
 from beaker import sandbox
 from algosdk.v2client.algod import AlgodClient
@@ -109,7 +110,19 @@ def ipfs_upload(image_url: str) -> str:
     Returns:
         str: IPFS uri of uploaded image
     """
-    raise NotImplementedError
+    # Connect to a local IPFS node
+    client = ipfshttpclient.connect()
+
+    # Download the image data from the URL
+    response = requests.get(image_url)
+    image_data = response.content
+
+    # Add the image data to IPFS
+    result = client.add_bytes(image_data)
+
+    # Return the IPFS uri
+    ipfs_uri = f"ipfs://{result}"
+    return ipfs_uri
 
 
 def create_contract(name: str, description: str, stats: str, image: str) -> str:
