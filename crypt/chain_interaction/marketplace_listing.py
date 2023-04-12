@@ -1,11 +1,28 @@
 """This module contains functions for generating
     marketplace listings for enemies and cards.
 """
+from ..blockchain.smart_contracts.nft_exchange import app as nft_app
+
 from argparse import ArgumentParser
+import os
+
+from dotenv import load_dotenv
+
+from algokit_utils import (
+    ApplicationClient,
+    get_account,
+    get_algod_client,
+    get_indexer_client
+)
+
+load_dotenv(os.path.join(
+    os.path.dirname(__file__),
+    "../.env"
+))
 
 
 def generate_card_listing(
-        name: str, description: str, image: str, price: int
+        name: str, description: str, image: str, asset_id: int, price: int, owner: str
 ) -> str:
     """Generate a marketplace listing for a card.
 
@@ -18,28 +35,27 @@ def generate_card_listing(
     Returns:
         str: marketplace listing
     """
-    raise NotImplementedError
+    algod_client = get_algod_client()
+    owner_acct = get_account(algod_client, owner)
+    app_client = ApplicationClient(
+        algod_client=algod_client,
+        app_spec=nft_app,
+        signer=owner_acct
+    )
+
+    app_client.create()
+
+    return app_client.call(
+        "update",
+        name=name,
+        descr=description,
+        image_uri=image,
+        asset_id=asset_id,
+        price=price,
+    )
 
 
-def generate_enemy_listing(
-        name: str, description: str, stats: str, image: str, price: int
-) -> str:
-    """Generate a marketplace listing for an enemy.
-
-    Args:
-        name (str): name of enemy
-        description (str): description of enemy
-        stats (str): stats of enemy
-        image (str): ipfs uri of image of enemy
-        price (int): price of enemy in microalgos
-
-    Returns:
-        str: marketplace listing
-    """
-    raise NotImplementedError
-
-
-def generate_listing(asset_id: int, price: int) -> str:
+def lookup_and_generate(asset_id: int, price: int, owner: str) -> str:
     """Generate a marketplace listing for an asset.
 
     Args:
@@ -53,11 +69,23 @@ def generate_listing(asset_id: int, price: int) -> str:
     if asset_id lookup -> enemy: generate_enemy_listing
 
     """
-    raise NotImplementedError
+    algod_client = get_algod_client()
+    indexer = get_indexer_client()
+    owner = get_account(algod_client, owner)
+
+    asset_info = indexer.asset_info(asset_id)
+    return generate_card_listing(
+        name=asset_info["asset_name"],
+        description=asset_info["asset_unit_name"],
+        image=asset_info["asset_url"],
+        asset_id=asset_id,
+        price=price,
+        owner=owner
+    )
 
 
 def main(asset_id: int, price: int):
-    listing = generate_listing(asset_id, price)
+    listing = lookup_and_generate(asset_id, price)
     print(listing)
 
 

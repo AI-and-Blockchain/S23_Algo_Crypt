@@ -13,6 +13,9 @@ from dotenv import load_dotenv
 
 import pyteal as pt
 from algosdk.v2client.algod import AlgodClient
+from algosdk.atomic_transaction_composer import TransactionWithSigner
+from algosdk import transaction
+from beaker import consts, sandbox
 
 from algokit_utils import (
     ApplicationClient,
@@ -32,15 +35,79 @@ class GameState:
     finished: bool
 
 
+def challenge(
+    algod_client: AlgodClient,
+    enemy_app_id: int,
+    address: str,
+    player_hp: int,
+    player_int: int,
+    player_str: int,
+    player_dex: int,
+) -> bool:
+    """Challenge the enemy contract.
+
+    Args:
+        address (str): address of the player
+        enemy_contract (str): address of the enemy contract
+
+    Returns:
+        bool:
+            True if the challenge was successful, False otherwise.
+    """
+    sender = get_account(algod_client, address)
+    app_client = ApplicationClient(
+        algod_client=algod_client,
+        app_spec=os.path.join(
+            os.path.dirname(__file__),
+            "../blockchain/smart_contracts/artifacts/Enemy Contract/application.json"
+        ),
+        app_id=enemy_app_id,
+        sender=sender.address
+    )
+    
+    txn = TransactionWithSigner(
+        transaction.PaymentTxn(
+            sender=sender.address,
+            sp=algod_client.suggested_params(),
+            receiver=app_client.app_address,
+            amt=0
+        ),
+        sender.signer
+    )
+
+    app_client.opt_in(txn=txn)
+
+    txn = TransactionWithSigner(
+        transaction.PaymentTxn(
+            sender=sender.address,
+            sp=algod_client.suggested_params(),
+            receiver=app_client.app_address,
+            amt=10*consts.algo
+        ),
+        sender.signer
+    )
+
+    app_client.call(
+        "challenge",
+        txn=txn,
+        player_hp=player_hp,
+        player_intelligence=player_int,
+        player_strength=player_str,
+        player_dexterity=player_dex
+    )
+
+    return True
+
+
 def submit_turn(
-        algod_client: AlgodClient,
-        enemy_app_id: int,
-        address: str,
-        actions: typing.Tuple[
-            typing.Tuple[str, str],
-            typing.Tuple[str, str],
-            typing.Tuple[str, str]
-            ]
+    algod_client: AlgodClient,
+    enemy_app_id: int,
+    address: str,
+    actions: typing.Tuple[
+        typing.Tuple[str, str],
+        typing.Tuple[str, str],
+        typing.Tuple[str, str]
+        ]
 ) -> GameState:
     """Submit a turn to the enemy contract.
 
@@ -64,14 +131,11 @@ def submit_turn(
         app_id=enemy_app_id,
         sender=get_account(algod_client, address)
     )
-    gs = GameState()
-    app_client.call(
+    return app_client.call(
         "submit_plays",
         [x[0] for x in actions],
         [x[1] for x in actions],
-        output=gs
     )
-    return gs
 
 
 def main():
