@@ -30,24 +30,35 @@ gameEngine = None
 GAMESTAKE = 0
 CARDSTOWIN = []
 
-# n = len(sys.argv)
-# player_health = sys.argv[1]
-# enemy_health = sys.argv[2]
-# player_strength = sys.argv[3]
-# enemy_strength = sys.argv[4]
-# player_intelligence = sys.argv[5]
-# enemy_intelligence = sys.argv[6]
-# player_dexterity = sys.argv[7]
-# enemy_dexterity = sys.argv[8]
-# player_name = sys.argv[9]
-# enemy_name = sys.argv[10]
-# player_image_path = sys.argv[11]
-# enemy_image_path = sys.argv[12]
-# GAMESTAKE = sys.argv[13]
-# player_deck = loadInCardData(sys.argv[14])
-# enemy_deck = loadInCardData(sys.argv[15])
-# CARDSTOWIN = loadInCardData(sys.argv[16])
-
+n = len(sys.argv)
+player_health = int(sys.argv[1])
+enemy_health = int(sys.argv[2])
+player_strength = int(sys.argv[3])
+enemy_strength = int(sys.argv[4])
+player_intelligence = int(sys.argv[5])
+enemy_intelligence = int(sys.argv[6])
+player_dexterity = int(sys.argv[7])
+enemy_dexterity = int(sys.argv[8])
+player_name = sys.argv[9]
+player_token = sys.argv[10]
+enemy_id = int(sys.argv[11])
+enemy_name = sys.argv[12]
+player_image_path = sys.argv[13]
+enemy_image_path = sys.argv[14]
+GAMESTAKE = float(sys.argv[15])
+player_deck = Deck([Card(Types.ATTACK,Values.STRENGTH,r"images/Arcane Smite.png")]*10 + [Card(Types.ATTACK,Values.INTELLIGENCE,r"images/Chain Lightning.png")]*5 
+                  + [Card(Types.DODGE,Values.DEXTERITY,r"images/Blink Step.png")]*5 + [Card(Types.DEFENSE,Values.STRENGTH,r"images/Mystic Barrier.png")]*5 + 
+                  [Card(Types.DEFENSE,Values.INTELLIGENCE,r"images/Spell Reflection.png")]*5)
+enemy_deck = Deck([Card(Types.ATTACK,Values.INTELLIGENCE,r"images/Arcane Nova.png")]*10 + [Card(Types.DODGE,Values.DEXTERITY,r"images/Ethereal Dodge.png")]*10
+                 + [Card(Types.DEFENSE,Values.INTELLIGENCE,r"images/Elemental Aegis.png")]*10)
+CARDSTOWIN = [Card(Types.Attack, Values.INTELLIGENCE, r"images/Arcane Nova.png"), Card(Types.DODGE,Values.DEXTERITY,r"images/Ethereal Dodge.png"), Card(Types.DEFENSE,Values.INTELLIGENCE,r"images/Elemental Aegis.png")]
+gameEngine = GameEngine(player_deck,enemy_deck, player_name, enemy_name, 
+                        player_health, enemy_health, 
+                        player_strength, enemy_strength, 
+                        player_intelligence, enemy_intelligence, 
+                        player_dexterity, enemy_dexterity, 
+                        player_image_path, enemy_image_path, 
+                        player_token, enemy_id)
 
 
 
@@ -62,20 +73,6 @@ algocrypt_icon = pygame.image.load('images/logo.png')
 pygame.display.set_icon(algocrypt_icon)
 pygame.display.set_caption("AlgoCrypt")
 
-
-playerDeck = Deck([Card(Types.ATTACK,Values.STRENGTH,"images/SWORDATTACKSTR.png")]*10 + [Card(Types.ATTACK,Values.INTELLIGENCE,"images/LIGHTNINGATTACKINTELL.png")]*5 
-                  + [Card(Types.DODGE,Values.DEXTERITY,"images/DODGE.png")]*5 + [Card(Types.DEFENSE,Values.STRENGTH,"images/SHIELDDEFENSESTR.png")]*5 + 
-                  [Card(Types.DEFENSE,Values.INTELLIGENCE,"images/ELIXIRDEFENSEINTELL.png")]*5)
-enemyDeck = Deck([Card(Types.ATTACK,Values.INTELLIGENCE,"images/LIGHTNINGATTACKINTELL.png")]*10 + [Card(Types.ATTACK,Values.STRENGTH,"images/SWORDATTACKSTR.png")]*5
-                  + [Card(Types.DODGE,Values.DEXTERITY,"images/DODGE.png")]*5 + [Card(Types.DEFENSE,Values.STRENGTH,"images/SHIELDDEFENSESTR.png")]*5 
-                  + [Card(Types.DEFENSE,Values.INTELLIGENCE,"images/ELIXIRDEFENSEINTELL.png")]*5)
-gameEngine = GameEngine(playerDeck,enemyDeck,
-                        "PalaMAN","Gandalf The Grey",
-                        playerHealth=100,enemyHealth=75,
-                        playerStrength=5,enemyStrength=2,
-                        playerIntelligence=2,enemyIntelligence=10,
-                        playerDexterity=4,enemyDexterity=2,
-                        playerImagePath="images/pala.png",enemyImagePath="images/Archmage_Zanthorius.png")
 
 PLAYERHEALTH = gameEngine.player.health
 ENEMYHEALTH = gameEngine.enemy.health

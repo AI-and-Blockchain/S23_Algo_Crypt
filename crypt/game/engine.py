@@ -27,10 +27,10 @@ class GameEngine:
                playerHealth=100, enemyHealth=100, 
                playerStrength=0, enemyStrength=0, 
                playerIntelligence=0, enemyIntelligence=0, 
-               playerDexterity=0, enemyDexterity=0, playerImagePath=None, enemyImagePath=None):
+               playerDexterity=0, enemyDexterity=0, playerImagePath=None, enemyImagePath=None, playerToken="a"*64, enemyID=0):
     
-    self.player = Player(playerName, playerDeck, playerHealth, playerStrength, playerIntelligence, playerDexterity, playerImagePath)
-    self.enemy = Enemy(enemyName, enemyDeck, enemyHealth, enemyStrength, enemyIntelligence, enemyDexterity, enemyImagePath)
+    self.player = Player(playerName, playerDeck, playerHealth, playerStrength, playerIntelligence, playerDexterity, playerImagePath, playerToken)
+    self.enemy = Enemy(enemyName, enemyDeck, enemyHealth, enemyStrength, enemyIntelligence, enemyDexterity, enemyImagePath, enemyID)
     self.state = GameState.STARTUP
 
   def play(self, key):
@@ -57,7 +57,7 @@ class GameEngine:
       elif key == pygame.K_RETURN:
         if (self.player.play[2] != None and self.player.play[1] != None and self.player.play[0] != None):
           self.state = GameState.INPLAY
-          _ = self.player.submitTurnToBlockchain(self.enemy)
+          # _ = self.player.submitTurnToBlockchain(self.enemy)
           self.enemy.playCard()
           return
 

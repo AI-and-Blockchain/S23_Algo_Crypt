@@ -5,6 +5,7 @@ import os
 import sys
 import io
 from urllib.request import urlopen
+from algosdk.v2client.algod import AlgodClient
 # import gameplay.py from the chain_interaction where crypt is the parent directory of this directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from chain_interaction import gameplay
@@ -70,7 +71,10 @@ class Player:
 
   damage = 0
 
-  def __init__(self, name, deck, health=100, strength=0, intelligence=0, dexterity=0, imagePath=None):
+  playerToken = None
+  client = None
+
+  def __init__(self, name, deck, health=100, strength=0, intelligence=0, dexterity=0, imagePath=None, playerToken="a"*64):
     self.hand = []
     self.play = [None] * 3
     self.name = name
@@ -79,6 +83,8 @@ class Player:
     self.health = health
     self.image = pygame.image.load(imagePath)
     self.image = pygame.transform.scale(self.image, (int(238*0.8), int(332*0.8)))
+    self.playerToken = playerToken
+    self.client = AlgodClient(self.playerToken, self.name)
 
 
     self.strength = strength
@@ -189,7 +195,7 @@ class Player:
     card1Type, card1Value = self.getTypeAndValue(self.play[1])
     card2Type, card2Value = self.getTypeAndValue(self.play[2])
 
-    gameState = gameplay.submit_turn(self.name, enemy.name, 
+    gameState = gameplay.submit_turn(self.client, enemy.enemyID, self.name,
                                                   [[card0Type, card0Value], [card1Type, card1Value], [card2Type, card2Value]])
     return gameState
   
@@ -218,7 +224,9 @@ class Enemy:
 
   damage = 0
 
-  def __init__(self, name, deck, health=100, strength=0, intelligence=0, dexterity=0, imagePath=None ):
+  enemyID = None
+
+  def __init__(self, name, deck, health=100, strength=0, intelligence=0, dexterity=0, imagePath=None, enemyID=None):
     self.hand = []
     self.name = name
     self.deck = deck
@@ -230,6 +238,8 @@ class Enemy:
     self.strength = strength
     self.intelligence = intelligence
     self.dexterity = dexterity
+
+    self.enemyID = enemyID
     
   def draw(self):
     if (self.deck.length() == 0):
