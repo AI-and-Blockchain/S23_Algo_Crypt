@@ -1,6 +1,15 @@
 import openai
 import random
 import typing
+import base64
+import os
+import json
+import ipfshttpclient
+from algokit_utils import get_algod_client, get_account
+from beaker import sandbox
+from algosdk.v2client.algod import AlgodClient
+from algosdk.transaction import PaymentTxn, ApplicationCreateTxn
+from algosdk import mnemonic, transaction
 
 #replace YOUR_API_KEY with your api key
 openai.api_key = "YOUR_API_KEY"
@@ -115,7 +124,50 @@ def create_contract(name: str, description: str, stats: str, image: str) -> str:
     Returns:
         str: address of contract
     """
-    raise NotImplementedError
+    algod_client = get_algod_client()
+
+    CREATOR_MNEMONIC = os.environ["CREATOR_MNEMONIC"]
+    creator_private_key = mnemonic.to_private_key(CREATOR_MNEMONIC)
+    creator_address = mnemonic.to_public_key(CREATOR_MNEMONIC)
+
+    # Set up the contract
+    # Teal script
+    enemy_contract = '''
+        #pragma version 2
+        txn CloseRemainderTo
+        addr <CREATOR_ADDRESS>
+        ==
+        txn Receiver
+        addr <CREATOR_ADDRESS>
+        ==
+        &&
+        txn AssetCloseTo
+        addr <CREATOR_ADDRESS>
+        ==
+        &&
+    '''
+    
+    # Compile the contract
+    compile_response = algod_client.compile(enemy_contract)
+    contract_address = compile_response['hash']
+    contract_bytes = base64.b64decode(compile_response['result'])
+
+    # Fund the contract
+    params = algod_client.suggested_params()
+    txn = PaymentTxn(creator_address, params, contract_address, 100000, note=base64.b64encode(contract_bytes))
+    signed_txn = txn.sign(creator_private_key)
+    txn_id = algod_client.send_transaction(signed_txn)
+    sandbox.wait_for_confirmation(algod_client, txn_id)
+
+    # Create contract deployment transaction
+    app_args = [name, description, stats, image]
+    txn = ApplicationCreateTxn(creator_address, params, transaction.OnCompletion.NoOpOC, contract_bytes, app_args)
+    signed_txn = txn.sign(creator_private_key)
+    txn_id = algod_client.send_transaction(signed_txn)
+    sandbox.wait_for_confirmation(algod_client, txn_id)
+
+    return contract_address
+
 
 
 def main(num_enemies: int = 10):
