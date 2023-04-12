@@ -14,7 +14,7 @@ GAMESTAKE = 24
 pygame.display.set_icon(algocrypt_icon)
 pygame.display.set_caption("AlgoCrypt")
 
-
+gameEngine = None
 playerDeck = Deck([Card(Types.ATTACK,Values.STRENGTH,"images/SWORDATTACKSTR.png")]*10 + [Card(Types.ATTACK,Values.INTELLIGENCE,"images/LIGHTNINGATTACKINTELL.png")]*5 
                   + [Card(Types.DODGE,Values.DEXTERITY,"images/DODGE.png")]*5 + [Card(Types.DEFENSE,Values.STRENGTH,"images/SHIELDDEFENSESTR.png")]*5 + 
                   [Card(Types.DEFENSE,Values.INTELLIGENCE,"images/ELIXIRDEFENSEINTELL.png")]*5)
@@ -35,6 +35,20 @@ ENEMYHEALTH = gameEngine.enemy.health
 # Image used for draw and discard piles
 cardBack = pygame.image.load('images/REALCARDBACK.png')
 cardBack = pygame.transform.scale(cardBack, (int(238*0.6), int(332*0.6)))
+
+def loadInGameData(json_file, gameEngine):
+  '''
+  Load in player deck and enemy deck from the json file
+
+  Load in player name, enemy name, player health, 
+  enemy health, player strength, enemy strength, 
+  player intelligence, enemy intelligence, player dexterity,
+  enemy dexterity, player image path, enemy image path
+
+  Instantiate gameEngine with the above data
+  
+  '''
+  pass
 
 def renderGame(window):
   window.fill((12,9,13))

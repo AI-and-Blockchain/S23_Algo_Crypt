@@ -190,9 +190,9 @@ class Player:
     card1Type, card1Value = self.getTypeAndValue(self.play[1])
     card2Type, card2Value = self.getTypeAndValue(self.play[2])
 
-    (enemyTurn, gameState) = gameplay.submit_turn(self.name, enemy.name, 
+    gameState = gameplay.submit_turn(self.name, enemy.name, 
                                                   [[card0Type, card0Value], [card1Type, card1Value], [card2Type, card2Value]])
-    return (enemyTurn, gameState)
+    return gameState
   
   def resetDamage(self):
     self.physDamage = 0
