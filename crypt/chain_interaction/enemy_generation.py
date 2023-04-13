@@ -6,11 +6,31 @@ import os
 import json
 import ipfshttpclient
 import requests
-from algokit_utils import get_algod_client, get_account
 from beaker import sandbox
-from algosdk.v2client.algod import AlgodClient
 from algosdk.transaction import PaymentTxn, ApplicationCreateTxn
-from algosdk import mnemonic, transaction
+from algosdk import transaction
+
+from dotenv import load_dotenv
+from algosdk.v2client.algod import AlgodClient
+from algosdk import mnemonic
+from algokit_utils import (
+    ApplicationClient,
+    get_account,
+    get_algod_client
+)
+
+load_dotenv(os.path.join(
+    os.path.dirname(__file__),
+    "../.env"
+))
+
+ALGOD_API_ADDR = os.getenv("ALGOD_API_ADDR", "http://localhost:4001")
+ALGOD_API_TOKEN = os.getenv("ALGOD_API_TOKEN")
+CREATOR_MNEMONIC = os.getenv("CREATOR_MNEMONIC")
+
+# Initialize Algod client
+algod_client = AlgodClient(algod_token=ALGOD_API_TOKEN, algod_address=ALGOD_API_ADDR)
+
 
 #replace YOUR_API_KEY with your api key
 openai.api_key = "YOUR_API_KEY"
@@ -137,59 +157,50 @@ def create_contract(name: str, description: str, stats: str, image: str) -> str:
     Returns:
         str: address of contract
     """
-    algod_client = get_algod_client()
+    creator_account = mnemonic.to_private_key(CREATOR_MNEMONIC)
+    creator_addr = mnemonic.to_public_key(CREATOR_MNEMONIC)
 
-    CREATOR_MNEMONIC = os.environ["CREATOR_MNEMONIC"]
-    creator_private_key = mnemonic.to_private_key(CREATOR_MNEMONIC)
-    creator_address = mnemonic.to_public_key(CREATOR_MNEMONIC)
+    app_client = ApplicationClient(
+        algod_client=algod_client,
+        app_spec=os.path.join(
+            os.path.dirname(__file__),
+            "../blockchain/smart_contracts/artifacts/Enemy Contract/application.json"
+        ),
+        sender=creator_addr
+    )
 
-    # Set up the contract
-    # Teal script
-    enemy_contract = '''
-        #pragma version 2
-        txn CloseRemainderTo
-        addr <CREATOR_ADDRESS>
-        ==
-        txn Receiver
-        addr <CREATOR_ADDRESS>
-        ==
-        &&
-        txn AssetCloseTo
-        addr <CREATOR_ADDRESS>
-        ==
-        &&
-    '''
-    
-    # Compile the contract
-    compile_response = algod_client.compile(enemy_contract)
-    contract_address = compile_response['hash']
-    contract_bytes = base64.b64decode(compile_response['result'])
+    app_client.create(creator_account)
 
-    # Fund the contract
-    params = algod_client.suggested_params()
-    txn = PaymentTxn(creator_address, params, contract_address, 100000, note=base64.b64encode(contract_bytes))
-    signed_txn = txn.sign(creator_private_key)
-    txn_id = algod_client.send_transaction(signed_txn)
-    sandbox.wait_for_confirmation(algod_client, txn_id)
+    app_client.call(
+        "update",
+        name=name,
+        description=description,
+        stats=stats,
+        image_uri=image,
+        signer=creator_account
+    )
 
-    # Create contract deployment transaction
-    app_args = [name, description, stats, image]
-    txn = ApplicationCreateTxn(creator_address, params, transaction.OnCompletion.NoOpOC, contract_bytes, app_args)
-    signed_txn = txn.sign(creator_private_key)
-    txn_id = algod_client.send_transaction(signed_txn)
-    sandbox.wait_for_confirmation(algod_client, txn_id)
-
-    return contract_address
-
+    return app_client.app_address
 
 
 def main(num_enemies: int = 10):
-    enemies = generate_enemies(num_enemies)
+    #enemies = generate_enemies(num_enemies)
+    
+    #for test 
+    enemies = [ ("Archmage Zanthorius", 
+                "Introducing Archmage Zanthorius, master of the arcane and keeper of the eternal flame. \
+                 His powerful spells and unmatched intellect make him a formidable opponent. \
+                 Defeat him and unravel the secrets of the ancient tomes that he guards with his life.", 
+                 "Strength: 9, Intelligence: 34, Dexterity: 14", 
+                 "https://gateway.pinata.cloud/ipfs/QmYyx1aetc2mXU8eYcokZDLy1R1yW51LG5rELYjjx3gKbn?_gl=1*kcxbq9*rs_ga*NTJjNDhmOTItYTEyNy00MzAzLWFmNjItODNkZjExY2FlYzVm*rs_ga_5RMPXG14TE*MTY4MTMxNDY3NS4xLjEuMTY4MTMxNDk2Ni4yMC4wLjA.") ]
+
+ 
 
     for enemy in enemies:
-        description, stats, image = enemy
-        image = ipfs_upload(image)
-        create_contract(description, stats, image)
+        name, description, stats, image = enemy
+        #image = ipfs_upload(image)
+        add = create_contract(name, description, stats, image)
+        print(add)
 
 
 if __name__ == "__main__":
