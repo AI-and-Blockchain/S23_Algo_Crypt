@@ -44,9 +44,11 @@ This script will install all python dependencies, start an algokit localnet sand
 ./run_api_frontend.sh
 ```
 
+This will open the signup page on port 3000 of localhost.
+
 ## Create Account
 
-To create an account locally, navigate to 
+To create an account, simply enter the details on the signup page
 
 ## How to Play
 

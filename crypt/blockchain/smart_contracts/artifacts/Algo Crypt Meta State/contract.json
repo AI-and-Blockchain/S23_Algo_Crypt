@@ -2,6 +2,13 @@
     "name": "Algo Crypt Meta State",
     "methods": [
         {
+            "name": "create",
+            "args": [],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
             "name": "bootstrap",
             "args": [
                 {

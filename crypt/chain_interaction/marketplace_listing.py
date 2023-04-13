@@ -8,11 +8,14 @@ import os
 
 from dotenv import load_dotenv
 
+from beaker.sandbox import (
+    get_algod_client,
+    get_indexer_client,
+)
+
 from algokit_utils import (
     ApplicationClient,
     get_account,
-    get_algod_client,
-    get_indexer_client
 )
 
 load_dotenv(os.path.join(

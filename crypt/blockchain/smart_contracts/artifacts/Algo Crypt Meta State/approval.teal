@@ -1,8 +1,8 @@
 #pragma version 8
 intcblock 0 8 1 2 65536 10000
 bytecblock 0x 0x6e5f6361726473 0x7374617274696e675f6465636b 0x00 0x151f7c75 0x636172645f696473
-txn NumAppArgs
-intc_0 // 0
+txna ApplicationArgs 0
+pushbytes 0x4c5c61ba // "create()void"
 ==
 bnz main_l16
 txna ApplicationArgs 0
@@ -61,7 +61,7 @@ load 8
 load 9
 load 10
 load 11
-callsub signup_7
+callsub signup_8
 intc_2 // 1
 return
 main_l10:
@@ -75,7 +75,7 @@ intc_0 // 0
 assert
 txna ApplicationArgs 1
 btoi
-callsub getcardcount_5
+callsub getcardcount_6
 store 7
 bytec 4 // 0x151f7c75
 load 7
@@ -95,7 +95,7 @@ intc_0 // 0
 assert
 txna ApplicationArgs 1
 btoi
-callsub getcardaid_4
+callsub getcardaid_5
 store 6
 bytec 4 // 0x151f7c75
 load 6
@@ -115,7 +115,7 @@ intc_0 // 0
 assert
 txna ApplicationArgs 1
 btoi
-callsub getcard_3
+callsub getcard_4
 store 5
 bytec 4 // 0x151f7c75
 load 5
@@ -141,7 +141,7 @@ store 4
 load 2
 load 3
 load 4
-callsub addcard_2
+callsub addcard_3
 intc_2 // 1
 return
 main_l14:
@@ -154,7 +154,7 @@ intc_0 // 0
 &&
 assert
 txna ApplicationArgs 1
-callsub setstartingdeck_1
+callsub setstartingdeck_2
 intc_2 // 1
 return
 main_l15:
@@ -179,25 +179,35 @@ intc_2 // pay
 assert
 load 0
 load 1
-callsub bootstrap_0
+callsub bootstrap_1
 intc_2 // 1
 return
 main_l16:
 txn OnCompletion
 intc_0 // NoOp
 ==
-bnz main_l18
-err
-main_l18:
 txn ApplicationID
 intc_0 // 0
 ==
+&&
 assert
+callsub create_0
 intc_2 // 1
 return
 
+// create
+create_0:
+proto 0 0
+pushbytes 0x676f7665726e6f72 // "governor"
+global CreatorAddress
+app_global_put
+bytec_1 // "n_cards"
+intc_0 // 0
+app_global_put
+retsub
+
 // bootstrap
-bootstrap_0:
+bootstrap_1:
 proto 2 0
 intc_0 // 0
 bytec_0 // ""
@@ -233,11 +243,11 @@ frame_dig 0
 store 12
 intc_0 // 0
 store 13
-bootstrap_0_l1:
+bootstrap_1_l1:
 load 13
 load 12
 <
-bz bootstrap_0_l6
+bz bootstrap_1_l6
 frame_dig 2
 frame_bury 8
 frame_dig 8
@@ -311,7 +321,7 @@ extract_uint16
 frame_bury 9
 frame_dig 9
 ==
-bnz bootstrap_0_l5
+bnz bootstrap_1_l5
 frame_dig -1
 intc_3 // 2
 load 13
@@ -323,7 +333,7 @@ intc_3 // 2
 extract_uint16
 intc_3 // 2
 +
-bootstrap_0_l4:
+bootstrap_1_l4:
 substring3
 frame_bury 1
 frame_dig 11
@@ -477,16 +487,16 @@ load 13
 intc_2 // 1
 +
 store 13
-b bootstrap_0_l1
-bootstrap_0_l5:
+b bootstrap_1_l1
+bootstrap_1_l5:
 frame_dig -1
 len
-b bootstrap_0_l4
-bootstrap_0_l6:
+b bootstrap_1_l4
+bootstrap_1_l6:
 retsub
 
 // set_starting_deck
-setstartingdeck_1:
+setstartingdeck_2:
 proto 1 0
 intc_0 // 0
 dupn 3
@@ -506,7 +516,7 @@ pushint 30 // 30
 assert
 intc_0 // 0
 store 14
-setstartingdeck_1_l1:
+setstartingdeck_2_l1:
 load 14
 frame_dig -1
 intc_0 // 0
@@ -514,7 +524,7 @@ extract_uint16
 frame_bury 1
 frame_dig 1
 <
-bz setstartingdeck_1_l3
+bz setstartingdeck_2_l3
 frame_dig -1
 intc_1 // 8
 load 14
@@ -534,12 +544,12 @@ load 14
 intc_2 // 1
 +
 store 14
-b setstartingdeck_1_l1
-setstartingdeck_1_l3:
+b setstartingdeck_2_l1
+setstartingdeck_2_l3:
 retsub
 
 // add_card
-addcard_2:
+addcard_3:
 proto 3 0
 bytec_0 // ""
 intc_0 // 0
@@ -673,7 +683,7 @@ app_global_put
 retsub
 
 // get_card
-getcard_3:
+getcard_4:
 proto 1 1
 bytec_0 // ""
 dupn 4
@@ -839,7 +849,7 @@ frame_bury 0
 retsub
 
 // get_card_aid
-getcardaid_4:
+getcardaid_5:
 proto 1 1
 intc_0 // 0
 frame_dig -1
@@ -871,7 +881,7 @@ frame_bury 0
 retsub
 
 // get_card_count
-getcardcount_5:
+getcardcount_6:
 proto 1 1
 intc_0 // 0
 frame_dig -1
@@ -895,7 +905,7 @@ frame_bury 0
 retsub
 
 // transfer_starting_deck
-transferstartingdeck_6:
+transferstartingdeck_7:
 proto 1 0
 bytec_0 // ""
 intc_0 // 0
@@ -906,11 +916,11 @@ intc_0 // 0
 dup
 intc_0 // 0
 store 23
-transferstartingdeck_6_l1:
+transferstartingdeck_7_l1:
 load 23
 pushint 30 // 30
 <
-bz transferstartingdeck_6_l3
+bz transferstartingdeck_7_l3
 bytec_2 // "starting_deck"
 intc_1 // 8
 load 23
@@ -1027,12 +1037,12 @@ load 23
 intc_2 // 1
 +
 store 23
-b transferstartingdeck_6_l1
-transferstartingdeck_6_l3:
+b transferstartingdeck_7_l1
+transferstartingdeck_7_l3:
 retsub
 
 // signup
-signup_7:
+signup_8:
 proto 4 0
 bytec_0 // ""
 intc_0 // 0
@@ -1061,5 +1071,5 @@ frame_dig -4
 frame_dig 0
 box_put
 frame_dig -4
-callsub transferstartingdeck_6
+callsub transferstartingdeck_7
 retsub
