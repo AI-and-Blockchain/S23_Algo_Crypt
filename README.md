@@ -20,7 +20,11 @@ The blockchain component runs on Algorand. All cards and enemies are represented
 
 The blockchain component of this project demo uses algokit, which requires Docker. Please install Docker Engine before attempting to run this demo.
 
-### Install
+The API and associated frontend require the Node Package Manager and React.js
+
+FOR WINDOWS USERS: the bootstrap scripts are written as linux shell scripts. For maximum ease of use, use WSL with this project. 
+
+### Install and Setup
 
 Start by cloning this repository.
 
@@ -34,13 +38,17 @@ In the root directory, run
 ./bootstrap.sh
 ```
 
-This script will install all dependencies, start an algokit localnet sandbox, and deploy the Membership contract that controls card distribution and game membership. You will then be redirected to the signup/login page.
+This script will install all python dependencies, start an algokit localnet sandbox, and deploy the Membership contract that controls card distribution and game membership. You will then be redirected to the signup/login page. After this script completes, in a new terminal, run the API and associated frontend.
 
-## Run API
+```
+./run_api_frontend.sh
+```
+
+This will open the signup page on port 3000 of localhost.
 
 ## Create Account
 
-## Challenge an Enemy
+To create an account, simply enter the details on the signup page
 
 ## How to Play
 

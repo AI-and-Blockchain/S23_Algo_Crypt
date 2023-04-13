@@ -62,5 +62,6 @@ def deploy(
                     envfile.write(f"METASTATE_APP_ID={app_client.app_id}")
                     envfile.write("\n")
                     envfile.write(f"METASTATE_APP_ADDRESS={app_client.app_address}")
+                    
         case _:
             pass

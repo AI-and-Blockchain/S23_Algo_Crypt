@@ -1,0 +1,1075 @@
+#pragma version 8
+intcblock 0 8 1 2 65536 10000
+bytecblock 0x 0x6e5f6361726473 0x7374617274696e675f6465636b 0x00 0x151f7c75 0x636172645f696473
+txna ApplicationArgs 0
+pushbytes 0x4c5c61ba // "create()void"
+==
+bnz main_l16
+txna ApplicationArgs 0
+pushbytes 0xa321e7da // "bootstrap(pay,(string,string,string)[])void"
+==
+bnz main_l15
+txna ApplicationArgs 0
+pushbytes 0x96022cd3 // "set_starting_deck(uint64[])void"
+==
+bnz main_l14
+txna ApplicationArgs 0
+pushbytes 0xa1b65d10 // "add_card(string,string,string)void"
+==
+bnz main_l13
+txna ApplicationArgs 0
+pushbytes 0x601550bd // "get_card(uint64)(string,string,string)"
+==
+bnz main_l12
+txna ApplicationArgs 0
+pushbytes 0xeea8c0fe // "get_card_aid(uint64)uint64"
+==
+bnz main_l11
+txna ApplicationArgs 0
+pushbytes 0x419f5e45 // "get_card_count(uint64)uint64"
+==
+bnz main_l10
+txna ApplicationArgs 0
+pushbytes 0x51627d04 // "signup(address,uint8,uint8,uint8)void"
+==
+bnz main_l9
+err
+main_l9:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+store 8
+txna ApplicationArgs 2
+intc_0 // 0
+getbyte
+store 9
+txna ApplicationArgs 3
+intc_0 // 0
+getbyte
+store 10
+txna ApplicationArgs 4
+intc_0 // 0
+getbyte
+store 11
+load 8
+load 9
+load 10
+load 11
+callsub signup_8
+intc_2 // 1
+return
+main_l10:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+btoi
+callsub getcardcount_6
+store 7
+bytec 4 // 0x151f7c75
+load 7
+itob
+concat
+log
+intc_2 // 1
+return
+main_l11:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+btoi
+callsub getcardaid_5
+store 6
+bytec 4 // 0x151f7c75
+load 6
+itob
+concat
+log
+intc_2 // 1
+return
+main_l12:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+btoi
+callsub getcard_4
+store 5
+bytec 4 // 0x151f7c75
+load 5
+concat
+log
+intc_2 // 1
+return
+main_l13:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+store 2
+txna ApplicationArgs 2
+store 3
+txna ApplicationArgs 3
+store 4
+load 2
+load 3
+load 4
+callsub addcard_3
+intc_2 // 1
+return
+main_l14:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+callsub setstartingdeck_2
+intc_2 // 1
+return
+main_l15:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+txna ApplicationArgs 1
+store 1
+txn GroupIndex
+intc_2 // 1
+-
+store 0
+load 0
+gtxns TypeEnum
+intc_2 // pay
+==
+assert
+load 0
+load 1
+callsub bootstrap_1
+intc_2 // 1
+return
+main_l16:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+==
+&&
+assert
+callsub create_0
+intc_2 // 1
+return
+
+// create
+create_0:
+proto 0 0
+pushbytes 0x676f7665726e6f72 // "governor"
+global CreatorAddress
+app_global_put
+bytec_1 // "n_cards"
+intc_0 // 0
+app_global_put
+retsub
+
+// bootstrap
+bootstrap_1:
+proto 2 0
+intc_0 // 0
+bytec_0 // ""
+dupn 3
+intc_0 // 0
+dup
+bytec_0 // ""
+dup
+intc_0 // 0
+bytec_0 // ""
+dupn 6
+intc_0 // 0
+dup
+bytec_0 // ""
+dup
+intc_0 // 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+frame_dig -2
+gtxns Receiver
+global CurrentApplicationAddress
+==
+// Seed transaction must be sent to the application address.
+assert
+frame_dig -1
+intc_0 // 0
+extract_uint16
+frame_bury 0
+frame_dig 0
+store 12
+intc_0 // 0
+store 13
+bootstrap_1_l1:
+load 13
+load 12
+<
+bz bootstrap_1_l6
+frame_dig 2
+frame_bury 8
+frame_dig 8
+frame_bury 7
+pushint 6 // 6
+frame_bury 5
+frame_dig 5
+frame_dig 8
+len
++
+frame_bury 6
+frame_dig 6
+intc 4 // 65536
+<
+assert
+frame_dig 5
+itob
+extract 6 0
+frame_dig 3
+frame_bury 8
+frame_dig 7
+frame_dig 8
+concat
+frame_bury 7
+frame_dig 6
+frame_bury 5
+frame_dig 5
+frame_dig 8
+len
++
+frame_bury 6
+frame_dig 6
+intc 4 // 65536
+<
+assert
+frame_dig 5
+itob
+extract 6 0
+concat
+frame_dig 4
+frame_bury 8
+frame_dig 7
+frame_dig 8
+concat
+frame_bury 7
+frame_dig 6
+frame_bury 5
+frame_dig 5
+itob
+extract 6 0
+concat
+frame_dig 7
+concat
+frame_bury 1
+frame_dig -1
+frame_dig -1
+intc_3 // 2
+load 13
+*
+intc_3 // 2
++
+extract_uint16
+intc_3 // 2
++
+load 13
+intc_2 // 1
++
+frame_dig -1
+intc_0 // 0
+extract_uint16
+frame_bury 9
+frame_dig 9
+==
+bnz bootstrap_1_l5
+frame_dig -1
+intc_3 // 2
+load 13
+*
+intc_3 // 2
++
+intc_3 // 2
++
+extract_uint16
+intc_3 // 2
++
+bootstrap_1_l4:
+substring3
+frame_bury 1
+frame_dig 11
+frame_bury 10
+frame_dig 13
+frame_bury 12
+frame_dig 15
+frame_bury 14
+frame_dig 1
+frame_dig 1
+intc_0 // 0
+extract_uint16
+frame_dig 1
+intc_3 // 2
+extract_uint16
+substring3
+frame_bury 10
+frame_dig 1
+frame_dig 1
+intc_3 // 2
+extract_uint16
+frame_dig 1
+pushint 4 // 4
+extract_uint16
+substring3
+frame_bury 12
+frame_dig 1
+frame_dig 1
+pushint 4 // 4
+extract_uint16
+dig 1
+len
+substring3
+frame_bury 14
+itxn_begin
+pushint 3 // acfg
+itxn_field TypeEnum
+frame_dig 10
+extract 2 0
+itxn_field ConfigAssetName
+pushbytes 0x435250542d436172642d7b697d // "CRPT-Card-{i}"
+itxn_field ConfigAssetUnitName
+frame_dig 14
+extract 2 0
+itxn_field ConfigAssetURL
+intc 5 // 10000
+itxn_field ConfigAssetTotal
+intc_0 // 0
+itxn_field ConfigAssetDecimals
+intc_0 // 0
+itxn_field ConfigAssetDefaultFrozen
+global CurrentApplicationAddress
+itxn_field ConfigAssetManager
+global CurrentApplicationAddress
+itxn_field ConfigAssetReserve
+global CurrentApplicationAddress
+itxn_field ConfigAssetFreeze
+global CurrentApplicationAddress
+itxn_field ConfigAssetClawback
+intc_0 // 0
+itxn_field Fee
+itxn_submit
+frame_dig 10
+frame_bury 20
+frame_dig 20
+frame_bury 19
+pushint 6 // 6
+frame_bury 17
+frame_dig 17
+frame_dig 20
+len
++
+frame_bury 18
+frame_dig 18
+intc 4 // 65536
+<
+assert
+frame_dig 17
+itob
+extract 6 0
+frame_dig 12
+frame_bury 20
+frame_dig 19
+frame_dig 20
+concat
+frame_bury 19
+frame_dig 18
+frame_bury 17
+frame_dig 17
+frame_dig 20
+len
++
+frame_bury 18
+frame_dig 18
+intc 4 // 65536
+<
+assert
+frame_dig 17
+itob
+extract 6 0
+concat
+frame_dig 14
+frame_bury 20
+frame_dig 19
+frame_dig 20
+concat
+frame_bury 19
+frame_dig 18
+frame_bury 17
+frame_dig 17
+itob
+extract 6 0
+concat
+frame_dig 19
+concat
+frame_bury 16
+itxn CreatedAssetID
+frame_bury 21
+itxn CreatedAssetID
+itob
+box_del
+pop
+itxn CreatedAssetID
+itob
+frame_dig 16
+box_put
+bytec 5 // "card_ids"
+intc_1 // 8
+bytec_1 // "n_cards"
+app_global_get
+*
+frame_dig 21
+itob
+box_replace
+itxn CreatedAssetID
+itob
+box_del
+pop
+itxn CreatedAssetID
+itob
+intc 5 // 10000
+itob
+box_put
+bytec_1 // "n_cards"
+bytec_1 // "n_cards"
+app_global_get
+intc_2 // 1
++
+app_global_put
+load 13
+intc_2 // 1
++
+store 13
+b bootstrap_1_l1
+bootstrap_1_l5:
+frame_dig -1
+len
+b bootstrap_1_l4
+bootstrap_1_l6:
+retsub
+
+// set_starting_deck
+setstartingdeck_2:
+proto 1 0
+intc_0 // 0
+dupn 3
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+frame_dig -1
+intc_0 // 0
+extract_uint16
+frame_bury 0
+frame_dig 0
+pushint 30 // 30
+==
+// Starting deck must have 30 cards.
+assert
+intc_0 // 0
+store 14
+setstartingdeck_2_l1:
+load 14
+frame_dig -1
+intc_0 // 0
+extract_uint16
+frame_bury 1
+frame_dig 1
+<
+bz setstartingdeck_2_l3
+frame_dig -1
+intc_1 // 8
+load 14
+*
+intc_3 // 2
++
+extract_uint64
+frame_bury 2
+bytec_2 // "starting_deck"
+intc_1 // 8
+load 14
+*
+frame_dig 2
+itob
+box_replace
+load 14
+intc_2 // 1
++
+store 14
+b setstartingdeck_2_l1
+setstartingdeck_2_l3:
+retsub
+
+// add_card
+addcard_3:
+proto 3 0
+bytec_0 // ""
+intc_0 // 0
+dup
+bytec_0 // ""
+dup
+intc_0 // 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+bytec_1 // "n_cards"
+app_global_get
+pushint 1000 // 1000
+<
+// Cannot add more than 1000 cards.
+assert
+itxn_begin
+pushint 3 // acfg
+itxn_field TypeEnum
+frame_dig -3
+extract 2 0
+itxn_field ConfigAssetName
+pushbytes 0x435250542d436172642d7b6170702e73746174652e6e5f63617264737d // "CRPT-Card-{app.state.n_cards}"
+itxn_field ConfigAssetUnitName
+intc 5 // 10000
+itxn_field ConfigAssetTotal
+intc_0 // 0
+itxn_field ConfigAssetDecimals
+intc_0 // 0
+itxn_field ConfigAssetDefaultFrozen
+global CurrentApplicationAddress
+itxn_field ConfigAssetManager
+global CurrentApplicationAddress
+itxn_field ConfigAssetReserve
+global CurrentApplicationAddress
+itxn_field ConfigAssetFreeze
+global CurrentApplicationAddress
+itxn_field ConfigAssetClawback
+intc_0 // 0
+itxn_field Fee
+itxn_submit
+frame_dig -3
+frame_bury 4
+frame_dig 4
+frame_bury 3
+pushint 6 // 6
+frame_bury 1
+frame_dig 1
+frame_dig 4
+len
++
+frame_bury 2
+frame_dig 2
+intc 4 // 65536
+<
+assert
+frame_dig 1
+itob
+extract 6 0
+frame_dig -2
+frame_bury 4
+frame_dig 3
+frame_dig 4
+concat
+frame_bury 3
+frame_dig 2
+frame_bury 1
+frame_dig 1
+frame_dig 4
+len
++
+frame_bury 2
+frame_dig 2
+intc 4 // 65536
+<
+assert
+frame_dig 1
+itob
+extract 6 0
+concat
+frame_dig -1
+frame_bury 4
+frame_dig 3
+frame_dig 4
+concat
+frame_bury 3
+frame_dig 2
+frame_bury 1
+frame_dig 1
+itob
+extract 6 0
+concat
+frame_dig 3
+concat
+frame_bury 0
+itxn CreatedAssetID
+frame_bury 5
+itxn CreatedAssetID
+itob
+box_del
+pop
+itxn CreatedAssetID
+itob
+frame_dig 0
+box_put
+bytec 5 // "card_ids"
+intc_1 // 8
+bytec_1 // "n_cards"
+app_global_get
+*
+frame_dig 5
+itob
+box_replace
+itxn CreatedAssetID
+itob
+box_del
+pop
+itxn CreatedAssetID
+itob
+intc 5 // 10000
+itob
+box_put
+bytec_1 // "n_cards"
+bytec_1 // "n_cards"
+app_global_get
+intc_2 // 1
++
+app_global_put
+retsub
+
+// get_card
+getcard_4:
+proto 1 1
+bytec_0 // ""
+dupn 4
+intc_0 // 0
+dup
+bytec_0 // ""
+dupn 4
+intc_0 // 0
+dup
+bytec_0 // ""
+dup
+frame_dig -1
+itob
+box_len
+store 16
+store 15
+load 16
+// Card does not exist.
+assert
+frame_dig 2
+frame_bury 8
+frame_dig 8
+frame_bury 7
+pushint 6 // 6
+frame_bury 5
+frame_dig 5
+frame_dig 8
+len
++
+frame_bury 6
+frame_dig 6
+intc 4 // 65536
+<
+assert
+frame_dig 5
+itob
+extract 6 0
+frame_dig 3
+frame_bury 8
+frame_dig 7
+frame_dig 8
+concat
+frame_bury 7
+frame_dig 6
+frame_bury 5
+frame_dig 5
+frame_dig 8
+len
++
+frame_bury 6
+frame_dig 6
+intc 4 // 65536
+<
+assert
+frame_dig 5
+itob
+extract 6 0
+concat
+frame_dig 4
+frame_bury 8
+frame_dig 7
+frame_dig 8
+concat
+frame_bury 7
+frame_dig 6
+frame_bury 5
+frame_dig 5
+itob
+extract 6 0
+concat
+frame_dig 7
+concat
+frame_bury 1
+frame_dig -1
+itob
+box_get
+store 18
+store 17
+load 18
+assert
+load 17
+frame_bury 1
+frame_dig 1
+frame_dig 1
+intc_0 // 0
+extract_uint16
+frame_dig 1
+intc_3 // 2
+extract_uint16
+substring3
+frame_bury 9
+frame_dig 1
+frame_dig 1
+intc_3 // 2
+extract_uint16
+frame_dig 1
+pushint 4 // 4
+extract_uint16
+substring3
+frame_bury 10
+frame_dig 1
+frame_dig 1
+pushint 4 // 4
+extract_uint16
+dig 1
+len
+substring3
+frame_bury 11
+frame_dig 9
+frame_bury 15
+frame_dig 15
+frame_bury 14
+pushint 6 // 6
+frame_bury 12
+frame_dig 12
+frame_dig 15
+len
++
+frame_bury 13
+frame_dig 13
+intc 4 // 65536
+<
+assert
+frame_dig 12
+itob
+extract 6 0
+frame_dig 10
+frame_bury 15
+frame_dig 14
+frame_dig 15
+concat
+frame_bury 14
+frame_dig 13
+frame_bury 12
+frame_dig 12
+frame_dig 15
+len
++
+frame_bury 13
+frame_dig 13
+intc 4 // 65536
+<
+assert
+frame_dig 12
+itob
+extract 6 0
+concat
+frame_dig 11
+frame_bury 15
+frame_dig 14
+frame_dig 15
+concat
+frame_bury 14
+frame_dig 13
+frame_bury 12
+frame_dig 12
+itob
+extract 6 0
+concat
+frame_dig 14
+concat
+frame_bury 0
+retsub
+
+// get_card_aid
+getcardaid_5:
+proto 1 1
+intc_0 // 0
+frame_dig -1
+bytec_1 // "n_cards"
+app_global_get
+<
+// Index out of range.
+assert
+frame_dig -1
+bytec_1 // "n_cards"
+app_global_get
+<
+// Card does not exist.
+assert
+bytec_1 // "n_cards"
+app_global_get
+intc_0 // 0
+>
+// No cards exist.
+assert
+bytec 5 // "card_ids"
+intc_1 // 8
+frame_dig -1
+*
+intc_1 // 8
+box_extract
+btoi
+frame_bury 0
+retsub
+
+// get_card_count
+getcardcount_6:
+proto 1 1
+intc_0 // 0
+frame_dig -1
+itob
+box_len
+store 20
+store 19
+load 20
+// Card does not exist.
+assert
+frame_dig -1
+itob
+box_get
+store 22
+store 21
+load 22
+assert
+load 21
+btoi
+frame_bury 0
+retsub
+
+// transfer_starting_deck
+transferstartingdeck_7:
+proto 1 0
+bytec_0 // ""
+intc_0 // 0
+dupn 4
+bytec_0 // ""
+dup
+intc_0 // 0
+dup
+intc_0 // 0
+store 23
+transferstartingdeck_7_l1:
+load 23
+pushint 30 // 30
+<
+bz transferstartingdeck_7_l3
+bytec_2 // "starting_deck"
+intc_1 // 8
+load 23
+*
+intc_1 // 8
+box_extract
+box_get
+store 25
+store 24
+load 25
+assert
+load 24
+btoi
+intc_0 // 0
+>
+// Insufficient cards in the bank.
+assert
+itxn_begin
+pushint 4 // axfer
+itxn_field TypeEnum
+bytec_2 // "starting_deck"
+intc_1 // 8
+load 23
+*
+intc_1 // 8
+box_extract
+btoi
+itxn_field XferAsset
+intc_2 // 1
+itxn_field AssetAmount
+frame_dig -1
+itxn_field AssetReceiver
+intc_0 // 0
+itxn_field Fee
+itxn_submit
+bytec_2 // "starting_deck"
+intc_1 // 8
+load 23
+*
+intc_1 // 8
+box_extract
+box_del
+pop
+bytec_2 // "starting_deck"
+intc_1 // 8
+load 23
+*
+intc_1 // 8
+box_extract
+bytec_2 // "starting_deck"
+intc_1 // 8
+load 23
+*
+intc_1 // 8
+box_extract
+box_get
+store 27
+store 26
+load 27
+assert
+load 26
+btoi
+intc_2 // 1
+-
+itob
+box_put
+bytec_3 // 0x00
+intc_0 // 0
+frame_dig 1
+setbyte
+bytec_3 // 0x00
+intc_0 // 0
+frame_dig 2
+setbyte
+concat
+bytec_3 // 0x00
+intc_0 // 0
+frame_dig 3
+setbyte
+concat
+frame_bury 0
+frame_dig 9
+frame_bury 8
+frame_dig -1
+box_get
+store 29
+store 28
+load 29
+assert
+load 28
+frame_bury 0
+bytec_2 // "starting_deck"
+intc_1 // 8
+load 23
+*
+intc_1 // 8
+box_extract
+btoi
+frame_bury 8
+pushbytes 0x6c696272617279 // "library"
+intc_1 // 8
+load 23
+*
+frame_dig 8
+itob
+box_replace
+frame_dig -1
+box_del
+pop
+frame_dig -1
+frame_dig 0
+box_put
+load 23
+intc_2 // 1
++
+store 23
+b transferstartingdeck_7_l1
+transferstartingdeck_7_l3:
+retsub
+
+// signup
+signup_8:
+proto 4 0
+bytec_0 // ""
+intc_0 // 0
+dup
+bytec_0 // ""
+dup
+bytec_3 // 0x00
+intc_0 // 0
+frame_dig -2
+setbyte
+bytec_3 // 0x00
+intc_0 // 0
+frame_dig -3
+setbyte
+concat
+bytec_3 // 0x00
+intc_0 // 0
+frame_dig -1
+setbyte
+concat
+frame_bury 0
+frame_dig -4
+box_del
+pop
+frame_dig -4
+frame_dig 0
+box_put
+frame_dig -4
+callsub transferstartingdeck_7
+retsub

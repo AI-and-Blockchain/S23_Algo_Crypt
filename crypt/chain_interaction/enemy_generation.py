@@ -190,8 +190,8 @@ def main(num_enemies: int = 10):
     enemies = [ ("Archmage Zanthorius", 
                 "Introducing Archmage Zanthorius, master of the arcane and keeper of the eternal flame. \
                  His powerful spells and unmatched intellect make him a formidable opponent. \
-                 Defeat him and unravel the secrets of the ancient tomes that he guards with his life.", 
-                 "Strength: 9, Intelligence: 34, Dexterity: 14", 
+                 Defeat him and unravel the secrets of the ancient tomes that he guards with his life. Strength: 9, Intelligence: 34, Dexterity: 14", 
+                 [ 9, 34, 14] , 
                  "https://gateway.pinata.cloud/ipfs/QmYyx1aetc2mXU8eYcokZDLy1R1yW51LG5rELYjjx3gKbn?_gl=1*kcxbq9*rs_ga*NTJjNDhmOTItYTEyNy00MzAzLWFmNjItODNkZjExY2FlYzVm*rs_ga_5RMPXG14TE*MTY4MTMxNDY3NS4xLjEuMTY4MTMxNDk2Ni4yMC4wLjA.") ]
 
  

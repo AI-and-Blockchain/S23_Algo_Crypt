@@ -74,7 +74,10 @@ async def signup(user: UserCreate):
     db = SessionLocal()
     hashed_password = get_password_hash(user.password)
     register_membership(user.algorand_address)
-    store_private_key(user.private_key)
+    store_private_key(user.private_key, user.algorand_address)
+
+    with open(".env", "w+") as f:
+        f.write("PLAYER_ADDRESS={}".format(user.algorand_address))
 
 
     query = User.__table__.insert().values(

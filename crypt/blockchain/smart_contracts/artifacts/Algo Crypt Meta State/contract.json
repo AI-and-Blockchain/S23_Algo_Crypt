@@ -1,0 +1,142 @@
+{
+    "name": "Algo Crypt Meta State",
+    "methods": [
+        {
+            "name": "create",
+            "args": [],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "bootstrap",
+            "args": [
+                {
+                    "type": "pay",
+                    "name": "seed",
+                    "desc": "seeded transaction"
+                },
+                {
+                    "type": "(string,string,string)[]",
+                    "name": "card_list"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Bootstrap the game with a list of cards."
+        },
+        {
+            "name": "set_starting_deck",
+            "args": [
+                {
+                    "type": "uint64[]",
+                    "name": "card_list"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Set the starting deck for new members."
+        },
+        {
+            "name": "add_card",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "card_name",
+                    "desc": "Name of the card"
+                },
+                {
+                    "type": "string",
+                    "name": "card_desc",
+                    "desc": "Description of the card"
+                },
+                {
+                    "type": "string",
+                    "name": "card_url",
+                    "desc": "URL of the card"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Add a new card to the game."
+        },
+        {
+            "name": "get_card",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "card_id",
+                    "desc": "Card ID"
+                }
+            ],
+            "returns": {
+                "type": "(string,string,string)",
+                "desc": "pyteal expression"
+            },
+            "desc": "Get the card details."
+        },
+        {
+            "name": "get_card_aid",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "index",
+                    "desc": "Index of the card"
+                }
+            ],
+            "returns": {
+                "type": "uint64",
+                "desc": "pyteal expression"
+            },
+            "desc": "Get asset id for a card in the all_cards array."
+        },
+        {
+            "name": "get_card_count",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "card_id",
+                    "desc": "Card ID"
+                }
+            ],
+            "returns": {
+                "type": "uint64",
+                "desc": "pyteal expression"
+            },
+            "desc": "Get the card count."
+        },
+        {
+            "name": "signup",
+            "args": [
+                {
+                    "type": "address",
+                    "name": "address",
+                    "desc": "Address of the player"
+                },
+                {
+                    "type": "uint8",
+                    "name": "strength",
+                    "desc": "Strength"
+                },
+                {
+                    "type": "uint8",
+                    "name": "intelligence",
+                    "desc": "Intelligence"
+                },
+                {
+                    "type": "uint8",
+                    "name": "dexterity",
+                    "desc": "Dexterity"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Sign up for the game."
+        }
+    ],
+    "networks": {}
+}

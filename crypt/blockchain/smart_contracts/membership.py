@@ -64,6 +64,9 @@ app = bk.Application(
     ),
 )
 
+@app.create
+def create():
+    return app.initialize_global_state()
 
 @app.external(authorize=bk.Authorize.only_creator())
 def bootstrap(

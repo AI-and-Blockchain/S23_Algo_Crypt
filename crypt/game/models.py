@@ -76,6 +76,8 @@ class Player:
   token = None
   client = None
 
+  address = None
+
   def __init__(self, name, deck, health=100, strength=0, intelligence=0, dexterity=0, imagePath=None, playerToken="a"*64):
     self.hand = []
     self.play = [None] * 3
@@ -243,12 +245,22 @@ class Enemy:
     self.intelligence = intelligence
     self.dexterity = dexterity
 
+<<<<<<< HEAD
     # self.enemyID = enemy_generation.create_contract("Archmage Zanthorius", 
     #             "Introducing Archmage Zanthorius, master of the arcane and keeper of the eternal flame. \
     #              His powerful spells and unmatched intellect make him a formidable opponent. \
     #              Defeat him and unravel the secrets of the ancient tomes that he guards with his life.", 
     #              "Strength: 9, Intelligence: 34, Dexterity: 14", 
     #              "https://gateway.pinata.cloud/ipfs/QmYyx1aetc2mXU8eYcokZDLy1R1yW51LG5rELYjjx3gKbn?_gl=1*kcxbq9*rs_ga*NTJjNDhmOTItYTEyNy00MzAzLWFmNjItODNkZjExY2FlYzVm*rs_ga_5RMPXG14TE*MTY4MTMxNDY3NS4xLjEuMTY4MTMxNDk2Ni4yMC4wLjA.")
+=======
+    self.enemyID = enemy_generation.create_contract("Archmage Zanthorius", 
+                "Introducing Archmage Zanthorius, master of the arcane and keeper of the eternal flame. \
+                 His powerful spells and unmatched intellect make him a formidable opponent. \
+                 Defeat him and unravel the secrets of the ancient tomes that he guards with his life.", 
+                 "Strength: 9, Intelligence: 34, Dexterity: 14", 
+                 "https://gateway.pinata.cloud/ipfs/QmYyx1aetc2mXU8eYcokZDLy1R1yW51LG5rELYjjx3gKbn?_gl=1*kcxbq9*rs_ga*NTJjNDhmOTItYTEyNy00MzAzLWFmNjItODNkZjExY2FlYzVm*rs_ga_5RMPXG14TE*MTY4MTMxNDY3NS4xLjEuMTY4MTMxNDk2Ni4yMC4wLjA.")
+    
+>>>>>>> 1e92abd0a6242e32df0368221bd2301ed50c2b2a
 
     self.enemyID = enemyID
     
