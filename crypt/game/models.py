@@ -6,6 +6,8 @@ import sys
 import io
 from urllib.request import urlopen
 from algosdk.v2client.algod import AlgodClient
+import algokit_utils
+from beaker import sandbox
 # import gameplay.py from the chain_interaction where crypt is the parent directory of this directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from chain_interaction import gameplay
@@ -71,7 +73,7 @@ class Player:
 
   damage = 0
 
-  playerToken = None
+  token = None
   client = None
 
   def __init__(self, name, deck, health=100, strength=0, intelligence=0, dexterity=0, imagePath=None, playerToken="a"*64):
@@ -83,8 +85,8 @@ class Player:
     self.health = health
     self.image = pygame.image.load(imagePath)
     self.image = pygame.transform.scale(self.image, (int(238*0.8), int(332*0.8)))
-    self.playerToken = playerToken
-    self.client = AlgodClient(self.playerToken, self.name)
+    self.token = playerToken
+    self.client = sandbox.get_algod_client()
 
 
     self.strength = strength
@@ -226,6 +228,8 @@ class Enemy:
 
   enemyID = None
 
+  cardsToPlay = None
+
   def __init__(self, name, deck, health=100, strength=0, intelligence=0, dexterity=0, imagePath=None, enemyID=None):
     self.hand = []
     self.name = name
@@ -240,6 +244,11 @@ class Enemy:
     self.dexterity = dexterity
 
     self.enemyID = enemyID
+
+    self.cardsToPlay = [Card(Types.ATTACK,Values.INTELLIGENCE,r"images/Arcane Nova.png"),
+                        Card(Types.DODGE,Values.DEXTERITY,r"images/Ethereal Dodge.png"),
+                        Card(Types.DEFENSE,Values.INTELLIGENCE,r"images/Elemental Aegis.png")]
+
     
   def draw(self):
     if (self.deck.length() == 0):
@@ -270,16 +279,17 @@ class Enemy:
     
   def playCard(self, enemyTurn=None, gameState=None):
     drawnCards = random.sample(range(0,5),3)
+    played = random.sample(range(0,3),3)
     # self.play[0] = self.getCardFromChainInfo(enemyTurn[0])
-    self.play[0] = self.hand[drawnCards[0]]
+    self.play[0] = self.cardsToPlay[played[0]]
     self.hand[drawnCards[0]] = 0
 
     # self.play[1] = self.getCardFromChainInfo(enemyTurn[1])
-    self.play[1] = self.hand[drawnCards[1]]
+    self.play[1] = self.cardsToPlay[played[1]]
     self.hand[drawnCards[1]] = 1
 
     # self.play[2] = self.getCardFromChainInfo(enemyTurn[2])
-    self.play[2] = self.hand[drawnCards[2]]
+    self.play[2] = self.cardsToPlay[played[2]]
     self.hand[drawnCards[2]] = 2
 
     for card in self.play:

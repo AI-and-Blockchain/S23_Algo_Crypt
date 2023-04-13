@@ -51,7 +51,7 @@ player_deck = Deck([Card(Types.ATTACK,Values.STRENGTH,r"images/Arcane Smite.png"
                   [Card(Types.DEFENSE,Values.INTELLIGENCE,r"images/Spell Reflection.png")]*5)
 enemy_deck = Deck([Card(Types.ATTACK,Values.INTELLIGENCE,r"images/Arcane Nova.png")]*10 + [Card(Types.DODGE,Values.DEXTERITY,r"images/Ethereal Dodge.png")]*10
                  + [Card(Types.DEFENSE,Values.INTELLIGENCE,r"images/Elemental Aegis.png")]*10)
-CARDSTOWIN = [Card(Types.Attack, Values.INTELLIGENCE, r"images/Arcane Nova.png"), Card(Types.DODGE,Values.DEXTERITY,r"images/Ethereal Dodge.png"), Card(Types.DEFENSE,Values.INTELLIGENCE,r"images/Elemental Aegis.png")]
+CARDSTOWIN = [Card(Types.ATTACK, Values.INTELLIGENCE, r"images/Arcane Nova.png"), Card(Types.DODGE,Values.DEXTERITY,r"images/Ethereal Dodge.png"), Card(Types.DEFENSE,Values.INTELLIGENCE,r"images/Elemental Aegis.png")]
 gameEngine = GameEngine(player_deck,enemy_deck, player_name, enemy_name, 
                         player_health, enemy_health, 
                         player_strength, enemy_strength, 
