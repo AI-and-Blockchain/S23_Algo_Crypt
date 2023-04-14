@@ -6,9 +6,9 @@ from algokit_utils import (
     Account,
     ApplicationSpecification,
     get_account,
-    get_algod_client,
-    get_indexer_client,
 )
+
+from beaker.sandbox import get_algod_client, get_indexer_client
 from algosdk.v2client.algod import AlgodClient
 from algosdk.v2client.indexer import IndexerClient
 
