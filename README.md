@@ -22,6 +22,8 @@ The blockchain component of this project demo uses algokit, which requires Docke
 
 The API and associated frontend require the Node Package Manager and React.js
 
+The game and algorand components require Python 3.10+
+
 FOR WINDOWS USERS: the bootstrap scripts are written as linux shell scripts. For maximum ease of use, use WSL with this project. 
 
 ### Install and Setup
