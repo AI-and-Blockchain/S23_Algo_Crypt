@@ -36,19 +36,27 @@ In the root directory, run
 
 ```
 ./bootstrap.sh
+./run_frontend.sh
 ```
 
-This script will install all python dependencies, start an algokit localnet sandbox, and deploy the Membership contract that controls card distribution and game membership. You will then be redirected to the signup/login page. After this script completes, in a new terminal, run the API and associated frontend.
+This script will install all python dependencies, start an algokit localnet sandbox, and deploy the Membership contract that controls card distribution and game membership. You will then be redirected to the localhost port 3000 index. Add "auth" to the end of the URL to reach the signup page. After this script completes, in a new terminal, run the API.
 
 ```
-./run_api_frontend.sh
+./run_api.sh
 ```
+
+To run the game, in the original terminal, run
+
+```
+./run_game.sh
+```
+
 
 This will open the signup page on port 3000 of localhost.
 
 ## Create Account
 
-To create an account, simply enter the details on the signup page
+To create an account, simply enter the details on the signup page and submit. 
 
 ## How to Play
 
@@ -91,35 +99,6 @@ To create an account, simply enter the details on the signup page
         - asset_generation
 ```
 
-# Project Management (To-Do List)
-
-- Gameplay/Playmat
-  - Draw out structure
-  - Make initial playmat with no functionality
-  - Add game engine to playmat
-  - Link game engine and UX
-- Enemy Generation
-  - Design background story and enemy description
-  - Generate stat blocks 
-    - strength, intelligence, dexterity, and unique ability
-  - Generate unique images
-- NFT minting and exchange
-  - Scripts (priority order)
-    - Player Generation
-      - Player opt-in on sign-up
-      - Minting and distribution of starting deck
-    - Enemy contract
-      - Generation
-          - Minting of enemy deck
-          - Image NFT
-            - Upload to IPFS
-            - Mint/Distribute NFT
-      - Enemy Defeat
-        - Random selection and reward of enemy cards to player
-        - Reward of image NFT
-- User Experience (game outside of playmat)
-    - Signup and Login
-    - Card Management Interface 
 # System Design
 
 ## Overview

@@ -6,13 +6,15 @@
 from argparse import ArgumentParser
 import os
 import sys
+sys.path.append("..")
 from dotenv import load_dotenv
 
-from crypt.blockchain.smart_contracts.membership import app as membership_app
+from blockchain.smart_contracts.membership import app as membership_app
 from algokit_utils.application_client import ApplicationClient
 from algosdk.transaction import AssetOptInTxn
 from algosdk.mnemonic import from_private_key
-from algokit_utils import get_algod_client, get_account, get_indexer_client
+from beaker.sandbox import get_algod_client, get_indexer_client
+from algokit_utils import get_account
 from beaker import client, sandbox
 
 load_dotenv("../.env")
@@ -25,9 +27,8 @@ acct1 = accts.pop()
 algod_client = get_algod_client()
 app_client = client.ApplicationClient(
     client=algod_client,
-    app_spec=membership_app,
-    app_id=os.getenv("METASTATE_APP_ID"),
-    signer=acct1
+    app=membership_app,
+    app_id=int(os.getenv("METASTATE_APP_ID")),
 )
 
 
