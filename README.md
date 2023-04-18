@@ -47,12 +47,17 @@ This script will install all python dependencies, start an algokit localnet sand
 ./run_api.sh
 ```
 
+To generate a sandbox account for use on the localnet, run the following in a python shell
+```
+from beaker.sandbox import get_accounts
+get_accounts().pop()
+```
+
 To run the game, in the original terminal, run
 
 ```
 ./run_game.sh
 ```
-
 
 This will open the signup page on port 3000 of localhost.
 
